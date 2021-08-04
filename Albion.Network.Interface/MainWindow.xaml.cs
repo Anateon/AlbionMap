@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
@@ -23,16 +24,16 @@ namespace Albion.Network.Interface
         private System.Windows.Threading.DispatcherTimer dispatcherTimer;
         private double scale = 9;
         private static List<Thread> threads = new List<Thread>();
-        private static int secondsToDell = 10;
+        private static int secondsToDell = 60;
         public MainWindow()
         {
             InitializeComponent();
 
             dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
             dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
-            dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0,1);
+            dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0,200);
             dispatcherTimer.Start();
-
+            
 
             ReceiverBuilder builder = ReceiverBuilder.Create();
             
@@ -138,6 +139,69 @@ namespace Albion.Network.Interface
         private void Window_Closed(object sender, EventArgs e)
         {
             Process.GetCurrentProcess().Kill();
+        }
+
+        private void CheckBox_Click(object sender, RoutedEventArgs e)
+        {
+            if ((bool)((CheckBox)sender).IsChecked)
+            {
+                dispatcherTimer.Start();
+            }
+            else
+            {
+                dispatcherTimer.Stop();
+            }
+        }
+
+        private void TextBox_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
+        {
+            mutexObj.WaitOne();
+            e.Handled = !e.Text.All((c) => { return char.IsNumber(c); });
+            mutexObj.ReleaseMutex();
+        }
+
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            mutexObj.WaitOne();
+            secondsToDell = Int32.Parse(((TextBox)sender).Text);
+            mutexObj.ReleaseMutex();
+
+        }
+        private void TextBox_TextChanged2(object sender, TextChangedEventArgs e)
+        {
+            mutexObj.WaitOne();
+            scale = Int32.Parse(((TextBox)sender).Text);
+            mutexObj.ReleaseMutex();
+        }
+
+        private void TextBox_TextChanged3(object sender, TextChangedEventArgs e)
+        {
+            int z;
+            try
+            {
+                z = Int32.Parse(((TextBox) sender).Text);
+                if (z == 0)
+                {
+                    ShowRadius.Visibility = Visibility.Hidden;
+                }
+                else
+                {
+                    ShowRadius.Visibility = Visibility.Visible;
+                    ShowRadius.Width = ShowRadius.Height = z * scale;
+                }
+            }
+            catch (Exception exception)
+            {
+                ShowRadius.Visibility = Visibility.Hidden;
+            }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            mutexObj.WaitOne();
+            chelDictionary.Clear();
+            Points.Children.RemoveRange(0,Int32.MaxValue);
+            mutexObj.ReleaseMutex();
         }
     }
 }

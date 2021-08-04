@@ -16,10 +16,11 @@ namespace Albion.Network.Example
             ChelInfo MyInfo = new ChelInfo();
             ReceiverBuilder builder = ReceiverBuilder.Create();
 
-            builder.AddRequestHandler(new MoveRequestHandler(MyInfo)); // мое перемещение
-            builder.AddEventHandler(new MoveEventHandler(chelDictionary)); // Движения типов 
-            builder.AddEventHandler(new NewCharacterEventHandler(chelDictionary)); //новые типы
+            //builder.AddRequestHandler(new MoveRequestHandler(MyInfo)); // мое перемещение
+            //builder.AddEventHandler(new MoveEventHandler(chelDictionary)); // Движения типов 
+            //builder.AddEventHandler(new NewCharacterEventHandler(chelDictionary)); //новые типы
             //builder.AddEventHandler(new NewMobEventHandler()); // новые мобы
+            builder.AddEventHandler(new TESTEventHandler());
 
             receiver = builder.Build();
 

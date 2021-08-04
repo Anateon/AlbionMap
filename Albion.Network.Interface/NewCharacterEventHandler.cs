@@ -22,10 +22,10 @@ namespace Albion.Network.Interface
             {
                 MainWindow.mutexObj.WaitOne();
 
-                //using (var soundPlayer = new SoundPlayer(@"c:\Windows\Media\Windows Ringin.wav"))
-                //{
-                //    soundPlayer.Play();
-                //}
+                using (var soundPlayer = new SoundPlayer(@"c:\Windows\Media\Windows Ringin.wav"))
+                {
+                    soundPlayer.Play();
+                }
                 MainWindow.chelDictionary[value.Id] = new ChelInfo()
                 {
                     name = value.Name,

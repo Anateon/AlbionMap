@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.IO;
 
 namespace Albion.Network.Interface
 {
@@ -6,6 +8,11 @@ namespace Albion.Network.Interface
     {
         public NewCharacterEvent(Dictionary<byte, object> parameters) : base(parameters)
         {
+            StreamWriter fs = new StreamWriter("DataFile.txt", true);
+            string json = JsonConvert.SerializeObject(parameters);
+            fs.Write(json);
+            fs.Close();
+
             Id = parameters[0].ToString();
             Name = parameters[1].ToString();
             GuildName = parameters.TryGetValue(8, out object guildName) ? guildName.ToString() : null;
