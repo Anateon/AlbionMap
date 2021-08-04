@@ -23,8 +23,10 @@ namespace Albion.Network.Interface
                 MainWindow.MyInfo.Y = value.Position[1];
                 MainWindow.mutexObj.ReleaseMutex();
             }
-            catch (Exception e)
+            catch (Exception exception)
             {
+                Console.WriteLine("error MoveRequestHandler:" + exception.Message);
+                throw;
             }
 
             return Task.CompletedTask;

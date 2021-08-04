@@ -9,19 +9,47 @@
     <Window.Background>
         <SolidColorBrush Opacity="0.5" Color="White"/>
     </Window.Background>
-    <Grid RenderTransformOrigin="0.5,0.5" Width="500" Height="500">
-        <Grid.RenderTransform>
-            <TransformGroup>
-                <ScaleTransform/>
-                <SkewTransform/>
-                <RotateTransform Angle="45"/>
-                <TranslateTransform/>
-            </TransformGroup>
-        </Grid.RenderTransform>
-        <Ellipse Fill="#FFF4F4F5" Margin="0" Stroke="Black" OpacityMask="Black"/>
-        <Rectangle Fill="#FFF4F4F5" HorizontalAlignment="Center" Height="1" Margin="0" Stroke="Black" VerticalAlignment="Center" Width="500"/>
-        <Rectangle Fill="#FFF4F4F5" HorizontalAlignment="Center" Height="500" Margin="0" Stroke="Black" VerticalAlignment="Center" Width="1"/>
-        <Grid Name="Points">
-        </Grid>
+    <Grid>
+        <TabControl>
+            <TabItem Header="Radar">
+                <Grid Background="LightGray">
+                    <Ellipse Fill="YellowGreen" Margin="0" Stroke="Black" OpacityMask="Black" HorizontalAlignment="Center" VerticalAlignment="Center" Width="500" Height="500"/>
+                    <Rectangle HorizontalAlignment="Center" Height="1" Margin="0" Stroke="Black" VerticalAlignment="Center" Width="500" RenderTransformOrigin="0.5,0.5">
+                        <Rectangle.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform/>
+                                <RotateTransform Angle="45"/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </Rectangle.RenderTransform>
+                    </Rectangle>
+                    <Rectangle HorizontalAlignment="Center" Height="500" Margin="0" Stroke="Black" VerticalAlignment="Center" Width="1" RenderTransformOrigin="0.5,0.5">
+                        <Rectangle.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform/>
+                                <RotateTransform Angle="45"/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </Rectangle.RenderTransform>
+                    </Rectangle>
+                    <Grid RenderTransformOrigin="0.5,0.5" x:Name="Points">
+                        <Grid.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform/>
+                                <RotateTransform Angle="45"/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </Grid.RenderTransform>
+                    </Grid>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="TabItem">
+                <Grid Background="#FFE5E5E5"/>
+            </TabItem>
+        </TabControl>
     </Grid>
 </Window>

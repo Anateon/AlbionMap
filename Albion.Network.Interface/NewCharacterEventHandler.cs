@@ -21,14 +21,11 @@ namespace Albion.Network.Interface
             try
             {
                 MainWindow.mutexObj.WaitOne();
-                if (!MainWindow.chelDictionary.ContainsKey(value.Id))
-                {
-                    using (var soundPlayer = new SoundPlayer(@"c:\Windows\Media\Windows Ringin.wav"))
-                    {
-                        soundPlayer.Play();
-                    }
 
-                }
+                //using (var soundPlayer = new SoundPlayer(@"c:\Windows\Media\Windows Ringin.wav"))
+                //{
+                //    soundPlayer.Play();
+                //}
                 MainWindow.chelDictionary[value.Id] = new ChelInfo()
                 {
                     name = value.Name,
@@ -39,8 +36,11 @@ namespace Albion.Network.Interface
                 MainWindow.mutexObj.ReleaseMutex();
                 //Console.WriteLine($"New ch Id: {value.Id} name: {value.Name} hp: {value.FullHP}/{value.NowHP}");
             }
-            catch (Exception e)
+            catch (Exception exception)
             {
+                Console.WriteLine("error NewCharacterEventHandler:" + exception.Message);
+                throw;
+
             }
             return Task.CompletedTask;
         }

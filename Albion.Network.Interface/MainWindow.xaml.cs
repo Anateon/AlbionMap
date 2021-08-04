@@ -3,6 +3,7 @@ using SharpPcap;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Media;
@@ -22,13 +23,14 @@ namespace Albion.Network.Interface
         private System.Windows.Threading.DispatcherTimer dispatcherTimer;
         private double scale = 9;
         private static List<Thread> threads = new List<Thread>();
+        private static int secondsToDell = 10;
         public MainWindow()
         {
             InitializeComponent();
 
             dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
             dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
-            dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0,100);
+            dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0,1);
             dispatcherTimer.Start();
 
 
@@ -73,61 +75,64 @@ namespace Albion.Network.Interface
 
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
+            var timeNow = DateTime.Now.AddSeconds(secondsToDell*-1);
+            mutexObj.WaitOne();
             try
             {
-                var timeNow = DateTime.Now.AddSeconds(-60);
-                // Updating the Label which displays the current second
-                mutexObj.WaitOne();
-                foreach (KeyValuePair<String, ChelInfo> keyValuePair in chelDictionary)
+                foreach (KeyValuePair<String, ChelInfo> pairForDel in chelDictionary.ToArray())
                 {
-                    if (keyValuePair.Value.time < timeNow)// если надо убрать старых челов
+                    if (pairForDel.Value.time < timeNow)// если надо убрать старых челов
                     {
                         foreach (Ellipse pointsChild in Points.Children)
                         {
-                            if (pointsChild.Name == $"ID{keyValuePair.Key}")
+                            if (pointsChild.Name == $"ID{pairForDel.Key}")
                             {
                                 Points.Children.Remove(pointsChild);
                                 break;
                             }
                         }
-                        chelDictionary.Remove(keyValuePair.Key);
-                    }
-                    else
-                    {
-                        bool newPoint = true;
-                        for (int i = 0; i < Points.Children.Count; i++)
-                        {
-                            if (((Ellipse)Points.Children[i]).Name == $"ID{keyValuePair.Key}")
-                            {
-                                newPoint = false;
-                                ((Ellipse)Points.Children[i]).Margin = new Thickness((keyValuePair.Value.X - MyInfo.X) * scale, 0, 0, (keyValuePair.Value.Y - MyInfo.Y) * scale);
-                                break;
-                            }
-                        }
-
-                        if (newPoint)
-                        {
-                            var elipse = 
-                            Points.Children.Add(new Ellipse()
-                            {
-                                Fill = Brushes.Red,
-                                HorizontalAlignment = HorizontalAlignment.Center,
-                                VerticalAlignment = VerticalAlignment.Center,
-                                Height = 7,
-                                Width = 7,
-                                Margin = new Thickness((keyValuePair.Value.X - MyInfo.X) * scale, 0, 0, (keyValuePair.Value.Y - MyInfo.Y) * scale),
-                                Stroke = Brushes.Black,
-                                Name = $"ID{keyValuePair.Key}",
-                                Opacity = 0.5
-                            });
-                        }
+                        chelDictionary.Remove(pairForDel.Key);
                     }
                 }
-                mutexObj.ReleaseMutex();
+
+                foreach (KeyValuePair<String, ChelInfo> pairForUpdate in chelDictionary)
+                {
+                    bool newPoint = true;
+                    for (int i = 0; i < Points.Children.Count; i++)
+                    {
+                        if (((Ellipse)Points.Children[i]).Name == $"ID{pairForUpdate.Key}")
+                        {
+                            newPoint = false;
+                            ((Ellipse)Points.Children[i]).Margin = new Thickness((pairForUpdate.Value.X - MyInfo.X) * scale, 0, 0, (pairForUpdate.Value.Y - MyInfo.Y) * scale);
+                            break;
+                        }
+                    }
+
+                    if (newPoint)
+                    {
+                        var elipse = 
+                        Points.Children.Add(new Ellipse()
+                        {
+                            Fill = Brushes.Red,
+                            HorizontalAlignment = HorizontalAlignment.Center,
+                            VerticalAlignment = VerticalAlignment.Center,
+                            Height = 7,
+                            Width = 7,
+                            Margin = new Thickness((pairForUpdate.Value.X - MyInfo.X) * scale, 0, 0, (pairForUpdate.Value.Y - MyInfo.Y) * scale),
+                            Stroke = Brushes.Black,
+                            Name = $"ID{pairForUpdate.Key}",
+                            Opacity = 0.5
+                        });
+                    }
+                }
             }
             catch (Exception exception)
             {
+                Console.WriteLine("error:" + exception.Message);
+                throw;
+                //Points.Children.RemoveRange(0,Int32.MaxValue);
             }
+            mutexObj.ReleaseMutex();
         }
 
         private void Window_Closed(object sender, EventArgs e)

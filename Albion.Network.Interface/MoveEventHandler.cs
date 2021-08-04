@@ -30,8 +30,10 @@ namespace Albion.Network.Interface
                 }
                 MainWindow.mutexObj.ReleaseMutex();
             }
-            catch (Exception e)
+            catch (Exception exception)
             {
+                Console.WriteLine("error MoveEventHandler:" + exception.Message);
+                throw;
             }
             return Task.CompletedTask;
         }
