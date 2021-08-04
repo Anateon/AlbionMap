@@ -1,0 +1,39 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Shapes;
+
+namespace Albion.Network.Interface
+{
+    public class MoveEventHandler : EventPacketHandler<MoveEvent>
+    {
+
+        public MoveEventHandler() : base(EventCodes.Move)
+        {
+        }
+
+        protected override Task OnActionAsync(MoveEvent value)
+        {
+            try
+            {
+                MainWindow.mutexObj.WaitOne();
+                if (MainWindow.chelDictionary.ContainsKey(value.Id))
+                {
+                    var tmp = MainWindow.chelDictionary[value.Id];
+                    tmp.time = DateTime.Now;
+                    tmp.X = value.Position[0];
+                    tmp.Y = value.Position[1];
+                    MainWindow.chelDictionary[value.Id] = tmp;
+                }
+                MainWindow.mutexObj.ReleaseMutex();
+            }
+            catch (Exception e)
+            {
+            }
+            return Task.CompletedTask;
+        }
+    }
+}
