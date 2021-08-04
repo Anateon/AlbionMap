@@ -21,7 +21,7 @@
         <Ellipse Fill="#FFF4F4F5" Margin="0" Stroke="Black" OpacityMask="Black"/>
         <Rectangle Fill="#FFF4F4F5" HorizontalAlignment="Center" Height="1" Margin="0" Stroke="Black" VerticalAlignment="Center" Width="500"/>
         <Rectangle Fill="#FFF4F4F5" HorizontalAlignment="Center" Height="500" Margin="0" Stroke="Black" VerticalAlignment="Center" Width="1"/>
-        <Grid Name="Points"/>
-
+        <Grid Name="Points">
+        </Grid>
     </Grid>
 </Window>

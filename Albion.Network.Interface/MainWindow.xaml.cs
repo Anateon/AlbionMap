@@ -75,7 +75,7 @@ namespace Albion.Network.Interface
         {
             try
             {
-                var timeNow = DateTime.Now.AddMinutes(-1);
+                var timeNow = DateTime.Now.AddSeconds(-60);
                 // Updating the Label which displays the current second
                 mutexObj.WaitOne();
                 foreach (KeyValuePair<String, ChelInfo> keyValuePair in chelDictionary)
@@ -107,6 +107,7 @@ namespace Albion.Network.Interface
 
                         if (newPoint)
                         {
+                            var elipse = 
                             Points.Children.Add(new Ellipse()
                             {
                                 Fill = Brushes.Red,
