@@ -18,7 +18,7 @@ namespace Albion.Network.Interface
     public partial class MainWindow : Window
     {
         private static IPhotonReceiver receiver;
-        public static Dictionary<string, ChelInfo> chelDictionary = new Dictionary<string, ChelInfo>();
+        public static Dictionary<int, ChelInfo> chelDictionary = new Dictionary<int, ChelInfo>();
         public static ChelInfo MyInfo = new ChelInfo();
         public static Mutex mutexObj = new Mutex();
         private System.Windows.Threading.DispatcherTimer dispatcherTimer;
@@ -85,7 +85,7 @@ namespace Albion.Network.Interface
             mutexObj.WaitOne();
             try
             {
-                foreach (KeyValuePair<String, ChelInfo> pairForDel in chelDictionary.ToArray())
+                foreach (KeyValuePair<int, ChelInfo> pairForDel in chelDictionary.ToArray())
                 {
                     if (pairForDel.Value.time < timeNow && pairForDel.Value.leave)// если надо убрать старых челов
                     {
@@ -94,7 +94,7 @@ namespace Albion.Network.Interface
                     }
                 }
 
-                foreach (KeyValuePair<String, ChelInfo> pairForUpdate in chelDictionary)
+                foreach (KeyValuePair<int, ChelInfo> pairForUpdate in chelDictionary)
                 {
                     PointsControll.UpdatePoints(pairForUpdate);
                 }

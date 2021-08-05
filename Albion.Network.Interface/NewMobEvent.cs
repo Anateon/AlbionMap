@@ -8,13 +8,13 @@ namespace Albion.Network.Interface
         public NewMobEvent(Dictionary<byte, object> parameters) : base(parameters)
         {
             // 13 и 14 это ХП
-            Id = parameters[0].ToString();
+            Id = int.Parse(parameters[0].ToString());
             Position = (float[])parameters[7];
             FullHP = parameters.TryGetValue(13, out object hp1) ? Int32.Parse(hp1.ToString()) : 0;
             NowHP = parameters.TryGetValue(14, out object hp2) ? Int32.Parse(hp2.ToString()) : 0;
         }
 
-        public string Id { get; }
+        public int Id { get; }
         public float[] Position { get; }
         public int NowHP { get; }
         public int FullHP { get; }

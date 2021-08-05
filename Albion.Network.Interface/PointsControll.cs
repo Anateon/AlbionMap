@@ -16,7 +16,7 @@ namespace Albion.Network.Interface
             Player,
             Mob
         }
-        private static void AddPoint(KeyValuePair<String, ChelInfo> info, PointTypes types)
+        private static void AddPoint(KeyValuePair<int, ChelInfo> info, PointTypes types)
         {
             Grid pointArea = new Grid()
             {
@@ -68,7 +68,7 @@ namespace Albion.Network.Interface
             pointArea.RenderTransform = new RotateTransform(-45);
             radarArea.Children.Add(pointArea);
         }
-        public static void DelPoint(string ID)
+        public static void DelPoint(int ID)
         {
             foreach (Grid pointsChild in radarArea.Children)
             {
@@ -80,7 +80,7 @@ namespace Albion.Network.Interface
                 }
             }
         }
-        public static void UpdatePoints(KeyValuePair<String, ChelInfo> info)
+        public static void UpdatePoints(KeyValuePair<int, ChelInfo> info)
         {
             if (!ChangeIfCreated(info))
             {
@@ -94,7 +94,7 @@ namespace Albion.Network.Interface
                 }
             }
         }
-        private static bool ChangeIfCreated(KeyValuePair<String, ChelInfo> info)
+        private static bool ChangeIfCreated(KeyValuePair<int, ChelInfo> info)
         {
             for (int i = 0; i < radarArea.Children.Count; i++)
             {

@@ -8,9 +8,9 @@ namespace Albion.Network.Interface
     {
         public LeaveEvent(Dictionary<byte, object> parameters) : base(parameters)
         {
-            Id = parameters[0].ToString();
+            Id = int.Parse(parameters[0].ToString());
         }
-        public string Id { get; }
+        public int Id { get; }
 
     }
 }

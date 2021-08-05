@@ -9,7 +9,7 @@ namespace Albion.Network.Interface
     {
         public NewCharacterEvent(Dictionary<byte, object> parameters) : base(parameters)
         {
-            Id = parameters[0].ToString();
+            Id = int.Parse(parameters[0].ToString());
             Name = parameters[1].ToString();
             //GuildName = parameters.TryGetValue(8, out object guildName) ? guildName.ToString() : null;
             Position = (float[])parameters[12];
@@ -18,7 +18,7 @@ namespace Albion.Network.Interface
             FullHP = parameters.TryGetValue(19, out object hp2) ? Int32.Parse(hp2.ToString()) : 0;
         }
 
-        public string Id { get; }
+        public int Id { get; }
         public string Name { get; }
         //public string GuildName { get; }
         public float[] Position { get; }

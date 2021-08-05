@@ -8,11 +8,11 @@ namespace Albion.Network.Interface
         public HealthUpdateEvent(Dictionary<byte, object> parameters) : base(parameters)
         {
             // 13 и 14 это ХП
-            Id = parameters[0].ToString();
+            Id = int.Parse(parameters[0].ToString());
             NowHP = parameters.TryGetValue(3, out object hp2) ? Int32.Parse(hp2.ToString()) : 0;
         }
 
-        public string Id { get; }
+        public int Id { get; }
         public int NowHP { get; }
 
     }
