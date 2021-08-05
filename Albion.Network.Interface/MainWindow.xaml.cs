@@ -22,7 +22,7 @@ namespace Albion.Network.Interface
         public static ChelInfo MyInfo = new ChelInfo();
         public static Mutex mutexObj = new Mutex();
         private System.Windows.Threading.DispatcherTimer dispatcherTimer;
-        private double scale = 9;
+        public static double scale = 9;
         private static List<Thread> threads = new List<Thread>();
         private static int secondsToDell = 10;
         public static bool needSound = true;
@@ -35,15 +35,16 @@ namespace Albion.Network.Interface
             dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
             dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0,200);
             dispatcherTimer.Start();
-            
 
+            PointsControll.radarArea = Points;
             ReceiverBuilder builder = ReceiverBuilder.Create();
             
             builder.AddRequestHandler(new MoveRequestHandler()); // мое перемещение
             builder.AddEventHandler(new MoveEventHandler()); // Движения типов 
-            builder.AddEventHandler(new NewCharacterEventHandler()); //новые типы
+            builder.AddEventHandler(new NewChatacterEventHandler()); //новые типы
             builder.AddEventHandler(new NewMobEventHandler()); // новые мобы
-            builder.AddEventHandler(new LeaveEventHandler()); //Телепорты ХЗ ЧТО ЭТО
+            builder.AddEventHandler(new LeaveEventHandler()); // Исчезновеня типов
+            builder.AddEventHandler(new HealthUpdateEventHandler()); // изменения ХП
 
 
             receiver = builder.Build();
@@ -88,78 +89,14 @@ namespace Albion.Network.Interface
                 {
                     if (pairForDel.Value.time < timeNow && pairForDel.Value.leave)// если надо убрать старых челов
                     {
-                        foreach (Ellipse pointsChild in Points.Children)
-                        {
-                            if (pointsChild.Name == $"ID{pairForDel.Key}")
-                            {
-                                Points.Children.Remove(pointsChild);
-                                break;
-                            }
-                        }
+                        PointsControll.DelPoint(pairForDel.Key);
                         chelDictionary.Remove(pairForDel.Key);
                     }
                 }
 
                 foreach (KeyValuePair<String, ChelInfo> pairForUpdate in chelDictionary)
                 {
-                    bool newPoint = true;
-                    for (int i = 0; i < Points.Children.Count; i++)
-                    {
-                        if (((Ellipse)Points.Children[i]).Name == $"ID{pairForUpdate.Key}")
-                        {
-                            newPoint = false;
-                            ((Ellipse)Points.Children[i]).Margin = new Thickness((pairForUpdate.Value.X - MyInfo.X) * scale, 0, 0, (pairForUpdate.Value.Y - MyInfo.Y) * scale);
-                            if (pairForUpdate.Value.leave)
-                            {
-                                ((Ellipse)Points.Children[i]).Fill = Brushes.Yellow;
-                            }
-                            else
-                            {
-                                if (pairForUpdate.Value.isMob)
-                                {
-                                    ((Ellipse)Points.Children[i]).Fill = Brushes.Blue;
-                                }
-                                else
-                                {
-                                    ((Ellipse)Points.Children[i]).Fill = Brushes.Red;
-                                }
-                            }
-                            break;
-                        }
-                    }
-                    if (newPoint)
-                    {
-                        if (pairForUpdate.Value.isMob)
-                        {
-                            Points.Children.Add(new Ellipse()
-                            {
-                                Fill = Brushes.Blue,
-                                HorizontalAlignment = HorizontalAlignment.Center,
-                                VerticalAlignment = VerticalAlignment.Center,
-                                Height = 7,
-                                Width = 7,
-                                Margin = new Thickness((pairForUpdate.Value.X - MyInfo.X) * scale, 0, 0, (pairForUpdate.Value.Y - MyInfo.Y) * scale),
-                                Stroke = Brushes.Black,
-                                Name = $"ID{pairForUpdate.Key}",
-                                Opacity = 0.5
-                            });
-                        }
-                        else
-                        {
-                            Points.Children.Add(new Ellipse()
-                            {
-                                Fill = Brushes.Red,
-                                HorizontalAlignment = HorizontalAlignment.Center,
-                                VerticalAlignment = VerticalAlignment.Center,
-                                Height = 10,
-                                Width = 10,
-                                Margin = new Thickness((pairForUpdate.Value.X - MyInfo.X) * scale, 0, 0, (pairForUpdate.Value.Y - MyInfo.Y) * scale),
-                                Stroke = Brushes.Black,
-                                Name = $"ID{pairForUpdate.Key}",
-                                Opacity = 0.65
-                            });
-                        }
-                    }
+                    PointsControll.UpdatePoints(pairForUpdate);
                 }
             }
             catch (Exception exception)

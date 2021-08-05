@@ -19,15 +19,21 @@ namespace Albion.Network.Interface
 
         protected override Task OnActionAsync(LeaveEvent value)
         {
-            MainWindow.mutexObj.WaitOne();
             try
             {
-                MainWindow.chelDictionary[value.Id].leave = true;
+                MainWindow.mutexObj.WaitOne();
+                if (MainWindow.chelDictionary.ContainsKey(value.Id))
+                {
+                    MainWindow.chelDictionary[value.Id].leave = true;
+                }
+                MainWindow.mutexObj.ReleaseMutex();
+
             }
-            catch (Exception e)
+            catch (Exception)
             {
+                //Console.WriteLine("error LeaveEventHandler:" + exception.Message);
+
             }
-            MainWindow.mutexObj.ReleaseMutex();
             return Task.CompletedTask;
         }
     }

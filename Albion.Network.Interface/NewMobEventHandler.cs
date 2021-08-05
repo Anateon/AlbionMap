@@ -13,7 +13,7 @@ namespace Albion.Network.Interface
         {
             try
             {
-                if (value.FullHP == MainWindow.moobNeedHP || value.FullHP == 0)
+                if (value.FullHP == MainWindow.moobNeedHP || MainWindow.moobNeedHP == 0)
                 {
                     MainWindow.mutexObj.WaitOne();
                     MainWindow.chelDictionary[value.Id] = new ChelInfo()
@@ -22,7 +22,9 @@ namespace Albion.Network.Interface
                         X = value.Position[0],
                         Y = value.Position[1],
                         leave = false,
-                        time = DateTime.Now
+                        time = DateTime.Now,
+                        NowHP = value.NowHP,
+                        FullHP = value.FullHP
                     };
                     MainWindow.mutexObj.ReleaseMutex();
                 }

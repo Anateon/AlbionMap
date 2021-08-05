@@ -10,5 +10,7 @@ namespace Albion.Network.Interface
         public string name { get; set; }
         public DateTime time { get; set; }
         public bool leave { get; set; }
+        public int FullHP { get; set; }
+        public int NowHP { get; set; }
     }
 }

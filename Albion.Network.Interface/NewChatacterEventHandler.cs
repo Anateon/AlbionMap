@@ -9,10 +9,10 @@ using System.Windows.Shapes;
 
 namespace Albion.Network.Interface
 {
-    public class NewCharacterEventHandler : EventPacketHandler<NewCharacterEvent>
+    public class NewChatacterEventHandler : EventPacketHandler<NewCharacterEvent>
     {
 
-        public NewCharacterEventHandler() : base(EventCodes.NewCharacter)
+        public NewChatacterEventHandler() : base(EventCodes.NewCharacter)
         {
         }
 
@@ -36,7 +36,10 @@ namespace Albion.Network.Interface
                     X = value.Position[0],
                     Y = value.Position[1],
                     leave = false,
-                    time = DateTime.Now
+                    time = DateTime.Now,
+                    NowHP = value.NowHP,
+                    FullHP = value.FullHP,
+                    name = value.Name
                 };
                 MainWindow.mutexObj.ReleaseMutex();
                 //Console.WriteLine($"New ch Id: {value.Id} name: {value.Name} hp: {value.FullHP}/{value.NowHP}");

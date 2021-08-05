@@ -100,10 +100,13 @@
     <Compile Include="LeaveEvent.cs" />
     <Compile Include="NewCharacterEvent.cs" />
     <Compile Include="LeaveEventHandler.cs" />
-    <Compile Include="NewCharacterEventHandler.cs" />
+    <Compile Include="NewChatacterEventHandler.cs" />
+    <Compile Include="HealthUpdateEvent.cs" />
     <Compile Include="NewMobEvent.cs" />
+    <Compile Include="HealthUpdateEventHandler.cs" />
     <Compile Include="NewMobEventHandler.cs" />
     <Compile Include="OperationCodes.cs" />
+    <Compile Include="PointsControll.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
