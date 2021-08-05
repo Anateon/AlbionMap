@@ -4,8 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="MainWindow" Height="583" Width="582"
-        Topmost="True" Closed="Window_Closed">
+        Title="MainWindow" Height="583" Width="582" Closed="Window_Closed">
+    <!--Topmost="True"-->
     <Window.Background>
         <SolidColorBrush Opacity="0.5" Color="White"/>
     </Window.Background>
@@ -44,7 +44,7 @@
                             </TransformGroup>
                         </Grid.RenderTransform>
                     </Grid>
-                    <Ellipse x:Name="ShowRadius" HorizontalAlignment="Center" Height="100" Margin="0" Stroke="Black" VerticalAlignment="Center" Width="100"/>
+                    <Ellipse x:Name="ShowRadius" HorizontalAlignment="Center" Height="100" Margin="0" Stroke="Black" VerticalAlignment="Center" Width="100" Visibility="Hidden"/>
                     <Button Content="Reset points" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
                 </Grid>
             </TabItem>
@@ -52,13 +52,16 @@
             <TabItem Header="TabItem">
                 <Grid Background="#FFE5E5E5">
                     <CheckBox Content="Radar on/off" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" IsChecked="True" Click="CheckBox_Click"/>
-                    <TextBox HorizontalAlignment="Left" Height="22" Margin="10,55,0,0" TextWrapping="Wrap" Text="60" VerticalAlignment="Top" Width="60" PreviewTextInput="TextBox_PreviewTextInput" TextChanged="TextBox_TextChanged"/>
-                    <TextBlock HorizontalAlignment="Left" Margin="75,56,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="146" Text="Radar points life time (sec)"/>
-                    <TextBox HorizontalAlignment="Left" Height="22" Margin="10,82,0,0" TextWrapping="Wrap" Text="9" VerticalAlignment="Top" Width="60" PreviewTextInput="TextBox_PreviewTextInput" TextChanged="TextBox_TextChanged2"/>
-                    <TextBlock HorizontalAlignment="Left" Margin="75,83,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="146" Text="Scale px (px = 1m)"/>
-                    <TextBox HorizontalAlignment="Left" Height="24" Margin="10,109,0,0" TextWrapping="Wrap" Text="15" VerticalAlignment="Top" Width="60" PreviewTextInput="TextBox_PreviewTextInput" TextChanged="TextBox_TextChanged3"/>
-                    <TextBlock HorizontalAlignment="Left" Margin="75,110,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="146" Text="Radius (m)"/>
-                    <Button Content="Reset points" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
+                    <TextBox HorizontalAlignment="Left" Height="22" Margin="10,75,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Width="60" PreviewTextInput="TextBox_PreviewTextInput" TextChanged="TextBox_TextChanged"/>
+                    <TextBlock HorizontalAlignment="Left" Margin="75,76,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="146" Text="Radar points life time (sec)"/>
+                    <TextBox HorizontalAlignment="Left" Height="22" Margin="10,102,0,0" TextWrapping="Wrap" Text="9" VerticalAlignment="Top" Width="60" PreviewTextInput="TextBox_PreviewTextInput" TextChanged="TextBox_TextChanged2"/>
+                    <TextBlock HorizontalAlignment="Left" Margin="75,103,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="146" Text="Scale px (px = 1m)"/>
+                    <TextBox HorizontalAlignment="Left" Height="22" Margin="10,129,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="60" PreviewTextInput="TextBox_PreviewTextInput" TextChanged="TextBox_TextChanged3"/>
+                    <TextBlock HorizontalAlignment="Left" Margin="75,130,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="146" Text="Radius (m)"/>
+                    <Button Content="Reset points" HorizontalAlignment="Left" Margin="10,50,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
+                    <CheckBox Content="Players sound notification" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" IsChecked="True" Click="CheckBox_Click_1"/>
+                    <TextBox HorizontalAlignment="Left" Height="22" Margin="10,156,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="60" PreviewTextInput="TextBox_PreviewTextInput" TextChanged="TextBox_TextChanged4"/>
+                    <TextBlock HorizontalAlignment="Left" Margin="75,157,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="146" Text="Mob HP filter"/>
                 </Grid>
             </TabItem>
         </TabControl>

@@ -4,9 +4,11 @@ namespace Albion.Network.Interface
 {
     public class ChelInfo
     {
+        public bool isMob { get; set; }
         public float X { get; set; }
         public float Y { get; set; }
         public string name { get; set; }
         public DateTime time { get; set; }
+        public bool leave { get; set; }
     }
 }

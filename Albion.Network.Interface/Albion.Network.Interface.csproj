@@ -97,8 +97,12 @@
     <Compile Include="MoveEventHandler.cs" />
     <Compile Include="MoveOperation.cs" />
     <Compile Include="MoveRequestHandler.cs" />
+    <Compile Include="LeaveEvent.cs" />
     <Compile Include="NewCharacterEvent.cs" />
+    <Compile Include="LeaveEventHandler.cs" />
     <Compile Include="NewCharacterEventHandler.cs" />
+    <Compile Include="NewMobEvent.cs" />
+    <Compile Include="NewMobEventHandler.cs" />
     <Compile Include="OperationCodes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

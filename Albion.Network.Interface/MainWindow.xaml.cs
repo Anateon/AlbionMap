@@ -24,7 +24,9 @@ namespace Albion.Network.Interface
         private System.Windows.Threading.DispatcherTimer dispatcherTimer;
         private double scale = 9;
         private static List<Thread> threads = new List<Thread>();
-        private static int secondsToDell = 60;
+        private static int secondsToDell = 10;
+        public static bool needSound = true;
+        public static int moobNeedHP = 0;
         public MainWindow()
         {
             InitializeComponent();
@@ -40,8 +42,10 @@ namespace Albion.Network.Interface
             builder.AddRequestHandler(new MoveRequestHandler()); // мое перемещение
             builder.AddEventHandler(new MoveEventHandler()); // Движения типов 
             builder.AddEventHandler(new NewCharacterEventHandler()); //новые типы
-            //builder.AddEventHandler(new NewMobEventHandler()); // новые мобы
-            
+            builder.AddEventHandler(new NewMobEventHandler()); // новые мобы
+            builder.AddEventHandler(new LeaveEventHandler()); //Телепорты ХЗ ЧТО ЭТО
+
+
             receiver = builder.Build();
 
             Console.WriteLine("Start");
@@ -82,7 +86,7 @@ namespace Albion.Network.Interface
             {
                 foreach (KeyValuePair<String, ChelInfo> pairForDel in chelDictionary.ToArray())
                 {
-                    if (pairForDel.Value.time < timeNow)// если надо убрать старых челов
+                    if (pairForDel.Value.time < timeNow && pairForDel.Value.leave)// если надо убрать старых челов
                     {
                         foreach (Ellipse pointsChild in Points.Children)
                         {
@@ -105,25 +109,56 @@ namespace Albion.Network.Interface
                         {
                             newPoint = false;
                             ((Ellipse)Points.Children[i]).Margin = new Thickness((pairForUpdate.Value.X - MyInfo.X) * scale, 0, 0, (pairForUpdate.Value.Y - MyInfo.Y) * scale);
+                            if (pairForUpdate.Value.leave)
+                            {
+                                ((Ellipse)Points.Children[i]).Fill = Brushes.Yellow;
+                            }
+                            else
+                            {
+                                if (pairForUpdate.Value.isMob)
+                                {
+                                    ((Ellipse)Points.Children[i]).Fill = Brushes.Blue;
+                                }
+                                else
+                                {
+                                    ((Ellipse)Points.Children[i]).Fill = Brushes.Red;
+                                }
+                            }
                             break;
                         }
                     }
-
                     if (newPoint)
                     {
-                        var elipse = 
-                        Points.Children.Add(new Ellipse()
+                        if (pairForUpdate.Value.isMob)
                         {
-                            Fill = Brushes.Red,
-                            HorizontalAlignment = HorizontalAlignment.Center,
-                            VerticalAlignment = VerticalAlignment.Center,
-                            Height = 7,
-                            Width = 7,
-                            Margin = new Thickness((pairForUpdate.Value.X - MyInfo.X) * scale, 0, 0, (pairForUpdate.Value.Y - MyInfo.Y) * scale),
-                            Stroke = Brushes.Black,
-                            Name = $"ID{pairForUpdate.Key}",
-                            Opacity = 0.5
-                        });
+                            Points.Children.Add(new Ellipse()
+                            {
+                                Fill = Brushes.Blue,
+                                HorizontalAlignment = HorizontalAlignment.Center,
+                                VerticalAlignment = VerticalAlignment.Center,
+                                Height = 7,
+                                Width = 7,
+                                Margin = new Thickness((pairForUpdate.Value.X - MyInfo.X) * scale, 0, 0, (pairForUpdate.Value.Y - MyInfo.Y) * scale),
+                                Stroke = Brushes.Black,
+                                Name = $"ID{pairForUpdate.Key}",
+                                Opacity = 0.5
+                            });
+                        }
+                        else
+                        {
+                            Points.Children.Add(new Ellipse()
+                            {
+                                Fill = Brushes.Red,
+                                HorizontalAlignment = HorizontalAlignment.Center,
+                                VerticalAlignment = VerticalAlignment.Center,
+                                Height = 10,
+                                Width = 10,
+                                Margin = new Thickness((pairForUpdate.Value.X - MyInfo.X) * scale, 0, 0, (pairForUpdate.Value.Y - MyInfo.Y) * scale),
+                                Stroke = Brushes.Black,
+                                Name = $"ID{pairForUpdate.Key}",
+                                Opacity = 0.65
+                            });
+                        }
                     }
                 }
             }
@@ -201,6 +236,18 @@ namespace Albion.Network.Interface
             mutexObj.WaitOne();
             chelDictionary.Clear();
             Points.Children.RemoveRange(0,Int32.MaxValue);
+            mutexObj.ReleaseMutex();
+        }
+
+        private void CheckBox_Click_1(object sender, RoutedEventArgs e)
+        {
+            needSound = (bool)((CheckBox)sender).IsChecked;
+        }
+
+        private void TextBox_TextChanged4(object sender, TextChangedEventArgs e)
+        {
+            mutexObj.WaitOne();
+            moobNeedHP = Int32.Parse(((TextBox)sender).Text);
             mutexObj.ReleaseMutex();
         }
     }

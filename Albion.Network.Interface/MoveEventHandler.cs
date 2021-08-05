@@ -26,6 +26,7 @@ namespace Albion.Network.Interface
                     tmp.time = DateTime.Now;
                     tmp.X = value.Position[0];
                     tmp.Y = value.Position[1];
+                    tmp.leave = false;
                     MainWindow.chelDictionary[value.Id] = tmp;
                 }
                 MainWindow.mutexObj.ReleaseMutex();
