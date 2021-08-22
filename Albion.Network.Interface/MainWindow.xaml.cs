@@ -27,13 +27,19 @@ namespace Albion.Network.Interface
         private static int secondsToDell = 10;
         public static bool needSound = true;
         public static int moobNeedHP = 0;
+
+        public static bool needHPProcent = true;
+        public static bool needHPValuve = true;
+        public static bool needNickname = true;
+
+        public static List<int> keysForDell = new List<int>();
         public MainWindow()
         {
             InitializeComponent();
 
             dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
             dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
-            dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0,200);
+            dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0,250);
             dispatcherTimer.Start();
 
             PointsControll.radarArea = Points;
@@ -82,22 +88,32 @@ namespace Albion.Network.Interface
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
             var timeNow = DateTime.Now.AddSeconds(secondsToDell*-1);
-            mutexObj.WaitOne();
+            keysForDell.Clear();
             try
             {
                 foreach (KeyValuePair<int, ChelInfo> pairForDel in chelDictionary.ToArray())
                 {
                     if (pairForDel.Value.time < timeNow && pairForDel.Value.leave)// если надо убрать старых челов
                     {
-                        PointsControll.DelPoint(pairForDel.Key);
+                        keysForDell.Add(pairForDel.Key);
+                        mutexObj.WaitOne();
                         chelDictionary.Remove(pairForDel.Key);
+                        mutexObj.ReleaseMutex();
                     }
                 }
-
-                foreach (KeyValuePair<int, ChelInfo> pairForUpdate in chelDictionary)
+                foreach (var pairforDel in keysForDell)
                 {
-                    PointsControll.UpdatePoints(pairForUpdate);
+                    PointsControll.DelPoint(pairforDel);
                 }
+                foreach (KeyValuePair<int, ChelInfo> pairForUpdate in chelDictionary.ToArray())
+                {
+                    if (pairForUpdate.Value.NeedUpdate || MyInfo.NeedUpdate)
+                    {
+                        chelDictionary[pairForUpdate.Key].NeedUpdate = false; 
+                        PointsControll.UpdatePoints(pairForUpdate);
+                    }
+                }
+                MyInfo.NeedUpdate = false;
             }
             catch (Exception exception)
             {
@@ -105,7 +121,6 @@ namespace Albion.Network.Interface
                 throw;
                 //Points.Children.RemoveRange(0,Int32.MaxValue);
             }
-            mutexObj.ReleaseMutex();
         }
 
         private void Window_Closed(object sender, EventArgs e)
@@ -113,7 +128,7 @@ namespace Albion.Network.Interface
             Process.GetCurrentProcess().Kill();
         }
 
-        private void CheckBox_Click(object sender, RoutedEventArgs e)
+        private void CheckBox_Radar(object sender, RoutedEventArgs e)
         {
             if ((bool)((CheckBox)sender).IsChecked)
             {
@@ -176,7 +191,7 @@ namespace Albion.Network.Interface
             mutexObj.ReleaseMutex();
         }
 
-        private void CheckBox_Click_1(object sender, RoutedEventArgs e)
+        private void CheckBox_SoundNotification(object sender, RoutedEventArgs e)
         {
             needSound = (bool)((CheckBox)sender).IsChecked;
         }
@@ -186,6 +201,21 @@ namespace Albion.Network.Interface
             mutexObj.WaitOne();
             moobNeedHP = Int32.Parse(((TextBox)sender).Text);
             mutexObj.ReleaseMutex();
+        }
+
+        private void CheckBox_HPValuve(object sender, RoutedEventArgs e)
+        {
+            needHPValuve = (bool)((CheckBox)sender).IsChecked;
+        }
+
+        private void CheckBox_HPProcent(object sender, RoutedEventArgs e)
+        {
+            needHPProcent = (bool)((CheckBox)sender).IsChecked;
+        }
+
+        private void CheckBox_Nickname(object sender, RoutedEventArgs e)
+        {
+            needNickname = (bool)((CheckBox)sender).IsChecked;
         }
     }
 }

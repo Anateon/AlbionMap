@@ -18,10 +18,11 @@ namespace Albion.Network.Interface
         {
             try
             {
-                MainWindow.mutexObj.WaitOne();
+                //MainWindow.mutexObj.WaitOne();
                 MainWindow.MyInfo.X = value.Position[0];
                 MainWindow.MyInfo.Y = value.Position[1];
-                MainWindow.mutexObj.ReleaseMutex();
+                MainWindow.MyInfo.NeedUpdate = true;
+                //MainWindow.mutexObj.ReleaseMutex();
             }
             catch (Exception exception)
             {

@@ -39,29 +39,28 @@ namespace Albion.Network.Example
                 })
                 .Start();
             }
-            Console.Clear();
-            while (true)
-            {
-                //Console.SetCursorPosition(0, 0);
-                Console.Clear();
-                var timeNow = DateTime.Now.AddMinutes(-1);
-                Console.WriteLine($"NAME \t\t DISTANCE \t\t ANGLE");
-                try
-                {
-                    foreach (var var in chelDictionary)
-                    {
-                        if (var.Value.time < timeNow) // если надо убрать старых челов
-                            chelDictionary.Remove(var.Key);
-                        else
-                            Console.WriteLine($"{var.Value.name} \t\t {Math.Sqrt(Math.Pow(var.Value.X - MyInfo.X, 2) + Math.Pow(var.Value.Y - MyInfo.Y, 2))} \t\t {Angle(var.Value.X - MyInfo.X, var.Value.Y - MyInfo.Y)}°");
-                    }
-                }
-                catch (Exception e)
-                {
-                }
-                //Console.WriteLine("===================================");
-                Thread.Sleep(200);
-            }//←↑→↓
+            //while (true)
+            //{
+            //    Console.SetCursorPosition(0, 0);
+            //    Console.Clear();
+            //    var timeNow = DateTime.Now.AddMinutes(-1);
+            //    Console.WriteLine($"NAME \t\t DISTANCE \t\t ANGLE");
+            //    try
+            //    {
+            //        foreach (var var in chelDictionary)
+            //        {
+            //            if (var.Value.time < timeNow) // если надо убрать старых челов
+            //                chelDictionary.Remove(var.Key);
+            //            else
+            //                Console.WriteLine($"{var.Value.name} \t\t {Math.Sqrt(Math.Pow(var.Value.X - MyInfo.X, 2) + Math.Pow(var.Value.Y - MyInfo.Y, 2))} \t\t {Angle(var.Value.X - MyInfo.X, var.Value.Y - MyInfo.Y)}°");
+            //        }
+            //    }
+            //    catch (Exception e)
+            //    {
+            //    }
+            //    Console.WriteLine("===================================");
+            //    Thread.Sleep(200);
+            //}//←↑→↓
             Console.Read();
         }
 

@@ -11,10 +11,12 @@ namespace Albion.Network.Example
 
         public TESTEventHandler() : base(EventCodes.TESTcode)
         {
+
         }
 
         protected override Task OnActionAsync(TESTEvent value)
         {
+            //Console.WriteLine("ID: " + value.Id + " \\pos: " + value.Position[0] + ";" + value.Position[1]);
             return Task.CompletedTask;
         }
     }

@@ -45,7 +45,7 @@ namespace Albion.Network.Interface
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Bottom,
                 Margin = new Thickness(0, 23, 0, 0),
-                Text = $"{info.Value.FullHP}/{info.Value.NowHP} [{Math.Round(info.Value.NowHP / (double)info.Value.FullHP * 100.0, 2)}%]"
+                Text = GetInfoString(info)
             };
 
 
@@ -60,7 +60,6 @@ namespace Albion.Network.Interface
                     pointArea.Opacity = 0.65;
                     point.Height = point.Width = 10;
                     point.Fill = Brushes.Red;
-                    caption.Text = $"{info.Value.name} {caption.Text}";
                     break;
             }
             pointArea.Children.Add(point);
@@ -102,8 +101,7 @@ namespace Albion.Network.Interface
                 {
                     ((Grid) radarArea.Children[i]).Margin = new Thickness((info.Value.X - MainWindow.MyInfo.X) * MainWindow.scale, 0, 0,
                         (info.Value.Y - MainWindow.MyInfo.Y) * MainWindow.scale);
-                    ((TextBlock) ((Grid) radarArea.Children[i]).Children[1]).Text =
-                        $"{info.Value.FullHP}/{info.Value.NowHP} [{Math.Round(info.Value.NowHP / (double) info.Value.FullHP * 100.0, 2)}%]";
+                    ((TextBlock)((Grid) radarArea.Children[i]).Children[1]).Text = GetInfoString(info);
 
 
                     if (info.Value.leave)
@@ -118,7 +116,6 @@ namespace Albion.Network.Interface
                                 ((Ellipse)((Grid)radarArea.Children[i]).Children[0]).Fill = Brushes.Blue;
                                 break;
                             case false:
-                                ((TextBlock)((Grid)radarArea.Children[i]).Children[1]).Text = $"{info.Value.name} {((TextBlock)((Grid)radarArea.Children[i]).Children[1]).Text}";
                                 ((Ellipse)((Grid)radarArea.Children[i]).Children[0]).Fill = Brushes.Red;
                                 break;
                         }
@@ -128,5 +125,26 @@ namespace Albion.Network.Interface
             }
             return false;
         }
+
+        private static string GetInfoString(KeyValuePair<int, ChelInfo> info)
+        {
+            string tmpString = "";
+            if (MainWindow.needNickname)
+            {
+                tmpString += info.Value.name;
+            }
+
+            if (MainWindow.needHPValuve)
+            {
+                tmpString += $" {info.Value.FullHP}/{info.Value.NowHP}"; 
+            }
+
+            if (MainWindow.needHPProcent)
+            {
+                tmpString += $" [{Math.Round(info.Value.NowHP / (double)info.Value.FullHP * 100.0, 2)}%]";
+            }
+            return tmpString;
+        }
+
     }
 }

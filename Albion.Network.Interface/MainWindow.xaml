@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:interface="clr-namespace:Albion.Network.Interface"
         mc:Ignorable="d"
-        Title="MainWindow" Height="583" Width="582" Closed="Window_Closed">
+        Title="Albion Radar" Height="583" Width="582" Closed="Window_Closed">
     <!--Topmost="True"-->
     <Window.Background>
         <SolidColorBrush Opacity="0.5" Color="White"/>
@@ -43,7 +43,7 @@
 
             <TabItem Header="TabItem">
                 <Grid Background="#FFE5E5E5">
-                    <CheckBox Content="Radar on/off" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" IsChecked="True" Click="CheckBox_Click"/>
+                    <CheckBox Content="Radar on/off" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" IsChecked="True" Click="CheckBox_Radar"/>
                     <TextBox HorizontalAlignment="Left" Height="22" Margin="10,75,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Width="60" PreviewTextInput="TextBox_PreviewTextInput" TextChanged="TextBox_TextChanged"/>
                     <TextBlock HorizontalAlignment="Left" Margin="75,76,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="146" Text="Radar points life time (sec)"/>
                     <TextBox HorizontalAlignment="Left" Height="22" Margin="10,102,0,0" TextWrapping="Wrap" Text="9" VerticalAlignment="Top" Width="60" PreviewTextInput="TextBox_PreviewTextInput" TextChanged="TextBox_TextChanged2"/>
@@ -51,25 +51,12 @@
                     <TextBox HorizontalAlignment="Left" Height="22" Margin="10,129,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="60" PreviewTextInput="TextBox_PreviewTextInput" TextChanged="TextBox_TextChanged3"/>
                     <TextBlock HorizontalAlignment="Left" Margin="75,130,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="146" Text="Radius (m)"/>
                     <Button Content="Reset points" HorizontalAlignment="Left" Margin="10,50,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
-                    <CheckBox Content="Players sound notification" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" IsChecked="True" Click="CheckBox_Click_1"/>
+                    <CheckBox Content="Players sound notification" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" IsChecked="True" Click="CheckBox_SoundNotification"/>
                     <TextBox HorizontalAlignment="Left" Height="22" Margin="10,156,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="60" PreviewTextInput="TextBox_PreviewTextInput" TextChanged="TextBox_TextChanged4"/>
                     <TextBlock HorizontalAlignment="Left" Margin="75,157,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="146" Text="Mob HP filter"/>
-                    <Grid x:Name="fuckinGrid" Width="500" Height="500" RenderTransformOrigin="0.5,0.5">
-                        <Grid.RenderTransform>
-                            <TransformGroup>
-                                <RotateTransform Angle="45"/>
-                            </TransformGroup>
-                        </Grid.RenderTransform>
-                        <Grid x:Name="Qwqqqe" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="50,0,0,12" RenderTransformOrigin="0.5,0.5">
-                            <Ellipse Height="10" Width="10" Stroke="Black"/>
-                            <TextBlock Text="sdfasdfasdfaLabel" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,25,0,0" Height="30"/>
-                            <Grid.RenderTransform>
-                                <TransformGroup>
-                                    <RotateTransform Angle="-45"/>
-                                </TransformGroup>
-                            </Grid.RenderTransform>
-                        </Grid>
-                    </Grid>
+                    <CheckBox Content="HP (XX/XX)" HorizontalAlignment="Left" Margin="10,183,0,0" VerticalAlignment="Top" IsChecked="True" Click="CheckBox_HPValuve"/>
+                    <CheckBox Content="HP [XX%]" HorizontalAlignment="Left" Margin="10,203,0,0" VerticalAlignment="Top" IsChecked="True" Click="CheckBox_HPProcent"/>
+                    <CheckBox Content="Nickname" HorizontalAlignment="Left" Margin="10,223,0,0" VerticalAlignment="Top" IsChecked="True" Click="CheckBox_Nickname"/>
                 </Grid>
             </TabItem>
         </TabControl>

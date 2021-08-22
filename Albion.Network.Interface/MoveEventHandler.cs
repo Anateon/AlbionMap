@@ -19,7 +19,7 @@ namespace Albion.Network.Interface
         {
             try
             {
-                MainWindow.mutexObj.WaitOne();
+                //MainWindow.mutexObj.WaitOne();
                 if (MainWindow.chelDictionary.ContainsKey(value.Id))
                 {
                     var tmp = MainWindow.chelDictionary[value.Id];
@@ -27,9 +27,10 @@ namespace Albion.Network.Interface
                     tmp.X = value.Position[0];
                     tmp.Y = value.Position[1];
                     tmp.leave = false;
+                    tmp.NeedUpdate = true;
                     MainWindow.chelDictionary[value.Id] = tmp;
                 }
-                MainWindow.mutexObj.ReleaseMutex();
+                //MainWindow.mutexObj.ReleaseMutex();
             }
             catch (Exception exception)
             {

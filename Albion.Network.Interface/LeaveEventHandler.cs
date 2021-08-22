@@ -21,12 +21,13 @@ namespace Albion.Network.Interface
         {
             try
             {
-                MainWindow.mutexObj.WaitOne();
+                //MainWindow.mutexObj.WaitOne();
                 if (MainWindow.chelDictionary.ContainsKey(value.Id))
                 {
                     MainWindow.chelDictionary[value.Id].leave = true;
+                    MainWindow.chelDictionary[value.Id].NeedUpdate = true;
                 }
-                MainWindow.mutexObj.ReleaseMutex();
+                //MainWindow.mutexObj.ReleaseMutex();
 
             }
             catch (Exception)

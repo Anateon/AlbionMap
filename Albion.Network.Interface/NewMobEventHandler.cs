@@ -24,7 +24,8 @@ namespace Albion.Network.Interface
                         leave = false,
                         time = DateTime.Now,
                         NowHP = value.NowHP,
-                        FullHP = value.FullHP
+                        FullHP = value.FullHP,
+                        NeedUpdate = true
                     };
                     MainWindow.mutexObj.ReleaseMutex();
                 }

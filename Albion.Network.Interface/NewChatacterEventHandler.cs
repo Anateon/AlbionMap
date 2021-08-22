@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Media;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -20,15 +21,19 @@ namespace Albion.Network.Interface
         {
             try
             {
-                MainWindow.mutexObj.WaitOne();
-
                 if (MainWindow.needSound)
                 {
-                    using (var soundPlayer = new SoundPlayer(@"c:\Windows\Media\Windows Ringin.wav"))
-                    {
-                        soundPlayer.Play();
-                    }
+                    //using (var soundPlayer = new SoundPlayer(@"c:\Windows\Media\Windows Ringin.wav"))
+                    //{
+                    //    soundPlayer.Play();
+                    //}
+
+                    System.Media.SystemSounds.Beep.Play();
+                    //new Thread(() => Console.Beep()).Start();
                 }
+
+                MainWindow.mutexObj.WaitOne();
+
                 MainWindow.chelDictionary[value.Id] = new ChelInfo()
                 {
                     //name = value.Name,
@@ -39,7 +44,8 @@ namespace Albion.Network.Interface
                     time = DateTime.Now,
                     NowHP = value.NowHP,
                     FullHP = value.FullHP,
-                    name = value.Name
+                    name = value.Name,
+                    NeedUpdate = true
                 };
                 MainWindow.mutexObj.ReleaseMutex();
                 //Console.WriteLine($"New ch Id: {value.Id} name: {value.Name} hp: {value.FullHP}/{value.NowHP}");

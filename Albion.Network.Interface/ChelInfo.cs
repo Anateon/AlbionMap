@@ -12,5 +12,6 @@ namespace Albion.Network.Interface
         public bool leave { get; set; }
         public int FullHP { get; set; }
         public int NowHP { get; set; }
+        public bool NeedUpdate { get; set; }
     }
 }
