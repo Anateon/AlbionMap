@@ -4,12 +4,17 @@ using System.Threading.Tasks;
 
 namespace Albion.Network
 {
-    public abstract class EventPacketHandler<TEvent> : PacketHandler<EventPacket> where TEvent : BaseEvent
+    public abstract class EventPacketHandlerForTest<TEvent> : PacketHandler<EventPacket> where TEvent : BaseEvent
     {
         private readonly int eventCode;
 
-        public EventPacketHandler(int eventCode)
+        public EventPacketHandlerForTest(int eventCode)
         {
+            this.eventCode = eventCode;
+        }
+        public EventPacketHandlerForTest()
+        {
+            eventCode = -666;
             this.eventCode = eventCode;
         }
 
@@ -17,7 +22,6 @@ namespace Albion.Network
 
         protected internal override Task OnHandleAsync(EventPacket packet)
         {
-#if DEBUG
             if (eventCode == -666)
             {
                 if (packet.EventCode != 3 && packet.EventCode != 255 && packet.EventCode != 148)
@@ -34,10 +38,7 @@ namespace Albion.Network
                     return OnActionAsync(instance);
                 }
             }
-
-#endif
-
-            if (eventCode != packet.EventCode)
+            else if (eventCode != packet.EventCode)
             {
                 return NextAsync(packet);
             }
@@ -47,6 +48,7 @@ namespace Albion.Network
 
                 return OnActionAsync(instance);
             }
+            return NextAsync(packet);
         }
     }
 }

@@ -22,6 +22,11 @@ No supports backward compatibility with version 4.7.0!</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="EventPacketHandler - Копировать.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="PhotonPackageParser" Version="4.1.0" />
   </ItemGroup>
 

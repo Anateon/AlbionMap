@@ -21,7 +21,11 @@ namespace Albion.Network.Interface
         {
             try
             {
-                if (MainWindow.needSound)
+                if (MainWindow.needPVPNewPlayerSound && value.PVPmode)
+                {
+                    System.Media.SystemSounds.Exclamation.Play();
+                }
+                else if (MainWindow.needNewPlayerSound)
                 {
                     //using (var soundPlayer = new SoundPlayer(@"c:\Windows\Media\Windows Ringin.wav"))
                     //{
@@ -31,6 +35,7 @@ namespace Albion.Network.Interface
                     System.Media.SystemSounds.Beep.Play();
                     //new Thread(() => Console.Beep()).Start();
                 }
+
 
                 MainWindow.mutexObj.WaitOne();
 
@@ -45,7 +50,8 @@ namespace Albion.Network.Interface
                     NowHP = value.NowHP,
                     FullHP = value.FullHP,
                     name = value.Name,
-                    NeedUpdate = true
+                    NeedUpdate = true,
+                    pvpMode = value.PVPmode
                 };
                 MainWindow.mutexObj.ReleaseMutex();
                 //Console.WriteLine($"New ch Id: {value.Id} name: {value.Name} hp: {value.FullHP}/{value.NowHP}");

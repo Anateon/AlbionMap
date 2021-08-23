@@ -25,12 +25,15 @@ namespace Albion.Network.Interface
         public static double scale = 9;
         private static List<Thread> threads = new List<Thread>();
         private static int secondsToDell = 10;
-        public static bool needSound = true;
+        public static bool needNewPlayerSound = true;
+        public static bool needPVPNewPlayerSound = true;
+
         public static int moobNeedHP = 0;
 
         public static bool needHPProcent = true;
         public static bool needHPValuve = true;
         public static bool needNickname = true;
+        public static int ZIndexCounter = 1000;
 
         public static List<int> keysForDell = new List<int>();
         public MainWindow()
@@ -51,6 +54,8 @@ namespace Albion.Network.Interface
             builder.AddEventHandler(new NewMobEventHandler()); // новые мобы
             builder.AddEventHandler(new LeaveEventHandler()); // Исчезновеня типов
             builder.AddEventHandler(new HealthUpdateEventHandler()); // изменения ХП
+            builder.AddEventHandler(new PVPStatusUpdateHandler()); // если чел врубил ПВП режим
+
 
 
             receiver = builder.Build();
@@ -193,7 +198,12 @@ namespace Albion.Network.Interface
 
         private void CheckBox_SoundNotification(object sender, RoutedEventArgs e)
         {
-            needSound = (bool)((CheckBox)sender).IsChecked;
+            needNewPlayerSound = (bool)((CheckBox)sender).IsChecked;
+        }
+
+        private void CheckBox_PVPSoundNotification(object sender, RoutedEventArgs e)
+        {
+            needPVPNewPlayerSound = (bool)((CheckBox)sender).IsChecked;
         }
 
         private void TextBox_TextChanged4(object sender, TextChangedEventArgs e)
@@ -206,16 +216,20 @@ namespace Albion.Network.Interface
         private void CheckBox_HPValuve(object sender, RoutedEventArgs e)
         {
             needHPValuve = (bool)((CheckBox)sender).IsChecked;
+            MyInfo.NeedUpdate = true;
         }
 
         private void CheckBox_HPProcent(object sender, RoutedEventArgs e)
         {
             needHPProcent = (bool)((CheckBox)sender).IsChecked;
+            MyInfo.NeedUpdate = true;
+
         }
 
         private void CheckBox_Nickname(object sender, RoutedEventArgs e)
         {
             needNickname = (bool)((CheckBox)sender).IsChecked;
+            MyInfo.NeedUpdate = true;
         }
     }
 }

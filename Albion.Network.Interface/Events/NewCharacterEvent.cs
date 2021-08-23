@@ -16,6 +16,11 @@ namespace Albion.Network.Interface
 
             NowHP = parameters.TryGetValue(18, out object hp1) ? Int32.Parse(hp1.ToString()) : 0;
             FullHP = parameters.TryGetValue(19, out object hp2) ? Int32.Parse(hp2.ToString()) : 0;
+            int pvpTmp = parameters.TryGetValue(45, out object pvp) ? Int32.Parse(pvp.ToString()) : 0;
+            if (pvpTmp == 255)
+                PVPmode = true;
+            else
+                PVPmode = false;
         }
 
         public int Id { get; }
@@ -24,6 +29,7 @@ namespace Albion.Network.Interface
         public float[] Position { get; }
         public int NowHP { get; }
         public int FullHP { get; }
+        public bool PVPmode { get; }
 
     }
 }

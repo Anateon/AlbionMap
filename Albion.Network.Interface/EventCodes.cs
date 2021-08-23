@@ -7,6 +7,6 @@
         public const short NewCharacter = 25;
         public const short Leave = 1;
         public const short Health = 6;
-
+        public const short PVPStatus = 336;
     }
 }

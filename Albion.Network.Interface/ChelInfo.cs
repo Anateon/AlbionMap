@@ -13,5 +13,6 @@ namespace Albion.Network.Interface
         public int FullHP { get; set; }
         public int NowHP { get; set; }
         public bool NeedUpdate { get; set; }
+        public bool pvpMode { get; set; }
     }
 }

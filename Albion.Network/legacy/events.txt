@@ -1,5 +1,4 @@
-﻿Unused = 0
-Leave
+﻿Leave
 JoinFinished
 Move
 Teleport
@@ -334,7 +333,7 @@ FishingMiniGame
 SteamAchiementCompleted
 UpdatePuppet
 ChangeFlaggingFinished
-NewOutpostObject
+NewOutpostObject // ДРУГ ИЛИ НЕТ. ВРАГ 255 на 1 значении. ДРУГ = 0 на 1 значении
 OutpostUpdate
 OutpostClaimed
 OutpostReward

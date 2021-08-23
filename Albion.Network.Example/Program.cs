@@ -15,6 +15,7 @@ namespace Albion.Network.Example
             Dictionary<string, ChelInfo> chelDictionary = new Dictionary<string, ChelInfo>();
             ChelInfo MyInfo = new ChelInfo();
             ReceiverBuilder builder = ReceiverBuilder.Create();
+            long testTime = DateTime.Now.Ticks;
 
             //builder.AddRequestHandler(new MoveRequestHandler(MyInfo)); // мое перемещение
             //builder.AddEventHandler(new MoveEventHandler(chelDictionary)); // Движения типов 

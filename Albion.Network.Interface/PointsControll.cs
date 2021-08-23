@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Effects;
 using System.Windows.Shapes;
 
 namespace Albion.Network.Interface
@@ -54,12 +55,23 @@ namespace Albion.Network.Interface
                 case PointTypes.Mob:
                     pointArea.Opacity = 0.5;
                     point.Height = point.Width = 7;
-                    point.Fill = Brushes.Blue;
+                    point.Fill = Brushes.Yellow;
                     break;
                 case PointTypes.Player:
-                    pointArea.Opacity = 0.65;
+                    
                     point.Height = point.Width = 10;
-                    point.Fill = Brushes.Red;
+                    if (info.Value.pvpMode)
+                    {
+                        pointArea.Opacity = 0.85;
+                        Panel.SetZIndex(pointArea, MainWindow.ZIndexCounter++);
+                        point.Fill = Brushes.Red;
+                        caption.FontWeight = FontWeights.Bold;
+                    }
+                    else
+                    {
+                        pointArea.Opacity = 0.65;
+                        point.Fill = Brushes.Blue;
+                    }
                     break;
             }
             pointArea.Children.Add(point);
@@ -106,17 +118,33 @@ namespace Albion.Network.Interface
 
                     if (info.Value.leave)
                     {
-                        ((Ellipse)((Grid)radarArea.Children[i]).Children[0]).Fill = Brushes.Yellow;
+                        ((Grid) radarArea.Children[i]).Opacity = 0.25;
+                        //((Ellipse)((Grid)radarArea.Children[i]).Children[0]).Fill = Brushes.Yellow;
                     }
                     else
                     {
                         switch (info.Value.isMob)
                         {
                             case true:
-                                ((Ellipse)((Grid)radarArea.Children[i]).Children[0]).Fill = Brushes.Blue;
+                                ((Ellipse)((Grid)radarArea.Children[i]).Children[0]).Fill = Brushes.Yellow;
+                                ((Grid)radarArea.Children[i]).Opacity = 0.5;
+
                                 break;
                             case false:
-                                ((Ellipse)((Grid)radarArea.Children[i]).Children[0]).Fill = Brushes.Red;
+                                if (info.Value.pvpMode)
+                                {
+                                    ((Grid)radarArea.Children[i]).Opacity = 0.85;
+                                    ((Ellipse)((Grid)radarArea.Children[i]).Children[0]).Fill = Brushes.Red;
+                                    Panel.SetZIndex(((Grid)radarArea.Children[i]), MainWindow.ZIndexCounter++);
+                                    ((TextBlock)((Grid)radarArea.Children[i]).Children[1]).FontWeight = FontWeights.Bold;
+                                }
+                                else
+                                {
+                                    ((Grid)radarArea.Children[i]).Opacity = 0.65;
+                                    ((Ellipse)((Grid)radarArea.Children[i]).Children[0]).Fill = Brushes.Blue;
+                                    ((TextBlock)((Grid)radarArea.Children[i]).Children[1]).FontWeight = FontWeights.Normal;
+                                    ((TextBlock) ((Grid) radarArea.Children[i]).Children[1]).Effect = null;
+                                }
                                 break;
                         }
                     }

@@ -87,24 +87,26 @@
     </Compile>
     <Compile Include="ChelInfo.cs" />
     <Compile Include="EventCodes.cs" />
+    <Compile Include="Events\PVPStatusUpdateEvent.cs" />
+    <Compile Include="Events\PVPStatusUpdateHandler.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MoveEvent.cs" />
-    <Compile Include="MoveEventHandler.cs" />
+    <Compile Include="Events\MoveEvent.cs" />
+    <Compile Include="Events\MoveEventHandler.cs" />
     <Compile Include="MoveOperation.cs" />
     <Compile Include="MoveRequestHandler.cs" />
-    <Compile Include="LeaveEvent.cs" />
-    <Compile Include="NewCharacterEvent.cs" />
-    <Compile Include="LeaveEventHandler.cs" />
-    <Compile Include="NewChatacterEventHandler.cs" />
-    <Compile Include="HealthUpdateEvent.cs" />
-    <Compile Include="NewMobEvent.cs" />
-    <Compile Include="HealthUpdateEventHandler.cs" />
-    <Compile Include="NewMobEventHandler.cs" />
+    <Compile Include="Events\LeaveEvent.cs" />
+    <Compile Include="Events\NewCharacterEvent.cs" />
+    <Compile Include="Events\LeaveEventHandler.cs" />
+    <Compile Include="Events\NewChatacterEventHandler.cs" />
+    <Compile Include="Events\HealthUpdateEvent.cs" />
+    <Compile Include="Events\NewMobEvent.cs" />
+    <Compile Include="Events\HealthUpdateEventHandler.cs" />
+    <Compile Include="Events\NewMobEventHandler.cs" />
     <Compile Include="OperationCodes.cs" />
     <Compile Include="PointsControll.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">

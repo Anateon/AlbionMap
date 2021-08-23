@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Albion.Network.Example
 {
@@ -7,7 +9,15 @@ namespace Albion.Network.Example
     {
         public TESTEvent(Dictionary<byte, object> parameters) : base(parameters)
         {
-            Console.WriteLine(parameters);
+            string writePath = @"C:\hta2.txt";
+            string json = JsonConvert.SerializeObject(parameters);
+
+            using (StreamWriter sw = new StreamWriter(writePath, true, System.Text.Encoding.Default))
+            {
+                sw.WriteLine(json);
+            }
+
+            //Console.WriteLine(parameters);
         }
     }
 }
