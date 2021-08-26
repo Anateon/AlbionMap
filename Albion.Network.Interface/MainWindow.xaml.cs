@@ -4,9 +4,12 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
@@ -22,6 +25,13 @@ namespace Albion.Network.Interface
         public static ObjectInfo MyInfo = new ObjectInfo();
         public static Mutex mutexObj = new Mutex();
         private System.Windows.Threading.DispatcherTimer dispatcherTimer;
+
+        public HotKey hotKeyFullSizeMode;
+        public HotKey hotKeyPlusSize;
+        public HotKey hotKeyMinusSize;
+
+        public static bool fullSizeStatus = false;
+
         public static double scale = 9;
         private static List<Thread> threads = new List<Thread>();
         private static int secondsToDell = 10;
@@ -61,7 +71,49 @@ namespace Albion.Network.Interface
             builder.AddEventHandler(new PVPStatusUpdateHandler()); // если чел врубил ПВП режим
             builder.AddEventHandler(new NewResuseEventHandler()); // для ресурсов
             builder.AddEventHandler(new TierMobEventHandler()); // для тира ресурсов
+           // builder.AddEventHandler(new JoinFinishedEventHandler()); // для перехода между локами
+            hotKeyFullSizeMode = new HotKey(Key.M, HotKey.KeyModifier.Alt, (HotKey o) =>
+            {
+                if (fullSizeStatus)
+                {
+                    fullSizeStatus = false;
+                    WindowState = WindowState.Normal;
+                    IntPtr hwnd = new WindowInteropHelper(this).Handle;
+                    Win32.makeNormal(hwnd);
+                    //TabControl.Background = Brushes.White;
+                    SliderOpacity.Value = 0.5;
+                    TabItem1.Visibility = Visibility.Visible;
+                    TabItem2.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    fullSizeStatus = true;
+                    WindowState = WindowState.Maximized;
+                    IntPtr hwnd = new WindowInteropHelper(this).Handle;
+                    Win32.makeTransparent(hwnd);
+                    //TabControl.Background = Brushes.Transparent;
+                    RGrid.Background = Brushes.Transparent;
+                    TabItem1.Visibility = Visibility.Hidden;
+                    TabItem2.Visibility = Visibility.Hidden;
+                }
+            });
+            hotKeyMinusSize = new HotKey(Key.OemMinus, HotKey.KeyModifier.Alt, (HotKey o) =>
+            {
+                int tmp = int.Parse(Scale.Text);
+                tmp--;
+                if (tmp < 0)
+                {
+                    tmp = 0;
+                }
+                Scale.Text = tmp.ToString();
+            });
 
+            hotKeyPlusSize = new HotKey(Key.OemPlus, HotKey.KeyModifier.Alt, (HotKey o) =>
+            {
+                int tmp = int.Parse(Scale.Text);
+                tmp++;
+                Scale.Text = tmp.ToString();
+            });
 
             receiver = builder.Build();
 
@@ -171,6 +223,11 @@ namespace Albion.Network.Interface
         {
             mutexObj.WaitOne();
             scale = Int32.Parse(((TextBox)sender).Text);
+            MyInfo.NeedUpdate = true;
+            if (RadiusTextBox != null)
+            {
+                TextBox_TextChanged3(RadiusTextBox, null);
+            }
             mutexObj.ReleaseMutex();
         }
 
@@ -194,14 +251,6 @@ namespace Albion.Network.Interface
             {
                 ShowRadius.Visibility = Visibility.Hidden;
             }
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            mutexObj.WaitOne();
-            chelDictionary.Clear();
-            Points.Children.RemoveRange(0,Int32.MaxValue);
-            mutexObj.ReleaseMutex();
         }
 
         private void CheckBox_SoundNotification(object sender, RoutedEventArgs e)
@@ -262,6 +311,30 @@ namespace Albion.Network.Interface
             mutexObj.WaitOne();
             lvlFilter = Int32.Parse(((TextBox)sender).Text);
             mutexObj.ReleaseMutex();
+        }
+
+        private void Window_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            this.DragMove();
+        }
+
+        private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            TabItem1.Opacity = TabItem2.Opacity = e.NewValue;
+            RGrid.Background = new SolidColorBrush(new Color() {A = (byte)(e.NewValue*255), R = 255, G = 255, B = 255});
+        }
+        private void Slider_ValueChanged1(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            Width = e.NewValue;
+            Height = Width + 24;
+            WindowState = WindowState.Normal;
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            TabControl.SelectedIndex = 0;
+            IntPtr hwnd = new WindowInteropHelper(this).Handle;
+            Win32.makeTransparent(hwnd);
         }
     }
 }

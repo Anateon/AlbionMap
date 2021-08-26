@@ -5,14 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:interface="clr-namespace:Albion.Network.Interface"
         mc:Ignorable="d"
-        Title="Albion Radar" Height="583" Width="582" Closed="Window_Closed">
+        Title="Albion Radar" Height="524" Width="500" Closed="Window_Closed" WindowStyle="None" Background="#00FFFFFF" MouseLeftButtonDown="Window_MouseLeftButtonDown" WindowState="Normal" 
+        Topmost="True" AllowsTransparency="True" BorderThickness="4">
     <!--Topmost="True"-->
 
     <Grid>
-        <TabControl>
-            <TabItem Header="Radar">
-                <Grid Background="LightGray">
-                    <Ellipse Fill="YellowGreen" Margin="0" Stroke="Black" OpacityMask="Black" HorizontalAlignment="Center" VerticalAlignment="Center" Width="500" Height="500"/>
+        <TabControl Background="{x:Null}" x:Name="TabControl" BorderThickness="1" BorderBrush="#00000000">
+            <TabItem Header="Radar" Height="22" VerticalAlignment="Bottom" x:Name="TabItem1">
+                <Grid Background="White" x:Name="RGrid">
+                    <!-- <Ellipse Fill="YellowGreen" Margin="0" Stroke="Black" OpacityMask="Black" HorizontalAlignment="Center" VerticalAlignment="Center" Width="500" Height="500"/> 
                     <Rectangle HorizontalAlignment="Center" Height="1" Margin="0" Stroke="Black" VerticalAlignment="Center" Width="500" RenderTransformOrigin="0.5,0.5">
                         <Rectangle.RenderTransform>
                             <TransformGroup>
@@ -27,7 +28,22 @@
                             </TransformGroup>
                         </Rectangle.RenderTransform>
                     </Rectangle>
-                    <Grid RenderTransformOrigin="0.5,0.5" x:Name="Points">
+                    -->
+                    <Rectangle HorizontalAlignment="Center" Height="1" Margin="0" Stroke="Black" VerticalAlignment="Center" Width="15" RenderTransformOrigin="0.5,0.5">
+                        <Rectangle.RenderTransform>
+                            <TransformGroup>
+                                <RotateTransform Angle="45"/>
+                            </TransformGroup>
+                        </Rectangle.RenderTransform>
+                    </Rectangle>
+                    <Rectangle HorizontalAlignment="Center" Height="15" Margin="0" Stroke="Black" VerticalAlignment="Center" Width="1" RenderTransformOrigin="0.5,0.5">
+                        <Rectangle.RenderTransform>
+                            <TransformGroup>
+                                <RotateTransform Angle="45"/>
+                            </TransformGroup>
+                        </Rectangle.RenderTransform>
+                    </Rectangle>
+                    <Grid RenderTransformOrigin="0.5,0.5" x:Name="Points" Margin="-3000">
                         <Grid.RenderTransform>
                             <TransformGroup>
                                 <RotateTransform Angle="45"/>
@@ -35,34 +51,40 @@
                         </Grid.RenderTransform>
                     </Grid>
                     <Ellipse x:Name="ShowRadius" HorizontalAlignment="Center" Height="100" Margin="0" Stroke="Black" VerticalAlignment="Center" Width="100" Visibility="Hidden"/>
-                    <Button Content="Reset points" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
                 </Grid>
             </TabItem>
+            <TabItem Header="Cfg" x:Name="TabItem2">
+                <ScrollViewer>
+                    <Grid Background="#FFE5E5E5" MouseLeftButtonDown="Window_MouseLeftButtonDown">
+                        <!-- <Button Content="Reset points" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="Button_Click"/>-->
 
-            <TabItem Header="Cfg">
-                <Grid Background="#FFE5E5E5">
-                    <CheckBox Content="Radar on/off" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" IsChecked="True" Click="CheckBox_Radar"/>
-                    <TextBox HorizontalAlignment="Left" Height="22" Margin="10,75,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Width="60" PreviewTextInput="TextBox_PreviewTextInput" TextChanged="TextBox_TextChanged"/>
-                    <TextBlock HorizontalAlignment="Left" Margin="75,76,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="146" Text="Radar points life time (sec)"/>
-                    <TextBox HorizontalAlignment="Left" Height="22" Margin="10,102,0,0" TextWrapping="Wrap" Text="9" VerticalAlignment="Top" Width="60" PreviewTextInput="TextBox_PreviewTextInput" TextChanged="TextBox_TextChanged2"/>
-                    <TextBlock HorizontalAlignment="Left" Margin="75,103,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="146" Text="Scale px (px = 1m)"/>
-                    <TextBox HorizontalAlignment="Left" Height="22" Margin="10,129,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="60" PreviewTextInput="TextBox_PreviewTextInput" TextChanged="TextBox_TextChanged3"/>
-                    <TextBlock HorizontalAlignment="Left" Margin="75,130,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="146" Text="Radius (m)"/>
-                    <CheckBox Content="All Players sound notification" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" IsChecked="False" Click="CheckBox_SoundNotification"/>
-                    <TextBox HorizontalAlignment="Left" Height="22" Margin="10,245,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="60" PreviewTextInput="TextBox_PreviewTextInput" TextChanged="TextBox_TextChanged4"/>
-                    <TextBlock HorizontalAlignment="Left" Margin="75,246,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="146" Text="Mob HP filter"/>
-                    <CheckBox Content="HP (XX/XX)" HorizontalAlignment="Left" Margin="11,156,0,0" VerticalAlignment="Top" IsChecked="True" Click="CheckBox_HPValuve"/>
-                    <CheckBox Content="HP [XX%]" HorizontalAlignment="Left" Margin="10,176,0,0" VerticalAlignment="Top" IsChecked="True" Click="CheckBox_HPProcent"/>
-                    <CheckBox Content="Nickname" HorizontalAlignment="Left" Margin="10,196,0,0" VerticalAlignment="Top" IsChecked="True" Click="CheckBox_Nickname"/>
-                    <CheckBox Content="PVP Players sound notification" HorizontalAlignment="Left" Margin="10,50,0,0" VerticalAlignment="Top" IsChecked="True" Click="CheckBox_PVPSoundNotification"/>
-                    <CheckBox Content="Без пустых трупов" HorizontalAlignment="Left" Margin="11,272,0,0" VerticalAlignment="Top" IsChecked="True" Click="CheckBox_Click_1"/>
-                    <CheckBox Content="Подпись" HorizontalAlignment="Left" Margin="11,292,0,0" VerticalAlignment="Top" IsChecked="True" Click="CheckBox_Click"/>
-                    <TextBox HorizontalAlignment="Left" Height="22" Margin="10,312,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="60" PreviewTextInput="TextBox_PreviewTextInput" TextChanged="TextBox_TextChanged5"/>
-                    <TextBlock HorizontalAlignment="Left" Margin="75,315,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="146" Text="Тир фильтр"/>
-                    <TextBox HorizontalAlignment="Left" Height="22" Margin="10,339,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="60" PreviewTextInput="TextBox_PreviewTextInput" TextChanged="TextBox_TextChanged6"/>
-                    <TextBlock HorizontalAlignment="Left" Margin="75,342,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="146" Text="LVL фильтр"/>
-
-                </Grid>
+                        <CheckBox Content="Radar on/off" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" IsChecked="True" Click="CheckBox_Radar"/>
+                        <TextBox HorizontalAlignment="Left" Height="22" Margin="10,75,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Width="60" PreviewTextInput="TextBox_PreviewTextInput" TextChanged="TextBox_TextChanged"/>
+                        <TextBlock HorizontalAlignment="Left" Margin="75,76,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="146" Text="Radar points life time (sec)"/>
+                        <TextBox x:Name="Scale" HorizontalAlignment="Left" Height="22" Margin="10,102,0,0" TextWrapping="Wrap" Text="9" VerticalAlignment="Top" Width="60" PreviewTextInput="TextBox_PreviewTextInput" TextChanged="TextBox_TextChanged2"/>
+                        <TextBlock HorizontalAlignment="Left" Margin="75,103,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="146" Text="Scale px (px = 1m)"/>
+                        <TextBox x:Name="RadiusTextBox" HorizontalAlignment="Left" Height="22" Margin="10,129,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="60" PreviewTextInput="TextBox_PreviewTextInput" TextChanged="TextBox_TextChanged3"/>
+                        <TextBlock HorizontalAlignment="Left" Margin="75,130,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="146" Text="Radius (m)"/>
+                        <CheckBox Content="All Players sound notification" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" IsChecked="False" Click="CheckBox_SoundNotification"/>
+                        <TextBox HorizontalAlignment="Left" Height="22" Margin="10,217,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="60" PreviewTextInput="TextBox_PreviewTextInput" TextChanged="TextBox_TextChanged4"/>
+                        <TextBlock HorizontalAlignment="Left" Margin="75,218,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="146" Text="Mob HP filter"/>
+                        <CheckBox Content="HP (XX/XX)" HorizontalAlignment="Left" Margin="11,156,0,0" VerticalAlignment="Top" IsChecked="True" Click="CheckBox_HPValuve"/>
+                        <CheckBox Content="HP [XX%]" HorizontalAlignment="Left" Margin="10,176,0,0" VerticalAlignment="Top" IsChecked="True" Click="CheckBox_HPProcent"/>
+                        <CheckBox Content="Nickname" HorizontalAlignment="Left" Margin="10,196,0,0" VerticalAlignment="Top" IsChecked="True" Click="CheckBox_Nickname"/>
+                        <CheckBox Content="PVP Players sound notification" HorizontalAlignment="Left" Margin="10,50,0,0" VerticalAlignment="Top" IsChecked="True" Click="CheckBox_PVPSoundNotification"/>
+                        <CheckBox Content="Без пустых трупов" HorizontalAlignment="Left" Margin="11,244,0,0" VerticalAlignment="Top" IsChecked="True" Click="CheckBox_Click_1"/>
+                        <CheckBox Content="Подпись" HorizontalAlignment="Left" Margin="11,264,0,0" VerticalAlignment="Top" IsChecked="True" Click="CheckBox_Click"/>
+                        <TextBox HorizontalAlignment="Left" Height="22" Margin="10,284,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="60" PreviewTextInput="TextBox_PreviewTextInput" TextChanged="TextBox_TextChanged5"/>
+                        <TextBlock HorizontalAlignment="Left" Margin="75,287,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="146" Text="Тир фильтр"/>
+                        <TextBox HorizontalAlignment="Left" Height="22" Margin="10,311,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="60" PreviewTextInput="TextBox_PreviewTextInput" TextChanged="TextBox_TextChanged6"/>
+                        <TextBlock HorizontalAlignment="Left" Margin="75,314,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="146" Text="LVL фильтр"/>
+                        <Slider x:Name="SliderOpacity" HorizontalAlignment="Left" Margin="10,352,0,0" VerticalAlignment="Top" Width="120" ValueChanged="Slider_ValueChanged" Maximum="1" TickFrequency="0" Value="0.5"/>
+                        <TextBlock HorizontalAlignment="Left" Margin="10,336,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="146" Text="Opacity"/>
+                        <TextBlock HorizontalAlignment="Left" Margin="11,374,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="146" Text="Windows size"/>
+                        <Slider HorizontalAlignment="Left" Margin="11,395,0,0" VerticalAlignment="Top" Width="120" ValueChanged="Slider_ValueChanged1" Maximum="2000" Value="500" Minimum="150"/>
+                        <Button Content="Radar+clickOver" HorizontalAlignment="Left" Margin="108,10,0,0" VerticalAlignment="Top" Width="97" Click="Button_Click_1"/>
+                    </Grid>
+                </ScrollViewer>
             </TabItem>
         </TabControl>
     </Grid>

@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace Albion.Network.Interface
 {
@@ -18,13 +19,13 @@ namespace Albion.Network.Interface
             NowHP = (int)(parameters.TryGetValue(18, out object hp1) ? double.Parse(hp1.ToString()) : 0);
             FullHP = (int)(parameters.TryGetValue(19, out object hp2) ? double.Parse(hp2.ToString()) : 0);
             int pvpTmp = parameters.TryGetValue(45, out object pvp) ? Int32.Parse(pvp.ToString()) : 0;
-            if (pvpTmp == 0 || pvpTmp == 2)
+            if (pvpTmp == 0 || pvpTmp == 2 || pvpTmp == 4 || pvpTmp == 6) 
+            {
                 PVPmode = false;
+            }
             else
             {
-#if DEBUG
-                Debug.WriteLine($"PVP valuve: {pvpTmp}");
-#endif
+                Console.WriteLine(pvpTmp);
                 PVPmode = true;
             }
         }
