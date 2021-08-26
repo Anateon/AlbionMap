@@ -8,5 +8,7 @@
         public const short Leave = 1;
         public const short Health = 6;
         public const short PVPStatus = 336;
+        public const short NewHarvestableObject = 33;
+        public const short HarvestableChangeState = 37;
     }
 }

@@ -18,14 +18,14 @@ namespace Albion.Network.Interface
     public partial class MainWindow : Window
     {
         private static IPhotonReceiver receiver;
-        public static Dictionary<int, ChelInfo> chelDictionary = new Dictionary<int, ChelInfo>();
-        public static ChelInfo MyInfo = new ChelInfo();
+        public static Dictionary<int, ObjectInfo> chelDictionary = new Dictionary<int, ObjectInfo>();
+        public static ObjectInfo MyInfo = new ObjectInfo();
         public static Mutex mutexObj = new Mutex();
         private System.Windows.Threading.DispatcherTimer dispatcherTimer;
         public static double scale = 9;
         private static List<Thread> threads = new List<Thread>();
         private static int secondsToDell = 10;
-        public static bool needNewPlayerSound = true;
+        public static bool needNewPlayerSound = false;
         public static bool needPVPNewPlayerSound = true;
 
         public static int moobNeedHP = 0;
@@ -33,6 +33,10 @@ namespace Albion.Network.Interface
         public static bool needHPProcent = true;
         public static bool needHPValuve = true;
         public static bool needNickname = true;
+        public static bool needResourseCaption = true;
+        public static bool needHideZeroResouse = true;
+        public static int tierFileter = 0;
+        public static int lvlFilter = 0;
         public static int ZIndexCounter = 1000;
 
         public static List<int> keysForDell = new List<int>();
@@ -55,7 +59,8 @@ namespace Albion.Network.Interface
             builder.AddEventHandler(new LeaveEventHandler()); // Исчезновеня типов
             builder.AddEventHandler(new HealthUpdateEventHandler()); // изменения ХП
             builder.AddEventHandler(new PVPStatusUpdateHandler()); // если чел врубил ПВП режим
-
+            builder.AddEventHandler(new NewResuseEventHandler()); // для ресурсов
+            builder.AddEventHandler(new TierMobEventHandler()); // для тира ресурсов
 
 
             receiver = builder.Build();
@@ -68,10 +73,13 @@ namespace Albion.Network.Interface
                 threads.Add(new Thread(() =>
                 {
                     Console.WriteLine($"Open... {device.Description}");
-
-                    device.OnPacketArrival += new PacketArrivalEventHandler(PacketHandler);
-                    device.Open(DeviceMode.Promiscuous, 1000);
-                    device.StartCapture();
+                    if (device.Description.Contains("Realtek"))
+                    {
+                        Console.Write("Realtek ADD");
+                        device.OnPacketArrival += new PacketArrivalEventHandler(PacketHandler);
+                        device.Open(DeviceMode.Promiscuous, 1000);
+                        device.StartCapture();
+                    }
                 }));
             }
 
@@ -94,9 +102,9 @@ namespace Albion.Network.Interface
         {
             var timeNow = DateTime.Now.AddSeconds(secondsToDell*-1);
             keysForDell.Clear();
-            try
-            {
-                foreach (KeyValuePair<int, ChelInfo> pairForDel in chelDictionary.ToArray())
+            //try
+            //{
+                foreach (KeyValuePair<int, ObjectInfo> pairForDel in chelDictionary.ToArray())
                 {
                     if (pairForDel.Value.time < timeNow && pairForDel.Value.leave)// если надо убрать старых челов
                     {
@@ -110,7 +118,7 @@ namespace Albion.Network.Interface
                 {
                     PointsControll.DelPoint(pairforDel);
                 }
-                foreach (KeyValuePair<int, ChelInfo> pairForUpdate in chelDictionary.ToArray())
+                foreach (KeyValuePair<int, ObjectInfo> pairForUpdate in chelDictionary.ToArray())
                 {
                     if (pairForUpdate.Value.NeedUpdate || MyInfo.NeedUpdate)
                     {
@@ -119,13 +127,13 @@ namespace Albion.Network.Interface
                     }
                 }
                 MyInfo.NeedUpdate = false;
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine("error:" + exception.Message);
-                throw;
-                //Points.Children.RemoveRange(0,Int32.MaxValue);
-            }
+            //}
+            //catch (Exception exception)
+            //{
+            //    Console.WriteLine("error:" + exception.Message);
+            //    throw;
+            //    //Points.Children.RemoveRange(0,Int32.MaxValue);
+            //}
         }
 
         private void Window_Closed(object sender, EventArgs e)
@@ -230,6 +238,30 @@ namespace Albion.Network.Interface
         {
             needNickname = (bool)((CheckBox)sender).IsChecked;
             MyInfo.NeedUpdate = true;
+        }
+
+        private void CheckBox_Click(object sender, RoutedEventArgs e)
+        {
+            needResourseCaption = (bool)((CheckBox)sender).IsChecked;
+            MyInfo.NeedUpdate = true;
+        }
+
+        private void CheckBox_Click_1(object sender, RoutedEventArgs e)
+        {
+            needHideZeroResouse = (bool)((CheckBox)sender).IsChecked;
+            MyInfo.NeedUpdate = true;
+        }
+        private void TextBox_TextChanged5(object sender, TextChangedEventArgs e)
+        {
+            mutexObj.WaitOne();
+            tierFileter = Int32.Parse(((TextBox)sender).Text);
+            mutexObj.ReleaseMutex();
+        }
+        private void TextBox_TextChanged6(object sender, TextChangedEventArgs e)
+        {
+            mutexObj.WaitOne();
+            lvlFilter = Int32.Parse(((TextBox)sender).Text);
+            mutexObj.ReleaseMutex();
         }
     }
 }

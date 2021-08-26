@@ -36,23 +36,21 @@ namespace Albion.Network.Interface
                     //new Thread(() => Console.Beep()).Start();
                 }
 
-
-                MainWindow.mutexObj.WaitOne();
-
-                MainWindow.chelDictionary[value.Id] = new ChelInfo()
+                var tmp = new PlayerInfo()
                 {
                     //name = value.Name,
-                    isMob = false,
                     X = value.Position[0],
                     Y = value.Position[1],
                     leave = false,
                     time = DateTime.Now,
                     NowHP = value.NowHP,
                     FullHP = value.FullHP,
-                    name = value.Name,
+                    Name = value.Name,
                     NeedUpdate = true,
                     pvpMode = value.PVPmode
                 };
+                MainWindow.mutexObj.WaitOne();
+                MainWindow.chelDictionary[value.Id] = tmp;
                 MainWindow.mutexObj.ReleaseMutex();
                 //Console.WriteLine($"New ch Id: {value.Id} name: {value.Name} hp: {value.FullHP}/{value.NowHP}");
             }

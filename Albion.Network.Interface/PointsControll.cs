@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Media.Effects;
+using System.Windows.Media.TextFormatting;
 using System.Windows.Shapes;
 
 namespace Albion.Network.Interface
@@ -15,10 +17,15 @@ namespace Albion.Network.Interface
         public enum PointTypes
         {
             Player,
-            Mob
+            Mob,
+            Resurse
         }
-        private static void AddPoint(KeyValuePair<int, ChelInfo> info, PointTypes types)
+        private static void AddPoint(KeyValuePair<int, ObjectInfo> info, PointTypes types)
         {
+            if (!NeedShow(info))
+            {
+                return;
+            }
             Grid pointArea = new Grid()
             {
                 Margin = new Thickness((info.Value.X - MainWindow.MyInfo.X) * MainWindow.scale, 0, 0,
@@ -28,10 +35,7 @@ namespace Albion.Network.Interface
                 VerticalAlignment = VerticalAlignment.Center,
                 RenderTransformOrigin = new Point(0.5,0.5),
             };
-            Ellipse point = new Ellipse()
-            {
-                Stroke = Brushes.Black
-            };
+            Shape point = null;
 
             //Label caption2 = new Label()
             //{
@@ -49,18 +53,26 @@ namespace Albion.Network.Interface
                 Text = GetInfoString(info)
             };
 
-
             switch (types)
             {
                 case PointTypes.Mob:
+                    point = new Ellipse()
+                    {
+                        Stroke = Brushes.Black,
+                        Height = 7,
+                        Width = 7,
+                        Fill = Brushes.Yellow
+                    };
                     pointArea.Opacity = 0.5;
-                    point.Height = point.Width = 7;
-                    point.Fill = Brushes.Yellow;
                     break;
                 case PointTypes.Player:
-                    
-                    point.Height = point.Width = 10;
-                    if (info.Value.pvpMode)
+                    point = new Ellipse()
+                    {
+                        Stroke = Brushes.Black,
+                        Height = 10,
+                        Width = 10
+                    };
+                    if (((PlayerInfo)info.Value).pvpMode)
                     {
                         pointArea.Opacity = 0.85;
                         Panel.SetZIndex(pointArea, MainWindow.ZIndexCounter++);
@@ -72,6 +84,16 @@ namespace Albion.Network.Interface
                         pointArea.Opacity = 0.65;
                         point.Fill = Brushes.Blue;
                     }
+                    break;
+                case PointTypes.Resurse:
+                    point = new Rectangle()
+                    {
+                        Height = 6,
+                        Width = 6,
+                        Fill = Brushes.Green,
+                        Stroke = Brushes.Black
+                    };
+                    pointArea.Opacity = 0.5;
                     break;
             }
             pointArea.Children.Add(point);
@@ -91,31 +113,81 @@ namespace Albion.Network.Interface
                 }
             }
         }
-        public static void UpdatePoints(KeyValuePair<int, ChelInfo> info)
+        public static void UpdatePoints(KeyValuePair<int, ObjectInfo> info)
         {
             if (!ChangeIfCreated(info))
             {
-                if (info.Value.isMob)
+                if (info.Value is PlayerInfo)
+                {
+                    AddPoint(info, PointTypes.Player);
+                }
+                else if(info.Value is MobInfo)
                 {
                     AddPoint(info, PointTypes.Mob);
                 }
                 else
                 {
-                    AddPoint(info, PointTypes.Player);
+                    AddPoint(info, PointTypes.Resurse);
                 }
             }
         }
-        private static bool ChangeIfCreated(KeyValuePair<int, ChelInfo> info)
+
+        private static bool NeedShow(KeyValuePair<int, ObjectInfo> info)
         {
+            if (info.Value is MobInfo)
+            {
+                if (!(((MobInfo)info.Value).FullHP == MainWindow.moobNeedHP || MainWindow.moobNeedHP == 0))
+                {
+                    return false;
+                }
+
+                if (!(((MobInfo)info.Value).Tier >= MainWindow.tierFileter))
+                {
+                    return false;
+                }
+            }
+
+            if (info.Value is ResurseInfo)
+            {
+                if (((ResurseInfo)info.Value).Tier >= MainWindow.tierFileter &&
+                    ((ResurseInfo)info.Value).Lvl >= MainWindow.lvlFilter)
+                {
+                    if (MainWindow.needHideZeroResouse)
+                    {
+                        if (((ResurseInfo)info.Value).nuber == 0)
+                        {
+                            return false;
+                        }
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+        private static bool ChangeIfCreated(KeyValuePair<int, ObjectInfo> info)
+        {
+            bool needDelete = false;
+            if (!NeedShow(info))
+            {
+                needDelete = true;
+            }
+
             for (int i = 0; i < radarArea.Children.Count; i++)
             {
                 if (((Grid) radarArea.Children[i]).Name == $"ID{info.Key}")
                 {
+                    if (needDelete)
+                    {
+                        DelPoint(info.Key);
+                        return true;
+                    }
                     ((Grid) radarArea.Children[i]).Margin = new Thickness((info.Value.X - MainWindow.MyInfo.X) * MainWindow.scale, 0, 0,
                         (info.Value.Y - MainWindow.MyInfo.Y) * MainWindow.scale);
                     ((TextBlock)((Grid) radarArea.Children[i]).Children[1]).Text = GetInfoString(info);
-
-
                     if (info.Value.leave)
                     {
                         ((Grid) radarArea.Children[i]).Opacity = 0.25;
@@ -123,29 +195,25 @@ namespace Albion.Network.Interface
                     }
                     else
                     {
-                        switch (info.Value.isMob)
+                        if (info.Value is PlayerInfo)
                         {
-                            case true:
-                                ((Ellipse)((Grid)radarArea.Children[i]).Children[0]).Fill = Brushes.Yellow;
-                                ((Grid)radarArea.Children[i]).Opacity = 0.5;
-
-                                break;
-                            case false:
-                                if (info.Value.pvpMode)
-                                {
-                                    ((Grid)radarArea.Children[i]).Opacity = 0.85;
-                                    ((Ellipse)((Grid)radarArea.Children[i]).Children[0]).Fill = Brushes.Red;
-                                    Panel.SetZIndex(((Grid)radarArea.Children[i]), MainWindow.ZIndexCounter++);
-                                    ((TextBlock)((Grid)radarArea.Children[i]).Children[1]).FontWeight = FontWeights.Bold;
-                                }
-                                else
-                                {
-                                    ((Grid)radarArea.Children[i]).Opacity = 0.65;
-                                    ((Ellipse)((Grid)radarArea.Children[i]).Children[0]).Fill = Brushes.Blue;
-                                    ((TextBlock)((Grid)radarArea.Children[i]).Children[1]).FontWeight = FontWeights.Normal;
-                                    ((TextBlock) ((Grid) radarArea.Children[i]).Children[1]).Effect = null;
-                                }
-                                break;
+                            if (((PlayerInfo)info.Value).pvpMode)
+                            {
+                                ((Grid)radarArea.Children[i]).Opacity = 0.85;
+                                ((Ellipse)((Grid)radarArea.Children[i]).Children[0]).Fill = Brushes.Red;
+                                Panel.SetZIndex(((Grid)radarArea.Children[i]), MainWindow.ZIndexCounter++);
+                                ((TextBlock)((Grid)radarArea.Children[i]).Children[1]).FontWeight = FontWeights.Bold;
+                            }
+                            else
+                            {
+                                ((Grid)radarArea.Children[i]).Opacity = 0.65;
+                                ((Ellipse)((Grid)radarArea.Children[i]).Children[0]).Fill = Brushes.Blue;
+                                ((TextBlock)((Grid)radarArea.Children[i]).Children[1]).FontWeight = FontWeights.Normal;
+                            }
+                        }
+                        else
+                        {
+                            ((Grid)radarArea.Children[i]).Opacity = 0.5;
                         }
                     }
                     return true;
@@ -154,22 +222,51 @@ namespace Albion.Network.Interface
             return false;
         }
 
-        private static string GetInfoString(KeyValuePair<int, ChelInfo> info)
+        private static string GetInfoString(KeyValuePair<int, ObjectInfo> info)
         {
             string tmpString = "";
-            if (MainWindow.needNickname)
+            if (!(info.Value is ResurseInfo))
             {
-                tmpString += info.Value.name;
-            }
+                if (info.Value is MobInfo)
+                {
+                    tmpString += $"T:{((MobInfo)info.Value).Tier}";
+                }
+                if (info.Value is PlayerInfo && MainWindow.needNickname)
+                {
+                    tmpString += ((PlayerInfo)info.Value).Name;
+                }
 
-            if (MainWindow.needHPValuve)
-            {
-                tmpString += $" {info.Value.FullHP}/{info.Value.NowHP}"; 
-            }
+                if (MainWindow.needHPValuve)
+                {
+                    tmpString += $" {((LifeObject)info.Value).FullHP}/{((LifeObject)info.Value).NowHP}";
+                }
 
-            if (MainWindow.needHPProcent)
+                if (MainWindow.needHPProcent)
+                {
+                    tmpString += $" [{Math.Round(((LifeObject)info.Value).NowHP / (double)((LifeObject)info.Value).FullHP * 100.0, 2)}%]";
+                }
+                }
+            else
             {
-                tmpString += $" [{Math.Round(info.Value.NowHP / (double)info.Value.FullHP * 100.0, 2)}%]";
+                if (MainWindow.needResourseCaption)
+                {
+                    if (((ResurseInfo)info.Value).isStone)
+                    {
+                        tmpString = $"КАМЕНЬ lvl:{((ResurseInfo)info.Value).Lvl} num:{((ResurseInfo)info.Value).nuber} tier:{((ResurseInfo)info.Value).Tier}";
+                    }
+                    else if (((ResurseInfo)info.Value).isAnimal)
+                    {
+                        tmpString = $"L:{((ResurseInfo)info.Value).Lvl} N:{((ResurseInfo)info.Value).nuber} T:{((ResurseInfo)info.Value).Tier}";
+                    }
+                    else if (((ResurseInfo)info.Value).isTree)
+                    {
+                        tmpString = $"ДЕРЕВО lvl:{((ResurseInfo)info.Value).Lvl} num:{((ResurseInfo)info.Value).nuber} tier:{((ResurseInfo)info.Value).Tier}";
+                    }
+                    else
+                    {
+                        tmpString = $"WTF!!!!!!! lvl:{((ResurseInfo)info.Value).Lvl} num:{((ResurseInfo)info.Value).nuber} tier:{((ResurseInfo)info.Value).Tier}";
+                    }
+                }
             }
             return tmpString;
         }

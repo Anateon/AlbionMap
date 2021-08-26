@@ -15,6 +15,7 @@ namespace Albion.Network.Example
             using (StreamWriter sw = new StreamWriter(writePath, true, System.Text.Encoding.Default))
             {
                 sw.WriteLine(json);
+                Console.WriteLine(json);
             }
 
             //Console.WriteLine(parameters);

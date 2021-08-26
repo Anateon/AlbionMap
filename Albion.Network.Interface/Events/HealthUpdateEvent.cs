@@ -9,7 +9,7 @@ namespace Albion.Network.Interface
         {
             // 13 и 14 это ХП
             Id = int.Parse(parameters[0].ToString());
-            NowHP = parameters.TryGetValue(3, out object hp2) ? Int32.Parse(hp2.ToString()) : 0;
+            NowHP = (int)(parameters.TryGetValue(3, out object hp2) ? double.Parse(hp2.ToString()) : 0);
         }
 
         public int Id { get; }

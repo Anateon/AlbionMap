@@ -7,9 +7,7 @@
         mc:Ignorable="d"
         Title="Albion Radar" Height="583" Width="582" Closed="Window_Closed">
     <!--Topmost="True"-->
-    <Window.Background>
-        <SolidColorBrush Opacity="0.5" Color="White"/>
-    </Window.Background>
+
     <Grid>
         <TabControl>
             <TabItem Header="Radar">
@@ -41,7 +39,7 @@
                 </Grid>
             </TabItem>
 
-            <TabItem Header="TabItem">
+            <TabItem Header="Cfg">
                 <Grid Background="#FFE5E5E5">
                     <CheckBox Content="Radar on/off" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" IsChecked="True" Click="CheckBox_Radar"/>
                     <TextBox HorizontalAlignment="Left" Height="22" Margin="10,75,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Width="60" PreviewTextInput="TextBox_PreviewTextInput" TextChanged="TextBox_TextChanged"/>
@@ -50,13 +48,20 @@
                     <TextBlock HorizontalAlignment="Left" Margin="75,103,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="146" Text="Scale px (px = 1m)"/>
                     <TextBox HorizontalAlignment="Left" Height="22" Margin="10,129,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="60" PreviewTextInput="TextBox_PreviewTextInput" TextChanged="TextBox_TextChanged3"/>
                     <TextBlock HorizontalAlignment="Left" Margin="75,130,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="146" Text="Radius (m)"/>
-                    <CheckBox Content="Players sound notification" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" IsChecked="True" Click="CheckBox_SoundNotification"/>
-                    <TextBox HorizontalAlignment="Left" Height="22" Margin="10,156,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="60" PreviewTextInput="TextBox_PreviewTextInput" TextChanged="TextBox_TextChanged4"/>
-                    <TextBlock HorizontalAlignment="Left" Margin="75,157,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="146" Text="Mob HP filter"/>
-                    <CheckBox Content="HP (XX/XX)" HorizontalAlignment="Left" Margin="10,183,0,0" VerticalAlignment="Top" IsChecked="True" Click="CheckBox_HPValuve"/>
-                    <CheckBox Content="HP [XX%]" HorizontalAlignment="Left" Margin="10,203,0,0" VerticalAlignment="Top" IsChecked="True" Click="CheckBox_HPProcent"/>
-                    <CheckBox Content="Nickname" HorizontalAlignment="Left" Margin="10,223,0,0" VerticalAlignment="Top" IsChecked="True" Click="CheckBox_Nickname"/>
+                    <CheckBox Content="All Players sound notification" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" IsChecked="False" Click="CheckBox_SoundNotification"/>
+                    <TextBox HorizontalAlignment="Left" Height="22" Margin="10,245,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="60" PreviewTextInput="TextBox_PreviewTextInput" TextChanged="TextBox_TextChanged4"/>
+                    <TextBlock HorizontalAlignment="Left" Margin="75,246,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="146" Text="Mob HP filter"/>
+                    <CheckBox Content="HP (XX/XX)" HorizontalAlignment="Left" Margin="11,156,0,0" VerticalAlignment="Top" IsChecked="True" Click="CheckBox_HPValuve"/>
+                    <CheckBox Content="HP [XX%]" HorizontalAlignment="Left" Margin="10,176,0,0" VerticalAlignment="Top" IsChecked="True" Click="CheckBox_HPProcent"/>
+                    <CheckBox Content="Nickname" HorizontalAlignment="Left" Margin="10,196,0,0" VerticalAlignment="Top" IsChecked="True" Click="CheckBox_Nickname"/>
                     <CheckBox Content="PVP Players sound notification" HorizontalAlignment="Left" Margin="10,50,0,0" VerticalAlignment="Top" IsChecked="True" Click="CheckBox_PVPSoundNotification"/>
+                    <CheckBox Content="Без пустых трупов" HorizontalAlignment="Left" Margin="11,272,0,0" VerticalAlignment="Top" IsChecked="True" Click="CheckBox_Click_1"/>
+                    <CheckBox Content="Подпись" HorizontalAlignment="Left" Margin="11,292,0,0" VerticalAlignment="Top" IsChecked="True" Click="CheckBox_Click"/>
+                    <TextBox HorizontalAlignment="Left" Height="22" Margin="10,312,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="60" PreviewTextInput="TextBox_PreviewTextInput" TextChanged="TextBox_TextChanged5"/>
+                    <TextBlock HorizontalAlignment="Left" Margin="75,315,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="146" Text="Тир фильтр"/>
+                    <TextBox HorizontalAlignment="Left" Height="22" Margin="10,339,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="60" PreviewTextInput="TextBox_PreviewTextInput" TextChanged="TextBox_TextChanged6"/>
+                    <TextBlock HorizontalAlignment="Left" Margin="75,342,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="146" Text="LVL фильтр"/>
+
                 </Grid>
             </TabItem>
         </TabControl>

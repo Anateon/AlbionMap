@@ -16,10 +16,25 @@ namespace Albion.Network.Interface
                 //MainWindow.mutexObj.WaitOne();
                 if (MainWindow.chelDictionary.ContainsKey(value.Id))
                 {
-                    var tmp = MainWindow.chelDictionary[value.Id];
+                    //ObjectInfo tmp = MainWindow.chelDictionary[value.Id];
+                    //if (MainWindow.chelDictionary[value.Id] is PlayerInfo)
+                    //{
+                    //    tmp.time = DateTime.Now;
+                    //    tmp.leave = false;
+                    //    ((PlayerInfo)tmp).NowHP = value.NowHP;
+                    //    tmp.NeedUpdate = true;
+                    //}
+                    //else
+                    //{
+                    //    tmp.time = DateTime.Now;
+                    //    tmp.leave = false;
+                    //    ((MobInfo)tmp).NowHP = value.NowHP;
+                    //    tmp.NeedUpdate = true;
+                    //}
+                    ObjectInfo tmp = MainWindow.chelDictionary[value.Id];
                     tmp.time = DateTime.Now;
                     tmp.leave = false;
-                    tmp.NowHP = value.NowHP;
+                    ((LifeObject)tmp).NowHP = value.NowHP;
                     tmp.NeedUpdate = true;
                     MainWindow.chelDictionary[value.Id] = tmp;
                 }

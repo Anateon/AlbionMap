@@ -5,11 +5,11 @@ using Albion.Network.Interface;
 
 namespace Albion.Network.Interface
 {
-    public class NewMobEventHandler : EventPacketHandler<NewMobEvent>
+    public class TEMPLATEEventHandler : EventPacketHandler<TEMPALTEEvent>
     {
-        public NewMobEventHandler() : base(EventCodes.NewMob) { }
+        public TEMPLATEEventHandler() : base(999999999) { }
 
-        protected override Task OnActionAsync(NewMobEvent value)
+        protected override Task OnActionAsync(TEMPALTEEvent value)
         {
             try
             {
@@ -21,7 +21,8 @@ namespace Albion.Network.Interface
                     time = DateTime.Now,
                     NowHP = value.NowHP,
                     FullHP = value.FullHP,
-                    NeedUpdate = true
+                    NeedUpdate = true,
+                    Tier = value.tier
                 };
                 MainWindow.mutexObj.WaitOne();
                 MainWindow.chelDictionary[value.Id] = tmp;

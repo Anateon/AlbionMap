@@ -1,4 +1,5 @@
-﻿Leave
+﻿Unused = 0
+Leave
 JoinFinished
 Move
 Teleport

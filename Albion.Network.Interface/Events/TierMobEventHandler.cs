@@ -5,24 +5,18 @@ using Albion.Network.Interface;
 
 namespace Albion.Network.Interface
 {
-    public class NewMobEventHandler : EventPacketHandler<NewMobEvent>
+    public class TierMobEventHandler : EventPacketHandler<TierMobEvent>
     {
-        public NewMobEventHandler() : base(EventCodes.NewMob) { }
+        public TierMobEventHandler() : base(EventCodes.HarvestableChangeState) { }
 
-        protected override Task OnActionAsync(NewMobEvent value)
+        protected override Task OnActionAsync(TierMobEvent value)
         {
             try
             {
-                var tmp = new MobInfo()
-                {
-                    X = value.Position[0],
-                    Y = value.Position[1],
-                    leave = false,
-                    time = DateTime.Now,
-                    NowHP = value.NowHP,
-                    FullHP = value.FullHP,
-                    NeedUpdate = true
-                };
+                MobInfo tmp = (MobInfo)MainWindow.chelDictionary[value.Id];
+                tmp.Tier = value.tier;
+                tmp.NeedUpdate = true;
+                tmp.time = DateTime.Now;
                 MainWindow.mutexObj.WaitOne();
                 MainWindow.chelDictionary[value.Id] = tmp;
                 MainWindow.mutexObj.ReleaseMutex();

@@ -85,8 +85,14 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ChelInfo.cs" />
-    <Compile Include="EventCodes.cs" />
+    <Compile Include="Events\TierMobEvent.cs" />
+    <Compile Include="Events\TierMobEventHandler.cs" />
+    <Compile Include="Events\template\TEMPALTEEvent.cs" />
+    <Compile Include="Events\template\TEMPLATEEventHandler.cs" />
+    <Compile Include="ObjectInfo.cs" />
+    <Compile Include="Events\EventCodes.cs" />
+    <Compile Include="Events\NewResuseEvent.cs" />
+    <Compile Include="Events\NewResuseEventHandler.cs" />
     <Compile Include="Events\PVPStatusUpdateEvent.cs" />
     <Compile Include="Events\PVPStatusUpdateHandler.cs" />
     <Compile Include="MainWindow.xaml.cs">
