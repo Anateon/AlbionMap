@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace Albion.Network.Interface
 {
@@ -22,34 +23,33 @@ namespace Albion.Network.Interface
     {
         private static IPhotonReceiver receiver;
         public static Dictionary<int, ObjectInfo> chelDictionary = new Dictionary<int, ObjectInfo>();
-        public static ObjectInfo MyInfo = new ObjectInfo();
+        public static List<int> keysForDell = new List<int>();
+        public static PlayerInfo MyInfo = new PlayerInfo();
         public static Mutex mutexObj = new Mutex();
-        private System.Windows.Threading.DispatcherTimer dispatcherTimer;
+        private DispatcherTimer dispatcherTimer;
+        private static List<Thread> threads = new List<Thread>();
+        public static bool fullSizeStatus = false;
+        public static int ZIndexCounter = 1000;
 
         public HotKey hotKeyFullSizeMode;
         public HotKey hotKeyPlusSize;
         public HotKey hotKeyMinusSize;
 
-        public static bool fullSizeStatus = false;
-
-        public static double scale = 9;
-        private static List<Thread> threads = new List<Thread>();
-        private static int secondsToDell = 10;
+        #region cfg
         public static bool needNewPlayerSound = false;
         public static bool needPVPNewPlayerSound = true;
-
-        public static int moobNeedHP = 0;
-
+        private static int secondsToDell = 10;
+        public static double scale = 9;
         public static bool needHPProcent = true;
         public static bool needHPValuve = true;
         public static bool needNickname = true;
-        public static bool needResourseCaption = true;
+        public static int moobNeedHP = 0;
         public static bool needHideZeroResouse = true;
+        public static bool needResourseCaption = true;
         public static int tierFileter = 0;
         public static int lvlFilter = 0;
-        public static int ZIndexCounter = 1000;
+        #endregion
 
-        public static List<int> keysForDell = new List<int>();
         public MainWindow()
         {
             InitializeComponent();
@@ -71,7 +71,8 @@ namespace Albion.Network.Interface
             builder.AddEventHandler(new PVPStatusUpdateHandler()); // если чел врубил ПВП режим
             builder.AddEventHandler(new NewResuseEventHandler()); // для ресурсов
             builder.AddEventHandler(new TierMobEventHandler()); // для тира ресурсов
-           // builder.AddEventHandler(new JoinFinishedEventHandler()); // для перехода между локами
+            builder.AddEventHandler(new JoinFinishedEventHandler()); // для перехода между локами
+            builder.AddEventHandler(new NewSimpleHarvestableObjectListEventHandler()); // для отслеживания деревьев/камня
             hotKeyFullSizeMode = new HotKey(Key.M, HotKey.KeyModifier.Alt, (HotKey o) =>
             {
                 if (fullSizeStatus)
@@ -81,7 +82,8 @@ namespace Albion.Network.Interface
                     IntPtr hwnd = new WindowInteropHelper(this).Handle;
                     Win32.makeNormal(hwnd);
                     //TabControl.Background = Brushes.White;
-                    SliderOpacity.Value = 0.5;
+                    SliderOpacity.Value = 0.74;
+                    SliderOpacity.Value = 0.75;
                     TabItem1.Visibility = Visibility.Visible;
                     TabItem2.Visibility = Visibility.Visible;
                 }
@@ -92,7 +94,7 @@ namespace Albion.Network.Interface
                     IntPtr hwnd = new WindowInteropHelper(this).Handle;
                     Win32.makeTransparent(hwnd);
                     //TabControl.Background = Brushes.Transparent;
-                    RGrid.Background = Brushes.Transparent;
+                    MainGrid.Background = Brushes.Transparent;
                     TabItem1.Visibility = Visibility.Hidden;
                     TabItem2.Visibility = Visibility.Hidden;
                 }
@@ -158,14 +160,35 @@ namespace Albion.Network.Interface
             //{
                 foreach (KeyValuePair<int, ObjectInfo> pairForDel in chelDictionary.ToArray())
                 {
-                    if (pairForDel.Value.time < timeNow && pairForDel.Value.leave)// если надо убрать старых челов
+                    if (pairForDel.Value is ResurseInfo)
                     {
-                        keysForDell.Add(pairForDel.Key);
-                        mutexObj.WaitOne();
-                        chelDictionary.Remove(pairForDel.Key);
-                        mutexObj.ReleaseMutex();
+                        if (pairForDel.Value.leave && pairForDel.Value.time < timeNow)// если надо убрать старых челов
+                        {
+                            keysForDell.Add(pairForDel.Key);
+                            mutexObj.WaitOne();
+                            chelDictionary.Remove(pairForDel.Key);
+                            mutexObj.ReleaseMutex();
+                        }
+                        else if (!pairForDel.Value.leave)
+                        {
+                            if (Math.Sqrt(Math.Pow(pairForDel.Value.X - MyInfo.X, 2) + Math.Pow(pairForDel.Value.Y - MyInfo.Y, 2)) > 150)
+                            {
+                                pairForDel.Value.leave = true;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (pairForDel.Value.leave && pairForDel.Value.time < timeNow)// если надо убрать старых челов
+                        {
+                            keysForDell.Add(pairForDel.Key);
+                            mutexObj.WaitOne();
+                            chelDictionary.Remove(pairForDel.Key);
+                            mutexObj.ReleaseMutex();
+                        }
                     }
                 }
+
                 foreach (var pairforDel in keysForDell)
                 {
                     PointsControll.DelPoint(pairforDel);
@@ -321,12 +344,12 @@ namespace Albion.Network.Interface
         private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             TabItem1.Opacity = TabItem2.Opacity = e.NewValue;
-            RGrid.Background = new SolidColorBrush(new Color() {A = (byte)(e.NewValue*255), R = 255, G = 255, B = 255});
+            MainGrid.Background = new SolidColorBrush(new Color() {A = (byte)(e.NewValue*255), R = 255, G = 255, B = 255});
         }
         private void Slider_ValueChanged1(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             Width = e.NewValue;
-            Height = Width + 24;
+            Height = Width + 22;
             WindowState = WindowState.Normal;
         }
 

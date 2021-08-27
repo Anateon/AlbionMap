@@ -32,11 +32,13 @@ namespace Albion.Network.Interface
 
     public class ResurseInfo : ObjectInfo
     {
+        public int Id { get; set; }
         public int Lvl { get; set; }
         public int Tier { get; set; }
         public bool isAnimal { get; set; }
         public bool isTree { get; set; }
         public bool isStone { get; set; }
         public int nuber { get; set; }
+        public byte resurseType { get; set; }
     }
 }

@@ -5,14 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:interface="clr-namespace:Albion.Network.Interface"
         mc:Ignorable="d"
-        Title="Albion Radar" Height="524" Width="500" Closed="Window_Closed" WindowStyle="None" Background="#00FFFFFF" MouseLeftButtonDown="Window_MouseLeftButtonDown" WindowState="Normal" 
-        Topmost="True" AllowsTransparency="True" BorderThickness="4">
+        Title="Albion Radar" Height="522" Width="500" Closed="Window_Closed" WindowStyle="None" Background="#00FFFFFF" MouseLeftButtonDown="Window_MouseLeftButtonDown" WindowState="Normal" 
+        Topmost="True" AllowsTransparency="True" BorderThickness="7">
     <!--Topmost="True"-->
 
-    <Grid>
-        <TabControl Background="{x:Null}" x:Name="TabControl" BorderThickness="1" BorderBrush="#00000000">
-            <TabItem Header="Radar" Height="22" VerticalAlignment="Bottom" x:Name="TabItem1">
-                <Grid Background="White" x:Name="RGrid">
+    <Grid Background="#33FFFFFF" x:Name="MainGrid">
+        <TabControl Background="Transparent" x:Name="TabControl" BorderThickness="0" BorderBrush="#00000000">
+            <TabItem Header="Radar" VerticalAlignment="Bottom" x:Name="TabItem1" Margin="0">
+                <Grid Background="Transparent" x:Name="RGrid">
                     <!-- <Ellipse Fill="YellowGreen" Margin="0" Stroke="Black" OpacityMask="Black" HorizontalAlignment="Center" VerticalAlignment="Center" Width="500" Height="500"/> 
                     <Rectangle HorizontalAlignment="Center" Height="1" Margin="0" Stroke="Black" VerticalAlignment="Center" Width="500" RenderTransformOrigin="0.5,0.5">
                         <Rectangle.RenderTransform>
@@ -53,7 +53,7 @@
                     <Ellipse x:Name="ShowRadius" HorizontalAlignment="Center" Height="100" Margin="0" Stroke="Black" VerticalAlignment="Center" Width="100" Visibility="Hidden"/>
                 </Grid>
             </TabItem>
-            <TabItem Header="Cfg" x:Name="TabItem2">
+            <TabItem Header="Cfg" x:Name="TabItem2" Margin="0">
                 <ScrollViewer>
                     <Grid Background="#FFE5E5E5" MouseLeftButtonDown="Window_MouseLeftButtonDown">
                         <!-- <Button Content="Reset points" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="Button_Click"/>-->
@@ -78,11 +78,11 @@
                         <TextBlock HorizontalAlignment="Left" Margin="75,287,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="146" Text="Тир фильтр"/>
                         <TextBox HorizontalAlignment="Left" Height="22" Margin="10,311,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="60" PreviewTextInput="TextBox_PreviewTextInput" TextChanged="TextBox_TextChanged6"/>
                         <TextBlock HorizontalAlignment="Left" Margin="75,314,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="146" Text="LVL фильтр"/>
-                        <Slider x:Name="SliderOpacity" HorizontalAlignment="Left" Margin="10,352,0,0" VerticalAlignment="Top" Width="120" ValueChanged="Slider_ValueChanged" Maximum="1" TickFrequency="0" Value="0.5"/>
+                        <Slider x:Name="SliderOpacity" HorizontalAlignment="Left" Margin="10,352,0,0" VerticalAlignment="Top" Width="120" ValueChanged="Slider_ValueChanged" Maximum="1" TickFrequency="0" Value="0.75"/>
                         <TextBlock HorizontalAlignment="Left" Margin="10,336,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="146" Text="Opacity"/>
                         <TextBlock HorizontalAlignment="Left" Margin="11,374,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="146" Text="Windows size"/>
                         <Slider HorizontalAlignment="Left" Margin="11,395,0,0" VerticalAlignment="Top" Width="120" ValueChanged="Slider_ValueChanged1" Maximum="2000" Value="500" Minimum="150"/>
-                        <Button Content="Radar+clickOver" HorizontalAlignment="Left" Margin="108,10,0,0" VerticalAlignment="Top" Width="97" Click="Button_Click_1"/>
+                        <Button Content="Radar+clickOver" HorizontalAlignment="Left" Margin="102,10,0,0" VerticalAlignment="Top" Width="97" Click="Button_Click_1"/>
                     </Grid>
                 </ScrollViewer>
             </TabItem>

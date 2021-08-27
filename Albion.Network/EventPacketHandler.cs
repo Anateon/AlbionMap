@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Albion.Network
@@ -17,24 +19,20 @@ namespace Albion.Network
 
         protected internal override Task OnHandleAsync(EventPacket packet)
         {
+
 #if DEBUG
             if (eventCode == -666)
             {
-                    if (packet.EventCode == 2)
-                    {
-                        string writePath = @"C:\logIvents.txt";
+                string writePath = @"C:\logIvents.txt";
 
-                        using (StreamWriter sw = new StreamWriter(writePath, true, System.Text.Encoding.Default))
-                        {
-                            sw.WriteLine(packet.EventCode);
-                        }
+                using (StreamWriter sw = new StreamWriter(writePath, true, System.Text.Encoding.Default))
+                {
+                    sw.WriteLine(packet.EventCode);
+                }
 
-                        TEvent instance = (TEvent)Activator.CreateInstance(typeof(TEvent), packet.Parameters);
-                        Console.WriteLine(packet.EventCode + "\t" + Enum.GetName(typeof(EnumEvents), (int)packet.EventCode));
-                        return OnActionAsync(instance);
-                    }
+                Console.WriteLine($"{packet.EventCode}\t{(EnumEvents)packet.EventCode}");
+
             }
-
 #endif
 
             if (eventCode != packet.EventCode)

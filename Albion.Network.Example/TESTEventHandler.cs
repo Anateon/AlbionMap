@@ -9,7 +9,7 @@ namespace Albion.Network.Example
     {
         public Dictionary<string, ChelInfo> cheliki;
 
-        public TESTEventHandler() : base(EventCodes.TESTcode)
+        public TESTEventHandler() : base(-666)
         {
 
         }

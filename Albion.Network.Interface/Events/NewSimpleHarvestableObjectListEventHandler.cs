@@ -1,0 +1,148 @@
+﻿using System;
+using System.Media;
+using System.Threading.Tasks;
+using Albion.Network.Interface;
+
+namespace Albion.Network.Interface
+{
+    public class NewSimpleHarvestableObjectListEventHandler : EventPacketHandler<NewSimpleHarvestableObjectListEvent>
+    {
+        public enum HarvestableType
+        {
+            WOOD,
+            WOOD_BIG,
+            WOOD_GIANTTREE,
+            WOOD_CRITTER_GREEN,
+            WOOD_CRITTER_RED,
+            WOOD_CRITTER_DEAD,
+            WOOD_GUARDIAN_RED,
+            WOOD_MINIGUARDIAN_RED,
+            ROCK,
+            ROCK_BIG,
+            ROCK_CRITTER_GREEN,
+            ROCK_CRITTER_RED,
+            ROCK_CRITTER_DEAD,
+            ROCK_CRITTER_RANDOM_DUNGEON,
+            ROCK_GUARDIAN_RED,
+            ROCK_MINIGUARDIAN_RED,
+            FIBER,
+            FIBER_BIG,
+            FIBER_CRITTER,
+            FIBER_GUARDIAN_RED,
+            FIBER_GUARDIAN_DEAD,
+            FIBER_MINIGUARDIAN_RED,
+            HIDE,
+            HIDE_FOREST,
+            HIDE_FOREST_SMALL,
+            HIDE_FOREST_02,
+            HIDE_STEPPE,
+            HIDE_STEPPE_SMALL,
+            HIDE_SWAMP,
+            HIDE_MOUNTAIN,
+            HIDE_HIGHLAND,
+            HIDE_CRITTER,
+            HIDE_GUARDIAN,
+            HIDE_MINIGUARDIAN,
+            HIDE_FOREST_BIG,
+            HIDE_STEPPE_BIG,
+            ORE,
+            ORE_BIG,
+            ORE_CRITTER_GREEN,
+            ORE_CRITTER_RED,
+            ORE_CRITTER_DEAD,
+            ORE_GUARDIAN_RED,
+            ORE_MINIGUARDIAN_RED,
+            WOOD_CRITTER_FOREST,
+            WOOD_CRITTER_FOREST_VETERAN,
+            WOOD_CRITTER_FOREST_ELITE,
+            WOOD_GUARDIAN_FOREST,
+            WOOD_MINIGUARDIAN_FOREST,
+            ROCK_CRITTER_FOREST,
+            ROCK_CRITTER_FOREST_VETERAN,
+            ROCK_CRITTER_FOREST_ELITE,
+            ROCK_GUARDIAN_FOREST,
+            ROCK_MINIGUARDIAN_FOREST,
+            FIBER_CRITTER_FOREST,
+            FIBER_CRITTER_FOREST_VETERAN,
+            FIBER_CRITTER_FOREST_ELITE,
+            FIBER_GUARDIAN_FOREST,
+            FIBER_MINIGUARDIAN_FOREST,
+            HIDE_CRITTER_FOREST,
+            HIDE_CRITTER_FOREST_VETERAN,
+            HIDE_CRITTER_FOREST_ELITE,
+            HIDE_GUARDIAN_FOREST,
+            HIDE_MINIGUARDIAN_FOREST,
+            ORE_CRITTER_FOREST,
+            ORE_CRITTER_FOREST_VETERAN,
+            ORE_CRITTER_FOREST_ELITE,
+            ORE_GUARDIAN_FOREST,
+            ORE_MINIGUARDIAN_FOREST,
+            DEADRAT,
+            SILVERCOINS_NODE,
+            SILVERCOINS_NODE_RICH,
+            SILVERCOINS_LOOT_STANDARD_TRASH,
+            SILVERCOINS_LOOT_VETERAN_TRASH,
+            SILVERCOINS_LOOT_ELITE_TRASH,
+            SILVERCOINS_LOOT_ROAMING,
+            SILVERCOINS_LOOT_ROAMING_MINIBOSS,
+            SILVERCOINS_LOOT_ROAMING_BOSS,
+            SILVERCOINS_LOOT_STANDARD,
+            SILVERCOINS_LOOT_VETERAN,
+            SILVERCOINS_LOOT_ELITE,
+            SILVERCOINS_LOOT_STANDARD_MINIBOSS,
+            SILVERCOINS_LOOT_VETERAN_MINIBOSS,
+            SILVERCOINS_LOOT_ELITE_MINIBOSS,
+            SILVERCOINS_LOOT_STANDARD_BOSS,
+            SILVERCOINS_LOOT_VETERAN_BOSS,
+            SILVERCOINS_LOOT_ELITE_BOSS,
+            SILVERCOINS_RD_STANDARD_TRASH,
+            SILVERCOINS_RD_STANDARD,
+            SILVERCOINS_RD_STANDARD_STANDARD,
+            SILVERCOINS_RD_STANDARD_UNCOMMON,
+            SILVERCOINS_RD_STANDARD_RARE,
+            SILVERCOINS_RD_STANDARD_LEGENDARY,
+            SILVERCOINS_RD_VETERAN_TRASH,
+            SILVERCOINS_RD_VETERAN,
+            SILVERCOINS_RD_VETERAN_STANDARD,
+            SILVERCOINS_RD_VETERAN_UNCOMMON,
+            SILVERCOINS_RD_VETERAN_RARE,
+            SILVERCOINS_RD_VETERAN_LEGENDARY,
+            SILVERCOINS_RD_ELITE_TRASH,
+            SILVERCOINS_RD_ELITE,
+            SILVERCOINS_RD_ELITE_STANDARD,
+            SILVERCOINS_RD_ELITE_UNCOMMON,
+            SILVERCOINS_RD_ELITE_RARE,
+            SILVERCOINS_RD_ELITE_LEGENDARY,
+            SILVERCOINS_LOOT_CHEST_STANDARD,
+            SILVERCOINS_LOOT_CHEST_STANDARD_TRASH,
+            SILVERCOINS_LOOT_CHEST_VETERAN,
+            SILVERCOINS_LOOT_CHEST_DEMON,
+            CHEST_EXP_SILVERCOINS_LOOT_STANDARD,
+            CHEST_EXP_SILVERCOINS_LOOT_VETERAN,
+            SILVERCOINS_LOOT_SARCOPHAGUS_STANDARD_MINIBOSS,
+        }
+
+        public NewSimpleHarvestableObjectListEventHandler() : base(EventCodes.NewSimpleHarvestableObjectList) { }
+
+        protected override Task OnActionAsync(NewSimpleHarvestableObjectListEvent value)
+        {
+            try
+            {
+                MainWindow.mutexObj.WaitOne();
+
+                foreach (var mob in value.MobsList)
+                {
+                    MainWindow.chelDictionary[mob.Id] = mob;
+                }
+                MainWindow.mutexObj.ReleaseMutex();
+
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine("error NewMobEventHandler:" + exception.Message);
+                throw;
+            }
+            return Task.CompletedTask;
+        }
+    }
+}

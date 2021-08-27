@@ -11,5 +11,6 @@
         public const short PVPStatus = 336;
         public const short NewHarvestableObject = 33;
         public const short HarvestableChangeState = 37;
+        public const short NewSimpleHarvestableObjectList = 32;
     }
 }

@@ -79,6 +79,8 @@
     </ApplicationDefinition>
     <Compile Include="Events\JoinFinishedEvent.cs" />
     <Compile Include="Events\JoinFinishedEventHandler.cs" />
+    <Compile Include="Events\NewSimpleHarvestableObjectListEvent.cs" />
+    <Compile Include="Events\NewSimpleHarvestableObjectListEventHandler.cs" />
     <Compile Include="HotKey.cs" />
     <Compile Include="Win32.cs" />
     <Page Include="MainWindow.xaml">

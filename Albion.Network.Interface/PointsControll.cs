@@ -7,6 +7,7 @@ using System.Windows.Media;
 using System.Windows.Media.Effects;
 using System.Windows.Media.TextFormatting;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace Albion.Network.Interface
 {
@@ -101,11 +102,19 @@ namespace Albion.Network.Interface
             pointArea.RenderTransform = new RotateTransform(-45);
             radarArea.Children.Add(pointArea);
         }
-        public static void DelPoint(int ID)
+        public static void DelPoint(int ID, bool dellAll = false)
         {
+            if (dellAll)
+            {
+                //for (int i = 0; i < radarArea.Children.Count; i++)
+                //{
+                //    radarArea.Children.Remove(radarArea.Children[i]);
+                //}
+                //return;
+            }
             foreach (Grid pointsChild in radarArea.Children)
             {
-                if (pointsChild.Name == $"ID{ID}")
+                if  (pointsChild.Name == $"ID{ID}")
                 {
                     pointsChild.Children.Clear();
                     radarArea.Children.Remove(pointsChild);
@@ -264,7 +273,7 @@ namespace Albion.Network.Interface
                     }
                     else
                     {
-                        tmpString = $"WTF!!!!!!! lvl:{((ResurseInfo)info.Value).Lvl} num:{((ResurseInfo)info.Value).nuber} tier:{((ResurseInfo)info.Value).Tier}";
+                        tmpString = $"{((ResurseInfo)info.Value).resurseType}/{(NewSimpleHarvestableObjectListEventHandler.HarvestableType)((ResurseInfo)info.Value).resurseType}";
                     }
                 }
             }

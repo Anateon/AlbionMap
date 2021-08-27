@@ -28,8 +28,9 @@ namespace Albion.Network.Interface
                     {
                         System.Media.SystemSounds.Exclamation.Play();
                     }
-                    ((PlayerInfo)(MainWindow.chelDictionary[value.Id])).pvpMode = value.PVPmode;
+                    ((PlayerInfo)MainWindow.chelDictionary[value.Id]).pvpMode = value.PVPmode;
                     MainWindow.chelDictionary[value.Id].NeedUpdate = true;
+
                 }
                 //MainWindow.mutexObj.ReleaseMutex();
 
