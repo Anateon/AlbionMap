@@ -41,13 +41,13 @@ namespace Albion.Network.Interface
                     //name = value.Name,
                     X = value.Position[0],
                     Y = value.Position[1],
-                    leave = false,
-                    time = DateTime.Now,
+                    Leave = false,
+                    Time = DateTime.Now,
                     NowHP = value.NowHP,
                     FullHP = value.FullHP,
                     Name = value.Name,
                     NeedUpdate = true,
-                    pvpMode = value.PVPmode
+                    PvpMode = value.PVPmode
                 };
                 MainWindow.mutexObj.WaitOne();
                 MainWindow.chelDictionary[value.Id] = tmp;

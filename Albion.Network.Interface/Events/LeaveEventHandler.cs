@@ -24,9 +24,9 @@ namespace Albion.Network.Interface
                 //MainWindow.mutexObj.WaitOne();
                 if (MainWindow.chelDictionary.ContainsKey(value.Id))
                 {
-                    MainWindow.chelDictionary[value.Id].leave = true;
+                    MainWindow.chelDictionary[value.Id].Leave = true;
                     MainWindow.chelDictionary[value.Id].NeedUpdate = true;
-                    MainWindow.chelDictionary[value.Id].time = DateTime.Now;
+                    MainWindow.chelDictionary[value.Id].Time = DateTime.Now;
 
                 }
                 //MainWindow.mutexObj.ReleaseMutex();

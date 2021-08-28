@@ -13,20 +13,38 @@ namespace Albion.Network.Interface
         {
             try
             {
-                if (value.type == 23)
+                var tmp = new ResurseInfo()
                 {
-                    var tmp = new ResurseInfo()
-                    {
-                        X = value.Position[0],
-                        Y = value.Position[1],
-                        leave = false,
-                        time = DateTime.Now,
-                        NeedUpdate = true,
-                        Lvl = value.lvl,
-                        nuber = value.kolvo,
-                        Tier = value.tier,
-                        isAnimal = true
-                    };
+                    X = value.Position[0],
+                    Y = value.Position[1],
+                    Leave = false,
+                    Time = DateTime.Now,
+                    NeedUpdate = true,
+                    Tier = value.lvl,
+                    Nuber = value.kolvo,
+                    Lvl = value.tier,
+                };
+                if ((value.type >= 0 && value.type <= 7) || (value.type >= 43 && value.type <= 47))
+                {
+                    tmp.Type = HarvestableTypeResource.WOOD;
+                }
+                else if ((value.type >= 8 && value.type <= 15) || (value.type >= 48 && value.type <= 52))
+                {
+                    tmp.Type = HarvestableTypeResource.ROCK;
+                }
+                else if ((value.type >= 36 && value.type <= 42) || (value.type >= 63 && value.type <= 67))
+                {
+                    tmp.Type = HarvestableTypeResource.ORE;
+                }
+                else if ((value.type >= 22 && value.type <= 35) || (value.type >= 58 && value.type <= 62) || value.type == 68)
+                {
+                    tmp.Type = HarvestableTypeResource.HIDE;
+                }
+                else if ((value.type >= 16 && value.type <= 21) || (value.type >= 53 && value.type <= 57))
+                {
+                    tmp.Type = HarvestableTypeResource.FIBER;
+                }
+
                     MainWindow.mutexObj.WaitOne();
                     MainWindow.chelDictionary[value.Id] = tmp;
                     MainWindow.mutexObj.ReleaseMutex();
@@ -42,7 +60,6 @@ namespace Albion.Network.Interface
                     //        tmp.isAnimal = true;
                     //        break;
                     //}
-                }
             }
             catch (Exception exception)
             {

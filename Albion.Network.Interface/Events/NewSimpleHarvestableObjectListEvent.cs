@@ -46,15 +46,15 @@ namespace Albion.Network.Interface
                     MobsList.Add(new ResurseInfo()
                     {  
                         Id = (int)a0.ElementAt(i),
-                        Tier = 0,
+                        Lvl = 0,
                         X = (Single)a3[i * 2],
                         Y = (Single)a3[i * 2 + 1],
-                        nuber = (byte)a4[i],
-                        Lvl = (byte)a2[i],
+                        Nuber = (byte)a4[i],
+                        Tier = (byte)a2[i],
                         NeedUpdate = true,
-                        leave = false,
-                        time = DateTime.Now,
-                        resurseType = (byte)a1[i]
+                        Leave = false,
+                        Time = DateTime.Now,
+                        RowType = (byte)a1[i]
                     });
                     //
                 }

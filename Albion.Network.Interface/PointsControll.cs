@@ -64,7 +64,7 @@ namespace Albion.Network.Interface
                         Width = 7,
                         Fill = Brushes.Yellow
                     };
-                    pointArea.Opacity = 0.5;
+                    pointArea.Opacity = 0.55;
                     break;
                 case PointTypes.Player:
                     point = new Ellipse()
@@ -73,16 +73,16 @@ namespace Albion.Network.Interface
                         Height = 10,
                         Width = 10
                     };
-                    if (((PlayerInfo)info.Value).pvpMode)
+                    if (((PlayerInfo)info.Value).PvpMode)
                     {
                         pointArea.Opacity = 0.85;
-                        Panel.SetZIndex(pointArea, MainWindow.ZIndexCounter++);
+                        Panel.SetZIndex(pointArea, MainWindow.ZIndexCounter++ + 45000);
                         point.Fill = Brushes.Red;
                         caption.FontWeight = FontWeights.Bold;
                     }
                     else
                     {
-                        pointArea.Opacity = 0.65;
+                        pointArea.Opacity = 0.70;
                         point.Fill = Brushes.Blue;
                     }
                     break;
@@ -91,10 +91,31 @@ namespace Albion.Network.Interface
                     {
                         Height = 6,
                         Width = 6,
-                        Fill = Brushes.Green,
+                        Fill = Brushes.Gray,
                         Stroke = Brushes.Black
                     };
-                    pointArea.Opacity = 0.5;
+                    switch (((ResurseInfo)info.Value).Lvl)
+                    {
+                        case 0:
+                            pointArea.Opacity = 0.5;
+                            point.Fill = Brushes.Transparent;
+                            break;
+                        case 1:
+                            pointArea.Opacity = 0.52;
+                            Panel.SetZIndex(pointArea, MainWindow.ZIndexCounter++);
+                            point.Fill = Brushes.Lime;
+                            break;
+                        case 2:
+                            pointArea.Opacity = 0.54;
+                            Panel.SetZIndex(pointArea, MainWindow.ZIndexCounter++ + 15000);
+                            point.Fill = Brushes.Blue;
+                            break;
+                        case 3:
+                            pointArea.Opacity = 0.56;
+                            Panel.SetZIndex(pointArea, MainWindow.ZIndexCounter++ + 30000);
+                            point.Fill = Brushes.Magenta;
+                            break;
+                    }
                     break;
             }
             pointArea.Children.Add(point);
@@ -158,12 +179,12 @@ namespace Albion.Network.Interface
 
             if (info.Value is ResurseInfo)
             {
-                if (((ResurseInfo)info.Value).Tier >= MainWindow.tierFileter &&
-                    ((ResurseInfo)info.Value).Lvl >= MainWindow.lvlFilter)
+                if (((ResurseInfo)info.Value).Lvl >= MainWindow.tierFileter &&
+                    ((ResurseInfo)info.Value).Tier >= MainWindow.lvlFilter)
                 {
                     if (MainWindow.needHideZeroResouse)
                     {
-                        if (((ResurseInfo)info.Value).nuber == 0)
+                        if (((ResurseInfo)info.Value).Nuber == 0)
                         {
                             return false;
                         }
@@ -197,7 +218,7 @@ namespace Albion.Network.Interface
                     ((Grid) radarArea.Children[i]).Margin = new Thickness((info.Value.X - MainWindow.MyInfo.X) * MainWindow.scale, 0, 0,
                         (info.Value.Y - MainWindow.MyInfo.Y) * MainWindow.scale);
                     ((TextBlock)((Grid) radarArea.Children[i]).Children[1]).Text = GetInfoString(info);
-                    if (info.Value.leave)
+                    if (info.Value.Leave)
                     {
                         ((Grid) radarArea.Children[i]).Opacity = 0.25;
                         //((Ellipse)((Grid)radarArea.Children[i]).Children[0]).Fill = Brushes.Yellow;
@@ -206,7 +227,7 @@ namespace Albion.Network.Interface
                     {
                         if (info.Value is PlayerInfo)
                         {
-                            if (((PlayerInfo)info.Value).pvpMode)
+                            if (((PlayerInfo)info.Value).PvpMode)
                             {
                                 ((Grid)radarArea.Children[i]).Opacity = 0.85;
                                 ((Ellipse)((Grid)radarArea.Children[i]).Children[0]).Fill = Brushes.Red;
@@ -259,22 +280,40 @@ namespace Albion.Network.Interface
             {
                 if (MainWindow.needResourseCaption)
                 {
-                    if (((ResurseInfo)info.Value).isStone)
+                    switch (((ResurseInfo)info.Value).Type)
                     {
-                        tmpString = $"КАМЕНЬ lvl:{((ResurseInfo)info.Value).Lvl} num:{((ResurseInfo)info.Value).nuber} tier:{((ResurseInfo)info.Value).Tier}";
+                        case HarvestableTypeResource.WOOD:
+                            tmpString = $"{((ResurseInfo) info.Value).Nuber}/W{((ResurseInfo) info.Value).Tier}";
+                            break;
+                        case HarvestableTypeResource.HIDE:
+                            tmpString = $"{((ResurseInfo)info.Value).Nuber}/H{((ResurseInfo)info.Value).Tier}";
+                            break;
+                        case HarvestableTypeResource.ORE:
+                            tmpString = $"{((ResurseInfo)info.Value).Nuber}/O{((ResurseInfo)info.Value).Tier}";
+                            break;
+                        case HarvestableTypeResource.ROCK:
+                            tmpString = $"{((ResurseInfo)info.Value).Nuber}/R{((ResurseInfo)info.Value).Tier}";
+                            break;
+                        case HarvestableTypeResource.FIBER:
+                            tmpString = $"{((ResurseInfo)info.Value).Nuber}/F{((ResurseInfo)info.Value).Tier}";
+                            break;
                     }
-                    else if (((ResurseInfo)info.Value).isAnimal)
-                    {
-                        tmpString = $"L:{((ResurseInfo)info.Value).Lvl} N:{((ResurseInfo)info.Value).nuber} T:{((ResurseInfo)info.Value).Tier}";
-                    }
-                    else if (((ResurseInfo)info.Value).isTree)
-                    {
-                        tmpString = $"ДЕРЕВО lvl:{((ResurseInfo)info.Value).Lvl} num:{((ResurseInfo)info.Value).nuber} tier:{((ResurseInfo)info.Value).Tier}";
-                    }
-                    else
-                    {
-                        tmpString = $"{((ResurseInfo)info.Value).resurseType}/{(NewSimpleHarvestableObjectListEventHandler.HarvestableType)((ResurseInfo)info.Value).resurseType}";
-                    }
+                    //if (((ResurseInfo)info.Value).isStone)
+                    //{
+                    //    tmpString = $"КАМЕНЬ lvl:{((ResurseInfo)info.Value).Tier} num:{((ResurseInfo)info.Value).nuber} tier:{((ResurseInfo)info.Value).Lvl}";
+                    //}
+                    //else if (((ResurseInfo)info.Value).isAnimal)
+                    //{
+                    //    tmpString = $"L:{((ResurseInfo)info.Value).Tier} N:{((ResurseInfo)info.Value).nuber} T:{((ResurseInfo)info.Value).Lvl}";
+                    //}
+                    //else if (((ResurseInfo)info.Value).isTree)
+                    //{
+                    //    tmpString = $"ДЕРЕВО lvl:{((ResurseInfo)info.Value).Tier} num:{((ResurseInfo)info.Value).nuber} tier:{((ResurseInfo)info.Value).Lvl}";
+                    //}
+                    //else
+                    //{
+                    //    tmpString = $"{((ResurseInfo)info.Value).resurseType}/{(NewSimpleHarvestableObjectListEventHandler.HarvestableType)((ResurseInfo)info.Value).resurseType}";
+                    //}
                 }
             }
             return tmpString;

@@ -17,8 +17,8 @@ namespace Albion.Network.Interface
                 {
                     X = value.Position[0],
                     Y = value.Position[1],
-                    leave = false,
-                    time = DateTime.Now,
+                    Leave = false,
+                    Time = DateTime.Now,
                     NowHP = value.NowHP,
                     FullHP = value.FullHP,
                     NeedUpdate = true

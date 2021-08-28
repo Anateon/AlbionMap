@@ -29,7 +29,7 @@ namespace Albion.Network.Interface
         private DispatcherTimer dispatcherTimer;
         private static List<Thread> threads = new List<Thread>();
         public static bool fullSizeStatus = false;
-        public static int ZIndexCounter = 1000;
+        public static int ZIndexCounter = 15000;
 
         public HotKey hotKeyFullSizeMode;
         public HotKey hotKeyPlusSize;
@@ -162,24 +162,24 @@ namespace Albion.Network.Interface
                 {
                     if (pairForDel.Value is ResurseInfo)
                     {
-                        if (pairForDel.Value.leave && pairForDel.Value.time < timeNow)// если надо убрать старых челов
+                        if (pairForDel.Value.Leave && pairForDel.Value.Time < timeNow)// если надо убрать старых челов
                         {
                             keysForDell.Add(pairForDel.Key);
                             mutexObj.WaitOne();
                             chelDictionary.Remove(pairForDel.Key);
                             mutexObj.ReleaseMutex();
                         }
-                        else if (!pairForDel.Value.leave)
+                        else if (!pairForDel.Value.Leave)
                         {
                             if (Math.Sqrt(Math.Pow(pairForDel.Value.X - MyInfo.X, 2) + Math.Pow(pairForDel.Value.Y - MyInfo.Y, 2)) > 150)
                             {
-                                pairForDel.Value.leave = true;
+                                pairForDel.Value.Leave = true;
                             }
                         }
                     }
                     else
                     {
-                        if (pairForDel.Value.leave && pairForDel.Value.time < timeNow)// если надо убрать старых челов
+                        if (pairForDel.Value.Leave && pairForDel.Value.Time < timeNow)// если надо убрать старых челов
                         {
                             keysForDell.Add(pairForDel.Key);
                             mutexObj.WaitOne();

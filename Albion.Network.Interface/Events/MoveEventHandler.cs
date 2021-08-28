@@ -23,10 +23,10 @@ namespace Albion.Network.Interface
                 if (MainWindow.chelDictionary.ContainsKey(value.Id))
                 {
                     var tmp = MainWindow.chelDictionary[value.Id];
-                    tmp.time = DateTime.Now;
+                    tmp.Time = DateTime.Now;
                     tmp.X = value.Position[0];
                     tmp.Y = value.Position[1];
-                    tmp.leave = false;
+                    tmp.Leave = false;
                     tmp.NeedUpdate = true;
                     MainWindow.chelDictionary[value.Id] = tmp;
                 }

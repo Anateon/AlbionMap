@@ -16,8 +16,8 @@ namespace Albion.Network.Interface
                 MobInfo tmp = (MobInfo)MainWindow.chelDictionary[value.Id];
                 tmp.Tier = value.tier;
                 tmp.NeedUpdate = true;
-                tmp.leave = false;
-                tmp.time = DateTime.Now;
+                tmp.Leave = false;
+                tmp.Time = DateTime.Now;
                 MainWindow.mutexObj.WaitOne();
                 MainWindow.chelDictionary[value.Id] = tmp;
                 MainWindow.mutexObj.ReleaseMutex();

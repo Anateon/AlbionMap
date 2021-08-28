@@ -2,14 +2,23 @@
 
 namespace Albion.Network.Interface
 {
+    public enum HarvestableTypeResource
+    {
+        WOOD, //дерево
+        ROCK, //камень
+        FIBER,//ткань
+        HIDE, //шкура
+        ORE   //руда
+    }
+
     public class ObjectInfo
     {
         //public bool isMob { get; set; }
         //public bool isResurse { get; set; }
         public float X { get; set; }
         public float Y { get; set; }
-        public DateTime time { get; set; }
-        public bool leave { get; set; }
+        public DateTime Time { get; set; }
+        public bool Leave { get; set; }
         public bool NeedUpdate { get; set; }
     }
 
@@ -22,7 +31,7 @@ namespace Albion.Network.Interface
     public class PlayerInfo : LifeObject
     {
         public string Name { get; set; }
-        public bool pvpMode { get; set; }
+        public bool PvpMode { get; set; }
     }
 
     public class MobInfo : LifeObject
@@ -33,12 +42,10 @@ namespace Albion.Network.Interface
     public class ResurseInfo : ObjectInfo
     {
         public int Id { get; set; }
-        public int Lvl { get; set; }
         public int Tier { get; set; }
-        public bool isAnimal { get; set; }
-        public bool isTree { get; set; }
-        public bool isStone { get; set; }
-        public int nuber { get; set; }
-        public byte resurseType { get; set; }
+        public int Lvl { get; set; }
+        public HarvestableTypeResource Type { get; set; }
+        public int Nuber { get; set; }
+        public byte RowType { get; set; }
     }
 }

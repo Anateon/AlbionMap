@@ -121,7 +121,6 @@ namespace Albion.Network.Interface
             CHEST_EXP_SILVERCOINS_LOOT_VETERAN,
             SILVERCOINS_LOOT_SARCOPHAGUS_STANDARD_MINIBOSS,
         }
-
         public NewSimpleHarvestableObjectListEventHandler() : base(EventCodes.NewSimpleHarvestableObjectList) { }
 
         protected override Task OnActionAsync(NewSimpleHarvestableObjectListEvent value)
@@ -132,6 +131,26 @@ namespace Albion.Network.Interface
 
                 foreach (var mob in value.MobsList)
                 {
+                    if ((mob.RowType >= 0 && mob.RowType <= 7) || (mob.RowType >= 43 && mob.RowType <= 47))
+                    {
+                        mob.Type = HarvestableTypeResource.WOOD;
+                    }
+                    else if ((mob.RowType >= 8 && mob.RowType <= 15) || (mob.RowType >= 48 && mob.RowType <= 52))
+                    {
+                        mob.Type = HarvestableTypeResource.ROCK;
+                    }
+                    else if ((mob.RowType >= 36 && mob.RowType <= 42) || (mob.RowType >= 63 && mob.RowType <= 67))
+                    {
+                        mob.Type = HarvestableTypeResource.ORE;
+                    }
+                    else if ((mob.RowType >= 22 && mob.RowType <= 35) || (mob.RowType >= 58 && mob.RowType <= 62) || mob.RowType == 68)
+                    {
+                        mob.Type = HarvestableTypeResource.HIDE;
+                    }
+                    else if ((mob.RowType >= 16 && mob.RowType <= 21) || (mob.RowType >= 53 && mob.RowType <= 57))
+                    {
+                        mob.Type = HarvestableTypeResource.FIBER;
+                    }
                     MainWindow.chelDictionary[mob.Id] = mob;
                 }
                 MainWindow.mutexObj.ReleaseMutex();

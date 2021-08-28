@@ -32,8 +32,8 @@ namespace Albion.Network.Interface
                     //    tmp.NeedUpdate = true;
                     //}
                     ObjectInfo tmp = MainWindow.chelDictionary[value.Id];
-                    tmp.time = DateTime.Now;
-                    tmp.leave = false;
+                    tmp.Time = DateTime.Now;
+                    tmp.Leave = false;
                     ((LifeObject)tmp).NowHP = value.NowHP;
                     tmp.NeedUpdate = true;
                     MainWindow.chelDictionary[value.Id] = tmp;

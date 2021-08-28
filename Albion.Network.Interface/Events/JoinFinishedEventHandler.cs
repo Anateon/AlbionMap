@@ -17,8 +17,10 @@ namespace Albion.Network.Interface
             {
                 if (!(var.Value is PlayerInfo))
                 {
-                    MainWindow.chelDictionary[var.Key].leave = true;
+                    MainWindow.chelDictionary[var.Key].Leave = true;
                 }
+
+                MainWindow.ZIndexCounter = 15000;
             }
             MainWindow.mutexObj.ReleaseMutex();
             return Task.CompletedTask;
