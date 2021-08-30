@@ -26,7 +26,6 @@ namespace Albion.Network.Interface
             }
             catch (Exception exception)
             {
-                Console.WriteLine("error MoveRequestHandler:" + exception.Message);
                 throw;
             }
 

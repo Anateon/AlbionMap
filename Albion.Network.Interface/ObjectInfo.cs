@@ -8,7 +8,8 @@ namespace Albion.Network.Interface
         ROCK, //камень
         FIBER,//ткань
         HIDE, //шкура
-        ORE   //руда
+        ORE,   //руда
+        FISH // РЫБА
     }
 
 

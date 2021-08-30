@@ -5,25 +5,26 @@ using Albion.Network.Interface;
 
 namespace Albion.Network.Interface
 {
-    public class TEMPLATEEventHandler : EventPacketHandler<TEMPALTEEvent>
+    public class FishingMiniGameEventHandler : EventPacketHandler<FishingMiniGameEvent>
     {
-        public TEMPLATEEventHandler() : base(999999999) { }
+        public FishingMiniGameEventHandler() : base(EventCodes.FishingMiniGame) { }
 
-        protected override Task OnActionAsync(TEMPALTEEvent value)
+        protected override Task OnActionAsync(FishingMiniGameEvent value)
         {
             try
             {
-                var tmp = new MobInfo()
+                var tmp = new ResurseInfo()
                 {
                     X = value.Position[0],
                     Y = value.Position[1],
+                    Nuber = value.Status,
+                    Type = HarvestableTypeResource.FISH,
                     Leave = false,
                     Time = DateTime.Now,
-                    NowHP = value.NowHP,
-                    FullHP = value.FullHP,
+                    Lvl = -2,
                     NeedUpdate = true,
-                    Lvl = value.tier
                 };
+                Console.WriteLine("MINI GAME FISH!!!!!!");
                 MainWindow.mutexObj.WaitOne();
                 MainWindow.chelDictionary[value.Id] = tmp;
                 MainWindow.mutexObj.ReleaseMutex();

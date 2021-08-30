@@ -85,6 +85,10 @@
     <Compile Include="Events\NewSimpleHarvestableObjectListEventHandler.cs" />
     <Compile Include="Events\MobChangeStateEvent.cs" />
     <Compile Include="Events\MobChangeStateEventHandler.cs" />
+    <Compile Include="Events\NewFishingZoneObjectEvent.cs" />
+    <Compile Include="Events\NewFishingZoneObjectEventHandler.cs" />
+    <Compile Include="Events\FishingMiniGameEvent.cs" />
+    <Compile Include="Events\FishingMiniGameEventHandler.cs" />
     <Compile Include="HotKey.cs" />
     <Compile Include="Win32.cs" />
     <Page Include="MainWindow.xaml">

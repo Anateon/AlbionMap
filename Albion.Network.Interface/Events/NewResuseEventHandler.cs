@@ -63,7 +63,6 @@ namespace Albion.Network.Interface
             }
             catch (Exception exception)
             {
-                Console.WriteLine("error NewResuseEventHandler:" + exception.Message);
                 throw;
             }
 

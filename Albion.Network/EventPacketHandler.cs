@@ -24,7 +24,7 @@ namespace Albion.Network
 #if DEBUG
             if (eventCode == -666)
             {
-                if (/*packet.EventCode == 331 || packet.EventCode == 332*/ /*packet.EventCode == 115*/ packet.EventCode == 36)
+                if (packet.EventCode == 332)
                 {
                     string writePath = @"C:\logIvents.txt";
 
@@ -32,12 +32,9 @@ namespace Albion.Network
                     {
                         sw.WriteLine(packet.EventCode);
                     }
-
-                    Console.WriteLine($"{packet.EventCode}\t{(EnumEvents) packet.EventCode}");
+                    Console.Write($"\n{packet.EventCode}\t{(EnumEvents) packet.EventCode}");
                     string json = JsonConvert.SerializeObject(packet.Parameters);
-
-                    Console.WriteLine(json);
-
+                    Console.Write(json);
                     return NextAsync(packet);
 
                 }

@@ -65,7 +65,7 @@ namespace Albion.Network.Interface
                         Width = 7,
                         Fill = Brushes.Yellow
                     };
-                    pointArea.Opacity = 0.55;
+                    pointArea.Opacity = 0.6;
                     break;
                 case PointTypes.Player:
                     point = new Ellipse()
@@ -95,28 +95,62 @@ namespace Albion.Network.Interface
                         Fill = Brushes.Gray,
                         Stroke = Brushes.Black
                     };
-                    switch (((ResurseInfo)info.Value).Lvl)
+                    if (((ResurseInfo) info.Value).Type != HarvestableTypeResource.FISH)
                     {
-                        case 0:
-                            pointArea.Opacity = 0.5;
-                            point.Fill = Brushes.Transparent;
-                            break;
-                        case 1:
-                            pointArea.Opacity = 0.52;
-                            Panel.SetZIndex(pointArea, MainWindow.ZIndexCounter++);
-                            point.Fill = Brushes.DarkGreen;
-                            break;
-                        case 2:
-                            pointArea.Opacity = 0.54;
-                            Panel.SetZIndex(pointArea, MainWindow.ZIndexCounter++ + 15000);
-                            point.Fill = Brushes.Blue;
-                            break;
-                        case 3:
-                            pointArea.Opacity = 0.56;
-                            Panel.SetZIndex(pointArea, MainWindow.ZIndexCounter++ + 30000);
-                            point.Fill = Brushes.MediumVioletRed;
-                            break;
+                        pointArea.Opacity = 0.5;
+                        switch (((ResurseInfo)info.Value).Lvl)
+                        {
+                            case 0:
+                                point.Fill = Brushes.Transparent;
+                                break;
+                            case 1:
+                                Panel.SetZIndex(pointArea, MainWindow.ZIndexCounter++);
+                                point.Fill = Brushes.DarkGreen;
+                                break;
+                            case 2:
+                                Panel.SetZIndex(pointArea, MainWindow.ZIndexCounter++ + 15000);
+                                point.Fill = Brushes.Blue;
+                                break;
+                            case 3:
+                                Panel.SetZIndex(pointArea, MainWindow.ZIndexCounter++ + 30000);
+                                point.Fill = Brushes.MediumVioletRed;
+                                break;
+                        }
                     }
+                    else
+                    {
+                        switch (((ResurseInfo)info.Value).Lvl)
+                        {
+                            case -2:
+                                pointArea.Opacity = 0.5;
+                                switch (((ResurseInfo)info.Value).Nuber)
+                                {
+                                    case 1:
+                                        point.Fill = Brushes.Black;
+                                        pointArea.Opacity = 0.5;
+                                        break;
+                                    case 2:
+                                        point.Fill = Brushes.Red;
+                                        pointArea.Opacity = 1;
+                                        break;
+                                        
+                                    case 3:
+                                        point.Fill = Brushes.Red;
+                                        pointArea.Opacity = 0.5;
+                                        break;
+
+                                    case 4:
+                                        pointArea.Opacity = 0;
+                                        break;
+                                }
+                                break;
+                            default:
+                                pointArea.Opacity = 0.5;
+                                point.Fill = Brushes.Transparent;
+                                break;
+                        }
+                    }
+
                     break;
             }
             pointArea.Children.Add(point);
@@ -171,35 +205,33 @@ namespace Albion.Network.Interface
             }
             else if (info.Value is MobInfo)
             {
-                if (MainWindow.needShowMobs)
+                if (MainWindow.MobFilter[((MobInfo) info.Value).Tier, ((MobInfo) info.Value).Lvl])
                 {
-                    if (!MainWindow.MobFilter[((MobInfo) info.Value).Tier, ((MobInfo) info.Value).Lvl])
+                    switch (MainWindow.filterListMode)
                     {
-                        return false;
+                        case 1: // white list
+                            foreach (var name in MainWindow.listNames)
+                            {
+                                if (name == ((MobInfo) info.Value).Name)
+                                {
+                                    return true;
+                                }
+                            }
+                            return false;
+                        case 2: // black list
+                            foreach (var name in MainWindow.listNames)
+                            {
+                                if (name == ((MobInfo) info.Value).Name)
+                                {
+                                    return false;
+                                }
+                            }
+                            break;
+                        default:
+                            return true;
                     }
                 }
-                switch (MainWindow.filterListMode)
-                {
-                    case 1: // white list
-                        foreach (var name in MainWindow.listNames)
-                        {
-                            if (name == ((MobInfo)info.Value).Name)
-                            {
-                                return true;
-                            }
-                        }
-                        return false;
-                    case 2: // black list
-                        foreach (var name in MainWindow.listNames)
-                        {
-                            if (name == ((MobInfo)info.Value).Name)
-                            {
-                                return false;
-                            }
-                        }
-                        break;
-                }
-                return true;
+                return false;
             }
             else if (info.Value is ResurseInfo)
             {
@@ -229,6 +261,8 @@ namespace Albion.Network.Interface
                         if (!MainWindow.needShowWood)
                             return false;
                         break;
+                    case HarvestableTypeResource.FISH:
+                            return MainWindow.needShowFish;
                 }
                 return MainWindow.ResurseFilter[((ResurseInfo) info.Value).Tier, ((ResurseInfo) info.Value).Lvl];
             }
@@ -256,7 +290,17 @@ namespace Albion.Network.Interface
                     ((TextBlock)((Grid) radarArea.Children[i]).Children[1]).Text = GetInfoString(info);
                     if (info.Value.Leave)
                     {
-                        ((Grid) radarArea.Children[i]).Opacity = 0.25;
+                        if (info.Value is ResurseInfo &&
+                            ((ResurseInfo) info.Value).Type == HarvestableTypeResource.FISH &&
+                            ((ResurseInfo) info.Value).Lvl == -2)
+                        {
+                            ((Grid)radarArea.Children[i]).Opacity = 0;
+                        }
+                        else
+                        {
+                            ((Grid)radarArea.Children[i]).Opacity = 0.25;
+                        }
+                        return true;
                         //((Ellipse)((Grid)radarArea.Children[i]).Children[0]).Fill = Brushes.Yellow;
                     }
                     else
@@ -266,20 +310,59 @@ namespace Albion.Network.Interface
                             if (((PlayerInfo)info.Value).PvpMode)
                             {
                                 ((Grid)radarArea.Children[i]).Opacity = 0.85;
-                                ((Ellipse)((Grid)radarArea.Children[i]).Children[0]).Fill = Brushes.Red;
+                                ((Shape)((Grid)radarArea.Children[i]).Children[0]).Fill = Brushes.Red;
                                 Panel.SetZIndex(((Grid)radarArea.Children[i]), MainWindow.ZIndexCounter++);
                                 ((TextBlock)((Grid)radarArea.Children[i]).Children[1]).FontWeight = FontWeights.Bold;
                             }
                             else
                             {
                                 ((Grid)radarArea.Children[i]).Opacity = 0.65;
-                                ((Ellipse)((Grid)radarArea.Children[i]).Children[0]).Fill = Brushes.Blue;
+                                ((Shape)((Grid)radarArea.Children[i]).Children[0]).Fill = Brushes.Blue;
                                 ((TextBlock)((Grid)radarArea.Children[i]).Children[1]).FontWeight = FontWeights.Normal;
                             }
                         }
-                        else
+                        else if (info.Value is ResurseInfo)
                         {
-                            ((Grid)radarArea.Children[i]).Opacity = 0.5;
+                            if (((ResurseInfo) info.Value).Type != HarvestableTypeResource.FISH)
+                            {
+                                ((Grid)radarArea.Children[i]).Opacity = 0.5;
+                            }
+                            else
+                            {
+                                ((Grid)radarArea.Children[i]).Opacity = 0.5;
+                                switch (((ResurseInfo)info.Value).Lvl)
+                                {
+                                    case -2:
+                                        switch (((ResurseInfo)info.Value).Nuber)
+                                        {
+                                            case 1:
+                                                ((Shape)((Grid)radarArea.Children[i]).Children[0]).Fill = Brushes.Black;
+                                                ((Grid)radarArea.Children[i]).Opacity = 0.5;
+                                                break;
+                                            case 2:
+                                                ((Shape)((Grid)radarArea.Children[i]).Children[0]).Fill = Brushes.Red;
+                                                ((Grid)radarArea.Children[i]).Opacity = 1;
+                                                break;
+
+                                            case 3:
+                                                //((Shape)((Grid)radarArea.Children[i]).Children[0]).Fill = Brushes.Red;
+                                                ((Shape)((Grid)radarArea.Children[i]).Children[0]).Fill = Brushes.Transparent;
+                                                ((Grid)radarArea.Children[i]).Opacity = 0.5;
+                                                break;
+
+                                            case 4:
+                                                ((Grid)radarArea.Children[i]).Opacity = 0;
+                                                break;
+                                        }
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            }
+                        }
+                        else if (info.Value is MobInfo)
+                        {
+                            ((Grid)radarArea.Children[i]).Opacity = 0.6;
                         }
                     }
                     return true;
@@ -337,19 +420,32 @@ namespace Albion.Network.Interface
                     switch (((ResurseInfo)info.Value).Type)
                     {
                         case HarvestableTypeResource.WOOD:
-                            tmpString = $"{((ResurseInfo)info.Value).Nuber}|W{((ResurseInfo)info.Value).Tier}.{((ResurseInfo)info.Value).Lvl}";
+                            tmpString = $"{((ResurseInfo)info.Value).Nuber}W{((ResurseInfo)info.Value).Tier}.{((ResurseInfo)info.Value).Lvl}";
                             break;
                         case HarvestableTypeResource.HIDE:
-                            tmpString = $"{((ResurseInfo)info.Value).Nuber}|H{((ResurseInfo)info.Value).Tier}.{((ResurseInfo)info.Value).Lvl}";
+                            tmpString = $"{((ResurseInfo)info.Value).Nuber}H{((ResurseInfo)info.Value).Tier}.{((ResurseInfo)info.Value).Lvl}";
                             break;
                         case HarvestableTypeResource.ORE:
-                            tmpString = $"{((ResurseInfo)info.Value).Nuber}|O{((ResurseInfo)info.Value).Tier}.{((ResurseInfo)info.Value).Lvl}";
+                            tmpString = $"{((ResurseInfo)info.Value).Nuber}O{((ResurseInfo)info.Value).Tier}.{((ResurseInfo)info.Value).Lvl}";
                             break;
                         case HarvestableTypeResource.ROCK:
-                            tmpString = $"{((ResurseInfo)info.Value).Nuber}|R{((ResurseInfo)info.Value).Tier}.{((ResurseInfo)info.Value).Lvl}";
+                            tmpString = $"{((ResurseInfo)info.Value).Nuber}R{((ResurseInfo)info.Value).Tier}.{((ResurseInfo)info.Value).Lvl}";
                             break;
                         case HarvestableTypeResource.FIBER:
-                            tmpString = $"{((ResurseInfo)info.Value).Nuber}|F{((ResurseInfo)info.Value).Tier}.{((ResurseInfo)info.Value).Lvl}";
+                            tmpString = $"{((ResurseInfo)info.Value).Nuber}F{((ResurseInfo)info.Value).Tier}.{((ResurseInfo)info.Value).Lvl}";
+                            break;
+                        case HarvestableTypeResource.FISH:
+                            switch (((ResurseInfo)info.Value).Lvl)
+                            {
+                                case 0:
+                                    tmpString = $"{((ResurseInfo)info.Value).Nuber} FISH";
+                                    break;
+                                case -1:
+                                    tmpString = $"{((ResurseInfo)info.Value).Nuber} FISH AREA";
+                                    break;
+                                case -2:
+                                    break;
+                            }
                             break;
                     }
                 }

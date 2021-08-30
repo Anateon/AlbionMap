@@ -24,7 +24,6 @@ namespace Albion.Network.Interface
             }
             catch (Exception exception)
             {
-                Console.WriteLine("error NewMobEventHandler:" + exception.Message);
                 throw;
             }
             return Task.CompletedTask;

@@ -7,7 +7,6 @@ namespace Albion.Network.Interface
     {
         public TEMPALTEEvent(Dictionary<byte, object> parameters) : base(parameters)
         {
-            // 13 и 14 это ХП
             Id = int.Parse(parameters[0].ToString());
             Position = (float[])parameters[7];
             FullHP = parameters.TryGetValue(13, out object hp1) ? Int32.Parse(hp1.ToString()) : 0;

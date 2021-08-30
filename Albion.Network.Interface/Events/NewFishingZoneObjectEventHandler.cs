@@ -5,25 +5,26 @@ using Albion.Network.Interface;
 
 namespace Albion.Network.Interface
 {
-    public class TEMPLATEEventHandler : EventPacketHandler<TEMPALTEEvent>
+    public class NewFishingZoneObjectEventHandler : EventPacketHandler<NewFishingZoneObjectEvent>
     {
-        public TEMPLATEEventHandler() : base(999999999) { }
+        public NewFishingZoneObjectEventHandler() : base(EventCodes.NewFishingZoneObject) { }
 
-        protected override Task OnActionAsync(TEMPALTEEvent value)
+        protected override Task OnActionAsync(NewFishingZoneObjectEvent value)
         {
             try
             {
-                var tmp = new MobInfo()
+                var tmp = new ResurseInfo()
                 {
                     X = value.Position[0],
                     Y = value.Position[1],
+                    Nuber = value.Number,
+                    Type = HarvestableTypeResource.FISH,
                     Leave = false,
+                    Lvl = value.Lvl,
                     Time = DateTime.Now,
-                    NowHP = value.NowHP,
-                    FullHP = value.FullHP,
                     NeedUpdate = true,
-                    Lvl = value.tier
                 };
+                Console.WriteLine("OBJECT FISH");
                 MainWindow.mutexObj.WaitOne();
                 MainWindow.chelDictionary[value.Id] = tmp;
                 MainWindow.mutexObj.ReleaseMutex();

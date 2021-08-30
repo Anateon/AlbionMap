@@ -59,7 +59,6 @@ namespace Albion.Network.Interface
         public static bool needHideZeroResouse = true;
         public static bool needResourseCaption = true;
         public static bool needShowPlayers = true;
-        public static bool needShowMobs = true;
 
         public static List<string> listNames = new List<string>();
         public static byte filterListMode = 0; // 0-off/ 1-white/ 2-black
@@ -72,6 +71,7 @@ namespace Albion.Network.Interface
         public static bool needShowOre;
         public static bool needShowRock;
         public static bool needShowWood;
+        public static bool needShowFish;
         public static bool[,] MobFilter = new bool[9, 4];
         #endregion
 
@@ -117,7 +117,10 @@ namespace Albion.Network.Interface
             builder.AddEventHandler(new HarvestableChangeHandler()); // для тира ресурсов
             builder.AddEventHandler(new JoinFinishedEventHandler()); // для перехода между локами
             builder.AddEventHandler(new NewSimpleHarvestableObjectListEventHandler()); // для отслеживания деревьев/камня
-            builder.AddEventHandler(new MobChangeStateEventHandler()); // для -- во время сбора шкуры
+            builder.AddEventHandler(new MobChangeStateEventHandler()); // присваивает тир мобу
+
+             builder.AddEventHandler(new FishingMiniGameEventHandler()); // ЭТО КРЮЧКИ РЫБОЛОВНЫЕ
+            builder.AddEventHandler(new NewFishingZoneObjectEventHandler()); // РЫБА
 
 
             hotKeyFullSizeMode = new HotKey(Key.M, HotKey.KeyModifier.Alt, (HotKey o) =>
@@ -192,7 +195,7 @@ namespace Albion.Network.Interface
             UdpPacket packet = Packet.ParsePacket(e.Packet.LinkLayerType, e.Packet.Data).Extract<UdpPacket>();
             if (packet != null && (packet.SourcePort == 5056 || packet.DestinationPort == 5056))
             {
-                receiver.ReceivePacket(packet.PayloadData);
+                receiver.ReceivePacket(packet.PayloadData); // ТУТ БЫВАЕТ ОВЕРФЛОУ
             }
         }
 
@@ -246,13 +249,6 @@ namespace Albion.Network.Interface
                     }
                 }
                 MyInfo.NeedUpdate = false;
-            //}
-            //catch (Exception exception)
-            //{
-            //    Console.WriteLine("error:" + exception.Message);
-            //    throw;
-            //    //Points.Children.RemoveRange(0,Int32.MaxValue);
-            //}
         }
 
         private void Window_Closed(object sender, EventArgs e)
@@ -455,6 +451,9 @@ namespace Albion.Network.Interface
                 case "CheckBoxWood":
                     needShowWood = (bool)((CheckBox)sender).IsChecked;
                     break;
+                case "CheckBoxFish":
+                    needShowFish = (bool)((CheckBox)sender).IsChecked;
+                    break;
             }
             MyInfo.NeedUpdate = true;
         }
@@ -498,13 +497,6 @@ namespace Albion.Network.Interface
             needShowPlayers = (bool)((CheckBox) sender).IsChecked;
             MyInfo.NeedUpdate = true;
         }
-
-        private void CheckBox_Click_3(object sender, RoutedEventArgs e)
-        {
-            needShowMobs = (bool)((CheckBox)sender).IsChecked;
-            MyInfo.NeedUpdate = true;
-        }
-
         private void ButtonAddList_Click(object sender, RoutedEventArgs e)
         {
             if (ComboBoxMobNameList.Text != null)

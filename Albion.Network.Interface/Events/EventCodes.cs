@@ -13,5 +13,7 @@
         public const short HarvestableChangeState = 36;
         public const short MobChangeState = 37;
         public const short NewSimpleHarvestableObjectList = 32;
+        public const short NewFishingZoneObject = 332;
+        public const short FishingMiniGame = 331;
     }
 }
