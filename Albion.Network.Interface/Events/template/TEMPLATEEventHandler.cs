@@ -22,7 +22,7 @@ namespace Albion.Network.Interface
                     NowHP = value.NowHP,
                     FullHP = value.FullHP,
                     NeedUpdate = true,
-                    Tier = value.tier
+                    Lvl = value.tier
                 };
                 MainWindow.mutexObj.WaitOne();
                 MainWindow.chelDictionary[value.Id] = tmp;

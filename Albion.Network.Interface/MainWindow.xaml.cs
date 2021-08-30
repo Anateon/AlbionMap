@@ -3,6 +3,7 @@ using SharpPcap;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -13,6 +14,11 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using Albion.Network.Interface.BinDumps;
+using Newtonsoft.Json;
+using System.Runtime.Serialization;
+using System.Windows.Controls.Primitives;
+using System.Xml.Serialization;
 
 namespace Albion.Network.Interface
 {
@@ -28,6 +34,8 @@ namespace Albion.Network.Interface
         public static Mutex mutexObj = new Mutex();
         private DispatcherTimer dispatcherTimer;
         private static List<Thread> threads = new List<Thread>();
+        public static Mobs MobsDump;
+        public static AOResources ResourcesDump;
         public static bool fullSizeStatus = false;
         public static int ZIndexCounter = 15000;
 
@@ -39,15 +47,32 @@ namespace Albion.Network.Interface
         public static bool needNewPlayerSound = false;
         public static bool needPVPNewPlayerSound = true;
         private static int secondsToDell = 10;
-        public static double scale = 9;
-        public static bool needHPProcent = true;
-        public static bool needHPValuve = true;
-        public static bool needNickname = true;
-        public static int moobNeedHP = 0;
+        public static double scale = 10;
+        public static bool needShowPlayerHPProcent = true;
+        public static bool needShowPlayerHPValuve = true;
+        public static bool needShowNickname = true;
+
+        public static bool needShowMobHPProcent = true;
+        public static bool needShowMobHPValuve = true;
+        public static bool needShowMobName = true;
+
         public static bool needHideZeroResouse = true;
         public static bool needResourseCaption = true;
-        public static int tierFileter = 0;
-        public static int lvlFilter = 0;
+        public static bool needShowPlayers = true;
+        public static bool needShowMobs = true;
+
+        public static List<string> listNames = new List<string>();
+        public static byte filterListMode = 0; // 0-off/ 1-white/ 2-black
+        #endregion
+
+        #region resursCfg
+        public static bool[,] ResurseFilter = new bool[9, 4];
+        public static bool needShowFiber;
+        public static bool needShowHide;
+        public static bool needShowOre;
+        public static bool needShowRock;
+        public static bool needShowWood;
+        public static bool[,] MobFilter = new bool[9, 4];
         #endregion
 
         public MainWindow()
@@ -61,7 +86,26 @@ namespace Albion.Network.Interface
 
             PointsControll.radarArea = Points;
             ReceiverBuilder builder = ReceiverBuilder.Create();
-            
+
+
+            // read file into a string and deserialize JSON to a type
+            XmlSerializer formatter = new XmlSerializer(typeof(Mobs));
+            using (FileStream fs = new FileStream(@"C:\bindumps\QQ\mobs.xml", FileMode.OpenOrCreate))
+            {
+                MobsDump = (Mobs)formatter.Deserialize(fs);
+            }
+
+            foreach (var varMob in MobsDump.Mob)
+            {
+                ComboBoxMobNameList.Items.Add(varMob.uniquename);
+            }
+            formatter = new XmlSerializer(typeof(AOResources));
+            using (FileStream fs = new FileStream(@"C:\bindumps\QQ\resources.xml", FileMode.OpenOrCreate))
+            {
+                ResourcesDump = (AOResources)formatter.Deserialize(fs);
+            }
+
+
             builder.AddRequestHandler(new MoveRequestHandler()); // мое перемещение
             builder.AddEventHandler(new MoveEventHandler()); // Движения типов 
             builder.AddEventHandler(new NewChatacterEventHandler()); //новые типы
@@ -70,9 +114,12 @@ namespace Albion.Network.Interface
             builder.AddEventHandler(new HealthUpdateEventHandler()); // изменения ХП
             builder.AddEventHandler(new PVPStatusUpdateHandler()); // если чел врубил ПВП режим
             builder.AddEventHandler(new NewResuseEventHandler()); // для ресурсов
-            builder.AddEventHandler(new TierMobEventHandler()); // для тира ресурсов
+            builder.AddEventHandler(new HarvestableChangeHandler()); // для тира ресурсов
             builder.AddEventHandler(new JoinFinishedEventHandler()); // для перехода между локами
             builder.AddEventHandler(new NewSimpleHarvestableObjectListEventHandler()); // для отслеживания деревьев/камня
+            builder.AddEventHandler(new MobChangeStateEventHandler()); // для -- во время сбора шкуры
+
+
             hotKeyFullSizeMode = new HotKey(Key.M, HotKey.KeyModifier.Alt, (HotKey o) =>
             {
                 if (fullSizeStatus)
@@ -89,6 +136,7 @@ namespace Albion.Network.Interface
                 }
                 else
                 {
+                    TabControl.SelectedIndex = 0;
                     fullSizeStatus = true;
                     WindowState = WindowState.Maximized;
                     IntPtr hwnd = new WindowInteropHelper(this).Handle;
@@ -99,6 +147,7 @@ namespace Albion.Network.Interface
                     TabItem2.Visibility = Visibility.Hidden;
                 }
             });
+
             hotKeyMinusSize = new HotKey(Key.OemMinus, HotKey.KeyModifier.Alt, (HotKey o) =>
             {
                 int tmp = int.Parse(Scale.Text);
@@ -109,7 +158,6 @@ namespace Albion.Network.Interface
                 }
                 Scale.Text = tmp.ToString();
             });
-
             hotKeyPlusSize = new HotKey(Key.OemPlus, HotKey.KeyModifier.Alt, (HotKey o) =>
             {
                 int tmp = int.Parse(Scale.Text);
@@ -118,9 +166,7 @@ namespace Albion.Network.Interface
             });
 
             receiver = builder.Build();
-
             Console.WriteLine("Start");
-
             CaptureDeviceList devices = CaptureDeviceList.Instance;
             foreach (var device in devices)
             {
@@ -136,13 +182,11 @@ namespace Albion.Network.Interface
                     }
                 }));
             }
-
             foreach (var thread in threads)
             {
                 thread.Start();
             }
-
-        }
+            }
         private static void PacketHandler(object sender, CaptureEventArgs e)
         {
             UdpPacket packet = Packet.ParsePacket(e.Packet.LinkLayerType, e.Packet.Data).Extract<UdpPacket>();
@@ -238,18 +282,35 @@ namespace Albion.Network.Interface
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             mutexObj.WaitOne();
-            secondsToDell = Int32.Parse(((TextBox)sender).Text);
+            try
+            {
+                secondsToDell = Int32.Parse(((TextBox)sender).Text);
+            }
+            catch (Exception)
+            {
+                ((TextBox)sender).Text = "0";
+                secondsToDell = 0;
+            }
             mutexObj.ReleaseMutex();
 
         }
         private void TextBox_TextChanged2(object sender, TextChangedEventArgs e)
         {
             mutexObj.WaitOne();
-            scale = Int32.Parse(((TextBox)sender).Text);
+            try
+            {
+                scale = Int32.Parse(((TextBox)sender).Text);
+            }
+            catch (Exception)
+            {
+                ((TextBox) sender).Text = "0";
+                scale = 0;
+            }
             MyInfo.NeedUpdate = true;
             if (RadiusTextBox != null)
             {
                 TextBox_TextChanged3(RadiusTextBox, null);
+                RadarScaleLable.Text = $"Radar scale ({scale/2}px=1m)";
             }
             mutexObj.ReleaseMutex();
         }
@@ -259,7 +320,15 @@ namespace Albion.Network.Interface
             int z;
             try
             {
-                z = Int32.Parse(((TextBox) sender).Text);
+                try
+                {
+                    z = Int32.Parse(((TextBox)sender).Text);
+                }
+                catch (Exception)
+                {
+                    ((TextBox)sender).Text = "0";
+                    z = 0;
+                }
                 if (z == 0)
                 {
                     ShowRadius.Visibility = Visibility.Hidden;
@@ -286,54 +355,52 @@ namespace Albion.Network.Interface
             needPVPNewPlayerSound = (bool)((CheckBox)sender).IsChecked;
         }
 
-        private void TextBox_TextChanged4(object sender, TextChangedEventArgs e)
+        private void CheckBox_PlayerHPValuve(object sender, RoutedEventArgs e)
         {
-            mutexObj.WaitOne();
-            moobNeedHP = Int32.Parse(((TextBox)sender).Text);
-            mutexObj.ReleaseMutex();
-        }
-
-        private void CheckBox_HPValuve(object sender, RoutedEventArgs e)
-        {
-            needHPValuve = (bool)((CheckBox)sender).IsChecked;
+            needShowPlayerHPValuve = (bool)((CheckBox)sender).IsChecked;
             MyInfo.NeedUpdate = true;
         }
 
-        private void CheckBox_HPProcent(object sender, RoutedEventArgs e)
+        private void CheckBox_MobHPValuve(object sender, RoutedEventArgs e)
         {
-            needHPProcent = (bool)((CheckBox)sender).IsChecked;
+            needShowMobHPValuve = (bool)((CheckBox)sender).IsChecked;
             MyInfo.NeedUpdate = true;
+        }
 
+        private void CheckBox_PlayerHPProcent(object sender, RoutedEventArgs e)
+        {
+            needShowPlayerHPProcent = (bool)((CheckBox)sender).IsChecked;
+            MyInfo.NeedUpdate = true;
+        }
+
+        private void CheckBox_MobHPProcent(object sender, RoutedEventArgs e)
+        {
+            needShowMobHPProcent = (bool)((CheckBox)sender).IsChecked;
+            MyInfo.NeedUpdate = true;
         }
 
         private void CheckBox_Nickname(object sender, RoutedEventArgs e)
         {
-            needNickname = (bool)((CheckBox)sender).IsChecked;
+            needShowNickname = (bool)((CheckBox)sender).IsChecked;
             MyInfo.NeedUpdate = true;
         }
 
-        private void CheckBox_Click(object sender, RoutedEventArgs e)
+        private void CheckBox_MobName(object sender, RoutedEventArgs e)
+        {
+            needShowMobName = (bool)((CheckBox)sender).IsChecked;
+            MyInfo.NeedUpdate = true;
+        }
+
+        private void CheckBoxNeedResourseCaption_Click(object sender, RoutedEventArgs e)
         {
             needResourseCaption = (bool)((CheckBox)sender).IsChecked;
             MyInfo.NeedUpdate = true;
         }
 
-        private void CheckBox_Click_1(object sender, RoutedEventArgs e)
+        private void CheckBoxneedHideZeroResouse_Click(object sender, RoutedEventArgs e)
         {
             needHideZeroResouse = (bool)((CheckBox)sender).IsChecked;
             MyInfo.NeedUpdate = true;
-        }
-        private void TextBox_TextChanged5(object sender, TextChangedEventArgs e)
-        {
-            mutexObj.WaitOne();
-            tierFileter = Int32.Parse(((TextBox)sender).Text);
-            mutexObj.ReleaseMutex();
-        }
-        private void TextBox_TextChanged6(object sender, TextChangedEventArgs e)
-        {
-            mutexObj.WaitOne();
-            lvlFilter = Int32.Parse(((TextBox)sender).Text);
-            mutexObj.ReleaseMutex();
         }
 
         private void Window_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -343,21 +410,164 @@ namespace Albion.Network.Interface
 
         private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
+            if (OpacityCaption != null)
+            {
+                OpacityCaption.Text = $"Opacity ({(int)(e.NewValue * 100)}%)";
+            }
             TabItem1.Opacity = TabItem2.Opacity = e.NewValue;
             MainGrid.Background = new SolidColorBrush(new Color() {A = (byte)(e.NewValue*255), R = 255, G = 255, B = 255});
         }
         private void Slider_ValueChanged1(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            Width = e.NewValue;
+            if (WindowsSizeCaption != null)
+            {
+                WindowsSizeCaption.Text = $"Windows size ({(int)e.NewValue}px)";
+            }
+            Width = (int)e.NewValue;
             Height = Width + 22;
             WindowState = WindowState.Normal;
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
+            fullSizeStatus = true;
             TabControl.SelectedIndex = 0;
             IntPtr hwnd = new WindowInteropHelper(this).Handle;
             Win32.makeTransparent(hwnd);
+        }
+
+        private void CheckBoxHarvestableAndMob_Click(object sender, RoutedEventArgs e)
+        {
+            switch (((CheckBox)sender).Name)
+            {
+                case "CheckBoxFiber":
+                    needShowFiber = (bool)((CheckBox) sender).IsChecked;
+                    break;
+                case "CheckBoxHide":
+                    needShowHide = (bool)((CheckBox)sender).IsChecked;
+                    break;
+                case "CheckBoxOre":
+                    needShowOre = (bool)((CheckBox)sender).IsChecked;
+                    break;
+                case "CheckBoxRock":
+                    needShowRock = (bool)((CheckBox)sender).IsChecked;
+                    break;
+                case "CheckBoxWood":
+                    needShowWood = (bool)((CheckBox)sender).IsChecked;
+                    break;
+            }
+            MyInfo.NeedUpdate = true;
+        }
+
+        private void CheckBoxHarvestableAndMobTierLvl_Click(object sender, RoutedEventArgs e)
+        {
+            var str = ((CheckBox)sender).Name;
+            int Tier;
+            int Lvl;
+            //CheckBoxT10
+            switch (((CheckBox)sender).Name[8])
+            {
+                case 'M':
+                    Tier = int.Parse(str[12].ToString());
+                    Lvl = int.Parse(str[13].ToString());
+                    MobFilter[Tier, Lvl] = (bool)((CheckBox)sender).IsChecked;
+                    break;
+                case 'H':
+                    Tier = int.Parse(str[20].ToString());
+                    Lvl = int.Parse(str[21].ToString());
+                    ResurseFilter[Tier, Lvl] = (bool)((CheckBox)sender).IsChecked;
+                    break;
+            }
+            MyInfo.NeedUpdate = true;
+        }
+
+        private void Window_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (WindowState != WindowState.Normal)
+            {
+                WindowState = WindowState.Normal;
+            }
+            else
+            {
+                WindowState = WindowState.Maximized;
+            }
+        }
+
+        private void CheckBox_Click_2(object sender, RoutedEventArgs e)
+        {
+            needShowPlayers = (bool)((CheckBox) sender).IsChecked;
+            MyInfo.NeedUpdate = true;
+        }
+
+        private void CheckBox_Click_3(object sender, RoutedEventArgs e)
+        {
+            needShowMobs = (bool)((CheckBox)sender).IsChecked;
+            MyInfo.NeedUpdate = true;
+        }
+
+        private void ButtonAddList_Click(object sender, RoutedEventArgs e)
+        {
+            if (ComboBoxMobNameList.Text != null)
+            {
+                bool exist = false;
+                foreach (var mob in MobsDump.Mob)
+                {
+                    if (mob.uniquename == ComboBoxMobNameList.Text)
+                    {
+                        exist = true;
+                        break;
+                    }
+                }
+
+                if (!exist)
+                {
+                    MessageBox.Show("Error adding a mob (does not exist)");
+                    return;
+                }
+                if (!WhiteBlackList.Items.Contains($"{ComboBoxMobNameList.Text}"))
+                {
+                    listNames.Add($"{ComboBoxMobNameList.Text}");
+                    WhiteBlackList.Items.Add($"{ComboBoxMobNameList.Text}");
+                }
+            }
+        }
+
+        private void ButtonRemove_Click(object sender, RoutedEventArgs e)
+        {
+            if (ComboBoxMobNameList.Text != null)
+            {
+                listNames.Remove($"{ComboBoxMobNameList.Text}");
+                WhiteBlackList.Items.Remove($"{ComboBoxMobNameList.Text}");
+            }
+        }
+
+        private void WhiteBlackList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            try
+            {
+                ComboBoxMobNameList.SelectedItem = e.AddedItems[0].ToString();
+            }
+            catch (Exception)
+            {
+                ((ListBox)sender).SelectedIndex = -1;
+            }
+        }
+
+        private void RadioButton_Checked(object sender, RoutedEventArgs e)
+        {
+            switch (((RadioButton)sender).Content)
+            {
+                case "Off filterList":
+                    filterListMode = 0;
+                    break;
+                case "WhiteList mode":
+                    filterListMode = 1;
+                    break;
+                case "BlackList mode":
+                    filterListMode = 2;
+                    break;
+            }
+            MyInfo.NeedUpdate = true;
         }
     }
 }

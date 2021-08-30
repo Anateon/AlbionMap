@@ -77,10 +77,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BinDumps\Mobs.cs" />
+    <Compile Include="BinDumps\Resources.cs" />
     <Compile Include="Events\JoinFinishedEvent.cs" />
     <Compile Include="Events\JoinFinishedEventHandler.cs" />
     <Compile Include="Events\NewSimpleHarvestableObjectListEvent.cs" />
     <Compile Include="Events\NewSimpleHarvestableObjectListEventHandler.cs" />
+    <Compile Include="Events\MobChangeStateEvent.cs" />
+    <Compile Include="Events\MobChangeStateEventHandler.cs" />
     <Compile Include="HotKey.cs" />
     <Compile Include="Win32.cs" />
     <Page Include="MainWindow.xaml">
@@ -91,8 +95,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Events\TierMobEvent.cs" />
-    <Compile Include="Events\TierMobEventHandler.cs" />
+    <Compile Include="Events\HarvestableChangeEvent.cs" />
+    <Compile Include="Events\HarvestableChangeHandler.cs" />
     <Compile Include="Events\template\TEMPALTEEvent.cs" />
     <Compile Include="Events\template\TEMPLATEEventHandler.cs" />
     <Compile Include="ObjectInfo.cs" />

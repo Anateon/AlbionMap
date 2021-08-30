@@ -131,27 +131,45 @@ namespace Albion.Network.Interface
 
                 foreach (var mob in value.MobsList)
                 {
-                    if ((mob.RowType >= 0 && mob.RowType <= 7) || (mob.RowType >= 43 && mob.RowType <= 47))
+                    //if ((mob.RowType >= 0 && mob.RowType <= 7) || (mob.RowType >= 43 && mob.RowType <= 47))
+                    //{
+                    //    mob.Type = HarvestableTypeResource.WOOD;
+                    //}
+                    //else if ((mob.RowType >= 8 && mob.RowType <= 15) || (mob.RowType >= 48 && mob.RowType <= 52))
+                    //{
+                    //    mob.Type = HarvestableTypeResource.ROCK;
+                    //}
+                    //else if ((mob.RowType >= 36 && mob.RowType <= 42) || (mob.RowType >= 63 && mob.RowType <= 67))
+                    //{
+                    //    mob.Type = HarvestableTypeResource.ORE;
+                    //}
+                    //else if ((mob.RowType >= 22 && mob.RowType <= 35) || (mob.RowType >= 58 && mob.RowType <= 62) || mob.RowType == 68)
+                    //{
+                    //    mob.Type = HarvestableTypeResource.HIDE;
+                    //}
+                    //else if ((mob.RowType >= 16 && mob.RowType <= 21) || (mob.RowType >= 53 && mob.RowType <= 57))
+                    //{
+                    //    mob.Type = HarvestableTypeResource.FIBER;
+                    //}
+                    switch (MainWindow.ResourcesDump.Harvestables[mob.RowType].resource)
                     {
-                        mob.Type = HarvestableTypeResource.WOOD;
+                        case "WOOD":
+                            mob.Type = HarvestableTypeResource.WOOD;
+                            break;
+                        case "ROCK":
+                            mob.Type = HarvestableTypeResource.ROCK;
+                            break;
+                        case "ORE":
+                            mob.Type = HarvestableTypeResource.ORE;
+                            break;
+                        case "HIDE":
+                            mob.Type = HarvestableTypeResource.HIDE;
+                            break;
+                        case "FIBER":
+                            mob.Type = HarvestableTypeResource.FIBER;
+                            break;
                     }
-                    else if ((mob.RowType >= 8 && mob.RowType <= 15) || (mob.RowType >= 48 && mob.RowType <= 52))
-                    {
-                        mob.Type = HarvestableTypeResource.ROCK;
-                    }
-                    else if ((mob.RowType >= 36 && mob.RowType <= 42) || (mob.RowType >= 63 && mob.RowType <= 67))
-                    {
-                        mob.Type = HarvestableTypeResource.ORE;
-                    }
-                    else if ((mob.RowType >= 22 && mob.RowType <= 35) || (mob.RowType >= 58 && mob.RowType <= 62) || mob.RowType == 68)
-                    {
-                        mob.Type = HarvestableTypeResource.HIDE;
-                    }
-                    else if ((mob.RowType >= 16 && mob.RowType <= 21) || (mob.RowType >= 53 && mob.RowType <= 57))
-                    {
-                        mob.Type = HarvestableTypeResource.FIBER;
-                    }
-                    MainWindow.chelDictionary[mob.Id] = mob;
+                    MainWindow.chelDictionary[mob.ObjectId] = mob;
                 }
                 MainWindow.mutexObj.ReleaseMutex();
 

@@ -17,7 +17,11 @@ namespace Albion.Network.Interface
                 {
                     X = value.Position[0],
                     Y = value.Position[1],
+                    ObjectId = value.ObjectId,
+                    Tier = value.Tier,
+                    Name = value.Name,
                     Leave = false,
+                    Lvl = 0,
                     Time = DateTime.Now,
                     NowHP = value.NowHP,
                     FullHP = value.FullHP,

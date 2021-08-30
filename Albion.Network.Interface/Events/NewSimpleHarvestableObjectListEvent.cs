@@ -45,7 +45,7 @@ namespace Albion.Network.Interface
                 {
                     MobsList.Add(new ResurseInfo()
                     {  
-                        Id = (int)a0.ElementAt(i),
+                        ObjectId = (int)a0.ElementAt(i),
                         Lvl = 0,
                         X = (Single)a3[i * 2],
                         Y = (Single)a3[i * 2 + 1],

@@ -16,8 +16,8 @@ namespace Albion.Network.Interface
                 //MainWindow.mutexObj.WaitOne();
                 if (MainWindow.chelDictionary.ContainsKey(value.Id))
                 {
-                    //ObjectInfo tmp = MainWindow.chelDictionary[value.Id];
-                    //if (MainWindow.chelDictionary[value.Id] is PlayerInfo)
+                    //ObjectInfo tmp = MainWindow.chelDictionary[value.ObjectId];
+                    //if (MainWindow.chelDictionary[value.ObjectId] is PlayerInfo)
                     //{
                     //    tmp.time = DateTime.Now;
                     //    tmp.leave = false;

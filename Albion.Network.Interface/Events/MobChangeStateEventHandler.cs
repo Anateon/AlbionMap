@@ -5,18 +5,17 @@ using Albion.Network.Interface;
 
 namespace Albion.Network.Interface
 {
-    public class TierMobEventHandler : EventPacketHandler<TierMobEvent>
+    public class MobChangeStateEventHandler : EventPacketHandler<MobChangeStateEvent>
     {
-        public TierMobEventHandler() : base(EventCodes.HarvestableChangeState) { }
+        public MobChangeStateEventHandler() : base(EventCodes.MobChangeState) { } // присваивает тир мобу
 
-        protected override Task OnActionAsync(TierMobEvent value)
+        protected override Task OnActionAsync(MobChangeStateEvent value)
         {
             try
             {
-                MobInfo tmp = (MobInfo)MainWindow.chelDictionary[value.Id];
-                tmp.Tier = value.tier;
+                var tmp = ((MobInfo)MainWindow.chelDictionary[value.Id]);
+                tmp.Lvl = value.Lvl;
                 tmp.NeedUpdate = true;
-                tmp.Leave = false;
                 tmp.Time = DateTime.Now;
                 MainWindow.mutexObj.WaitOne();
                 MainWindow.chelDictionary[value.Id] = tmp;

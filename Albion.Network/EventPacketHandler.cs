@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace Albion.Network
 {
@@ -23,15 +24,24 @@ namespace Albion.Network
 #if DEBUG
             if (eventCode == -666)
             {
-                string writePath = @"C:\logIvents.txt";
-
-                using (StreamWriter sw = new StreamWriter(writePath, true, System.Text.Encoding.Default))
+                if (/*packet.EventCode == 331 || packet.EventCode == 332*/ /*packet.EventCode == 115*/ packet.EventCode == 36)
                 {
-                    sw.WriteLine(packet.EventCode);
+                    string writePath = @"C:\logIvents.txt";
+
+                    using (StreamWriter sw = new StreamWriter(writePath, true, System.Text.Encoding.Default))
+                    {
+                        sw.WriteLine(packet.EventCode);
+                    }
+
+                    Console.WriteLine($"{packet.EventCode}\t{(EnumEvents) packet.EventCode}");
+                    string json = JsonConvert.SerializeObject(packet.Parameters);
+
+                    Console.WriteLine(json);
+
+                    return NextAsync(packet);
+
                 }
-
-                Console.WriteLine($"{packet.EventCode}\t{(EnumEvents)packet.EventCode}");
-
+                //Console.WriteLine($"{packet.EventCode}\t{(EnumEvents) packet.EventCode}");
             }
 #endif
 

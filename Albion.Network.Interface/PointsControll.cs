@@ -8,6 +8,7 @@ using System.Windows.Media.Effects;
 using System.Windows.Media.TextFormatting;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using Albion.Network.Interface.BinDumps;
 
 namespace Albion.Network.Interface
 {
@@ -103,7 +104,7 @@ namespace Albion.Network.Interface
                         case 1:
                             pointArea.Opacity = 0.52;
                             Panel.SetZIndex(pointArea, MainWindow.ZIndexCounter++);
-                            point.Fill = Brushes.Lime;
+                            point.Fill = Brushes.DarkGreen;
                             break;
                         case 2:
                             pointArea.Opacity = 0.54;
@@ -113,7 +114,7 @@ namespace Albion.Network.Interface
                         case 3:
                             pointArea.Opacity = 0.56;
                             Panel.SetZIndex(pointArea, MainWindow.ZIndexCounter++ + 30000);
-                            point.Fill = Brushes.Magenta;
+                            point.Fill = Brushes.MediumVioletRed;
                             break;
                     }
                     break;
@@ -164,38 +165,73 @@ namespace Albion.Network.Interface
 
         private static bool NeedShow(KeyValuePair<int, ObjectInfo> info)
         {
-            if (info.Value is MobInfo)
+            if (info.Value is PlayerInfo)
             {
-                if (!(((MobInfo)info.Value).FullHP == MainWindow.moobNeedHP || MainWindow.moobNeedHP == 0))
-                {
-                    return false;
-                }
-
-                if (!(((MobInfo)info.Value).Tier >= MainWindow.tierFileter))
-                {
-                    return false;
-                }
+                return MainWindow.needShowPlayers;
             }
-
-            if (info.Value is ResurseInfo)
+            else if (info.Value is MobInfo)
             {
-                if (((ResurseInfo)info.Value).Lvl >= MainWindow.tierFileter &&
-                    ((ResurseInfo)info.Value).Tier >= MainWindow.lvlFilter)
+                if (MainWindow.needShowMobs)
                 {
-                    if (MainWindow.needHideZeroResouse)
+                    if (!MainWindow.MobFilter[((MobInfo) info.Value).Tier, ((MobInfo) info.Value).Lvl])
                     {
-                        if (((ResurseInfo)info.Value).Nuber == 0)
-                        {
-                            return false;
-                        }
+                        return false;
                     }
                 }
-                else
+                switch (MainWindow.filterListMode)
+                {
+                    case 1: // white list
+                        foreach (var name in MainWindow.listNames)
+                        {
+                            if (name == ((MobInfo)info.Value).Name)
+                            {
+                                return true;
+                            }
+                        }
+                        return false;
+                    case 2: // black list
+                        foreach (var name in MainWindow.listNames)
+                        {
+                            if (name == ((MobInfo)info.Value).Name)
+                            {
+                                return false;
+                            }
+                        }
+                        break;
+                }
+                return true;
+            }
+            else if (info.Value is ResurseInfo)
+            {
+                if (MainWindow.needHideZeroResouse && ((ResurseInfo) info.Value).Nuber == 0)
                 {
                     return false;
                 }
+                switch (((ResurseInfo)info.Value).Type)
+                {
+                    case HarvestableTypeResource.FIBER:
+                        if (!MainWindow.needShowFiber)
+                            return false;
+                        break;
+                    case HarvestableTypeResource.HIDE:
+                        if (!MainWindow.needShowHide)
+                            return false;
+                        break;
+                    case HarvestableTypeResource.ORE:
+                        if (!MainWindow.needShowOre)
+                            return false;
+                        break;
+                    case HarvestableTypeResource.ROCK:
+                        if (!MainWindow.needShowRock)
+                            return false;
+                        break;
+                    case HarvestableTypeResource.WOOD:
+                        if (!MainWindow.needShowWood)
+                            return false;
+                        break;
+                }
+                return MainWindow.ResurseFilter[((ResurseInfo) info.Value).Tier, ((ResurseInfo) info.Value).Lvl];
             }
-
             return true;
         }
         private static bool ChangeIfCreated(KeyValuePair<int, ObjectInfo> info)
@@ -255,69 +291,71 @@ namespace Albion.Network.Interface
         private static string GetInfoString(KeyValuePair<int, ObjectInfo> info)
         {
             string tmpString = "";
-            if (!(info.Value is ResurseInfo))
+            if (info.Value is PlayerInfo)
             {
-                if (info.Value is MobInfo)
-                {
-                    tmpString += $"T:{((MobInfo)info.Value).Tier}";
-                }
-                if (info.Value is PlayerInfo && MainWindow.needNickname)
+                if (MainWindow.needShowNickname)
                 {
                     tmpString += ((PlayerInfo)info.Value).Name;
                 }
-
-                if (MainWindow.needHPValuve)
+                if (MainWindow.needShowPlayerHPValuve)
                 {
                     tmpString += $" {((LifeObject)info.Value).FullHP}/{((LifeObject)info.Value).NowHP}";
                 }
-
-                if (MainWindow.needHPProcent)
+                if (MainWindow.needShowPlayerHPProcent)
                 {
-                    tmpString += $" [{Math.Round(((LifeObject)info.Value).NowHP / (double)((LifeObject)info.Value).FullHP * 100.0, 2)}%]";
+                    tmpString +=
+                        $" [{Math.Round(((LifeObject)info.Value).NowHP / (double)((LifeObject)info.Value).FullHP * 100.0, 2)}%]";
                 }
+            }
+            else if (info.Value is MobInfo)
+            {
+                if (MainWindow.needResourseCaption)
+                {
+                    if (MainWindow.needShowMobName)
+                    {
+                        tmpString += $"{((MobInfo)info.Value).Name}";
+                    }
+                    if (MainWindow.needShowMobHPValuve)
+                    {
+                        tmpString += $" {((LifeObject)info.Value).FullHP}/{((LifeObject)info.Value).NowHP}";
+                    }
+                    if (MainWindow.needShowMobHPProcent)
+                    {
+                        tmpString +=
+                            $" [{Math.Round(((LifeObject)info.Value).NowHP / (double)((LifeObject)info.Value).FullHP * 100.0, 2)}%]";
+                    }
+                    if (((MobInfo)info.Value).Lvl != 0)
+                    {
+                        tmpString += $" T:{((MobInfo)info.Value).Lvl}";
+                    }
                 }
-            else
+            }
+            else if (info.Value is ResurseInfo)
             {
                 if (MainWindow.needResourseCaption)
                 {
                     switch (((ResurseInfo)info.Value).Type)
                     {
                         case HarvestableTypeResource.WOOD:
-                            tmpString = $"{((ResurseInfo) info.Value).Nuber}/W{((ResurseInfo) info.Value).Tier}";
+                            tmpString = $"{((ResurseInfo)info.Value).Nuber}|W{((ResurseInfo)info.Value).Tier}.{((ResurseInfo)info.Value).Lvl}";
                             break;
                         case HarvestableTypeResource.HIDE:
-                            tmpString = $"{((ResurseInfo)info.Value).Nuber}/H{((ResurseInfo)info.Value).Tier}";
+                            tmpString = $"{((ResurseInfo)info.Value).Nuber}|H{((ResurseInfo)info.Value).Tier}.{((ResurseInfo)info.Value).Lvl}";
                             break;
                         case HarvestableTypeResource.ORE:
-                            tmpString = $"{((ResurseInfo)info.Value).Nuber}/O{((ResurseInfo)info.Value).Tier}";
+                            tmpString = $"{((ResurseInfo)info.Value).Nuber}|O{((ResurseInfo)info.Value).Tier}.{((ResurseInfo)info.Value).Lvl}";
                             break;
                         case HarvestableTypeResource.ROCK:
-                            tmpString = $"{((ResurseInfo)info.Value).Nuber}/R{((ResurseInfo)info.Value).Tier}";
+                            tmpString = $"{((ResurseInfo)info.Value).Nuber}|R{((ResurseInfo)info.Value).Tier}.{((ResurseInfo)info.Value).Lvl}";
                             break;
                         case HarvestableTypeResource.FIBER:
-                            tmpString = $"{((ResurseInfo)info.Value).Nuber}/F{((ResurseInfo)info.Value).Tier}";
+                            tmpString = $"{((ResurseInfo)info.Value).Nuber}|F{((ResurseInfo)info.Value).Tier}.{((ResurseInfo)info.Value).Lvl}";
                             break;
                     }
-                    //if (((ResurseInfo)info.Value).isStone)
-                    //{
-                    //    tmpString = $"КАМЕНЬ lvl:{((ResurseInfo)info.Value).Tier} num:{((ResurseInfo)info.Value).nuber} tier:{((ResurseInfo)info.Value).Lvl}";
-                    //}
-                    //else if (((ResurseInfo)info.Value).isAnimal)
-                    //{
-                    //    tmpString = $"L:{((ResurseInfo)info.Value).Tier} N:{((ResurseInfo)info.Value).nuber} T:{((ResurseInfo)info.Value).Lvl}";
-                    //}
-                    //else if (((ResurseInfo)info.Value).isTree)
-                    //{
-                    //    tmpString = $"ДЕРЕВО lvl:{((ResurseInfo)info.Value).Tier} num:{((ResurseInfo)info.Value).nuber} tier:{((ResurseInfo)info.Value).Lvl}";
-                    //}
-                    //else
-                    //{
-                    //    tmpString = $"{((ResurseInfo)info.Value).resurseType}/{(NewSimpleHarvestableObjectListEventHandler.HarvestableType)((ResurseInfo)info.Value).resurseType}";
-                    //}
                 }
+
             }
             return tmpString;
         }
-
     }
 }

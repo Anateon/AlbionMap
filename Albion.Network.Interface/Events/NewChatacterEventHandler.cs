@@ -52,7 +52,7 @@ namespace Albion.Network.Interface
                 MainWindow.mutexObj.WaitOne();
                 MainWindow.chelDictionary[value.Id] = tmp;
                 MainWindow.mutexObj.ReleaseMutex();
-                //Console.WriteLine($"New ch Id: {value.Id} name: {value.Name} hp: {value.FullHP}/{value.NowHP}");
+                //Console.WriteLine($"New ch ObjectId: {value.ObjectId} name: {value.Name} hp: {value.FullHP}/{value.NowHP}");
             }
             catch (Exception exception)
             {
