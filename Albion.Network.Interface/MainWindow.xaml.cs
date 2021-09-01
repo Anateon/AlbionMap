@@ -15,7 +15,6 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using Albion.Network.Interface.BinDumps;
-using Newtonsoft.Json;
 using System.Runtime.Serialization;
 using System.Windows.Controls.Primitives;
 using System.Xml.Serialization;
@@ -90,7 +89,7 @@ namespace Albion.Network.Interface
 
             // read file into a string and deserialize JSON to a type
             XmlSerializer formatter = new XmlSerializer(typeof(Mobs));
-            using (FileStream fs = new FileStream(@"C:\bindumps\QQ\mobs.xml", FileMode.OpenOrCreate))
+            using (FileStream fs = new FileStream(@"SourseBinDumps\mobs.xml", FileMode.OpenOrCreate))
             {
                 MobsDump = (Mobs)formatter.Deserialize(fs);
             }
@@ -100,7 +99,7 @@ namespace Albion.Network.Interface
                 ComboBoxMobNameList.Items.Add(varMob.uniquename);
             }
             formatter = new XmlSerializer(typeof(AOResources));
-            using (FileStream fs = new FileStream(@"C:\bindumps\QQ\resources.xml", FileMode.OpenOrCreate))
+            using (FileStream fs = new FileStream(@"SourseBinDumps\resources.xml", FileMode.OpenOrCreate))
             {
                 ResourcesDump = (AOResources)formatter.Deserialize(fs);
             }
