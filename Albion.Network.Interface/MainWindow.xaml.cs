@@ -194,7 +194,15 @@ namespace Albion.Network.Interface
             UdpPacket packet = Packet.ParsePacket(e.Packet.LinkLayerType, e.Packet.Data).Extract<UdpPacket>();
             if (packet != null && (packet.SourcePort == 5056 || packet.DestinationPort == 5056))
             {
-                receiver.ReceivePacket(packet.PayloadData); // ТУТ БЫВАЕТ ОВЕРФЛОУ
+                try
+                {
+                    receiver.ReceivePacket(packet.PayloadData); // ТУТ БЫВАЕТ ОВЕРФЛОУ
+                }
+                catch (Exception exception)
+                {
+                    Console.WriteLine("Packet.ParsePacket exception " + exception);
+                    //throw;
+                }
             }
         }
 
