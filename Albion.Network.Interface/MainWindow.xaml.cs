@@ -175,13 +175,14 @@ namespace Albion.Network.Interface
                 threads.Add(new Thread(() =>
                 {
                     Console.WriteLine($"Open... {device.Description}");
-                    if (device.Description.Contains("Realtek"))
-                    {
-                        Console.Write("Realtek ADD");
-                        device.OnPacketArrival += new PacketArrivalEventHandler(PacketHandler);
-                        device.Open(DeviceMode.Promiscuous, 1000);
-                        device.StartCapture();
-                    }
+                    device.OnPacketArrival += new PacketArrivalEventHandler(PacketHandler);
+                    device.Open(DeviceMode.Promiscuous, 1000);
+                    device.StartCapture();
+                    //if (device.Description.Contains("Realtek"))
+                    //{
+                    //    Console.Write("Realtek ADD");
+
+                    //}
                 }));
             }
             foreach (var thread in threads)
