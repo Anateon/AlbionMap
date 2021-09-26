@@ -166,7 +166,7 @@ namespace Albion.Network.Interface
                 tmp++;
                 Scale.Text = tmp.ToString();
             });
-
+            ConfigStoreRestore(false);
             receiver = builder.Build();
             Console.WriteLine("Start");
             CaptureDeviceList devices = CaptureDeviceList.Instance;
@@ -189,7 +189,8 @@ namespace Albion.Network.Interface
             {
                 thread.Start();
             }
-            }
+
+        }
         private static void PacketHandler(object sender, CaptureEventArgs e)
         {
             UdpPacket packet = Packet.ParsePacket(e.Packet.LinkLayerType, e.Packet.Data).Extract<UdpPacket>();
@@ -421,16 +422,6 @@ namespace Albion.Network.Interface
             TabItem1.Opacity = TabItem2.Opacity = e.NewValue;
             MainGrid.Background = new SolidColorBrush(new Color() {A = (byte)(e.NewValue*255), R = 255, G = 255, B = 255});
         }
-        private void Slider_ValueChanged1(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            if (WindowsSizeCaption != null)
-            {
-                WindowsSizeCaption.Text = $"Windows size ({(int)e.NewValue}px)";
-            }
-            Width = (int)e.NewValue;
-            Height = Width + 22;
-            WindowState = WindowState.Normal;
-        }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
@@ -526,8 +517,9 @@ namespace Albion.Network.Interface
                 }
                 if (!WhiteBlackList.Items.Contains($"{ComboBoxMobNameList.Text}"))
                 {
-                    listNames.Add($"{ComboBoxMobNameList.Text}");
-                    WhiteBlackList.Items.Add($"{ComboBoxMobNameList.Text}");
+                    var z = ComboBoxMobNameList.Text;
+                    listNames.Add(z);
+                    WhiteBlackList.Items.Add(z);
                 }
             }
         }
@@ -536,8 +528,9 @@ namespace Albion.Network.Interface
         {
             if (ComboBoxMobNameList.Text != null)
             {
-                listNames.Remove($"{ComboBoxMobNameList.Text}");
-                WhiteBlackList.Items.Remove($"{ComboBoxMobNameList.Text}");
+                var z = ComboBoxMobNameList.Text;
+                listNames.Remove(z);
+                WhiteBlackList.Items.Remove(z);
             }
         }
 
@@ -608,6 +601,160 @@ namespace Albion.Network.Interface
                 }
             }
             Topmost = true;
+        }
+
+        private void ConfigStoreRestore(bool StoreMode)
+        {
+            /*
+             * ContentRadarCfgGrid = CheckBox; Slider; TextBox
+             * ContentHarvestableGrid = CheckBox
+             * ContentPlayerGrid = CheckBox
+             * ContentMobGrid = CheckBox; ListBox
+             */
+            var GridsForSaveResore = new List<Grid>()
+            {
+                ContentRadarCfgGrid,
+                ContentHarvestableGrid,
+                ContentPlayerGrid,
+                ContentMobGrid
+            };
+            string saveString = "";
+            string fileName = "saveConfig.cfg";
+            if (StoreMode)
+            {
+                foreach (Grid gridElement in GridsForSaveResore)
+                {
+                    foreach (FrameworkElement varChild in gridElement.Children)
+                    {
+                        if (varChild.Name != "")
+                        {
+                            switch (varChild.GetType().Name)
+                            {
+                                case "CheckBox":
+                                    saveString += $"{varChild.Name}={((CheckBox)varChild).IsChecked}\n";
+                                    break;
+                                case "Slider":
+                                    saveString += $"{varChild.Name}={((Slider)varChild).Value}\n";
+                                    break;
+                                case "TextBox":
+                                    saveString += $"{varChild.Name}={((TextBox)varChild).Text}\n";
+                                    break;
+                                case "ListBox":
+                                    saveString += $"{varChild.Name}=";
+                                    foreach (var listBoxItem in ((ListBox)varChild).Items)
+                                    {
+                                        saveString += listBoxItem.ToString() + ';';
+                                    }
+                                    saveString += "\n";
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                    }
+                }
+
+                try
+                {
+                    using (StreamWriter sw = new StreamWriter(fileName, false, System.Text.Encoding.Default))
+                    {
+                        sw.WriteLine(saveString);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    return;
+                }
+            }
+            else
+            {
+                try
+                {
+                    using (StreamReader sr = new StreamReader(fileName))
+                    {
+                        saveString = sr.ReadToEnd();
+                    }
+                    var saveSplit = saveString.Split('\n');
+                    foreach (Grid gridElement in GridsForSaveResore)
+                    {
+                        foreach (FrameworkElement varChild in gridElement.Children)
+                        {
+                            if (varChild.Name != "")
+                            {
+                                foreach (var oneProperty in saveSplit)
+                                {
+                                    var onePropertySeparated = oneProperty.Split('=');
+                                    if (onePropertySeparated[0] == varChild.Name)
+                                    {
+                                        switch (varChild.GetType().Name)
+                                        {
+                                            case "CheckBox":
+                                                ((CheckBox)varChild).IsChecked = Boolean.Parse(onePropertySeparated[1]);
+                                                saveString += $"{varChild.Name}={((CheckBox)varChild).IsChecked}\n";
+                                                break;
+                                            case "Slider":
+                                                ((Slider)varChild).Value = double.Parse(onePropertySeparated[1]);
+                                                break;
+                                            case "TextBox":
+                                                ((TextBox)varChild).Text = onePropertySeparated[1];
+                                                break;
+                                            case "ListBox":
+                                                var moblistSave = onePropertySeparated[1].Split(';');
+                                                foreach (var var in moblistSave)
+                                                {
+                                                    ((ListBox)varChild).Items.Add(var);
+                                                }
+                                                break;
+                                            default:
+                                                break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    return;
+                }
+            }
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            ConfigStoreRestore(true);
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+        private void WindowSizeY_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (WindowSizeY != null)
+            {
+                if (int.Parse(WindowSizeY.Text) != Height) 
+                    Height = int.Parse(WindowSizeY.Text);
+            }
+        }
+
+        private void WindowSizeX_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (WindowSizeX != null)
+            {
+                if (int.Parse(WindowSizeX.Text) != Width)
+                    Width = int.Parse(WindowSizeX.Text);
+            }
+        }
+
+        private void MainGrid_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            WindowSizeX.Text = Width.ToString();
+            WindowSizeY.Text = Height.ToString();
         }
     }
 }

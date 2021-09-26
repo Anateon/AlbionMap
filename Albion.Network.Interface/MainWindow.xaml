@@ -5,11 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:interface="clr-namespace:Albion.Network.Interface"
         mc:Ignorable="d"
-        Title="Albion Radar" Height="522" Width="500" Closed="Window_Closed" WindowStyle="None" Background="#00FFFFFF" MouseLeftButtonDown="Window_MouseLeftButtonDown" WindowState="Normal" 
-        Topmost="True" AllowsTransparency="True" BorderThickness="7">
+        Title="Albion Radar" Height="476" Width="354" Closed="Window_Closed" WindowStyle="None" Background="#00FFFFFF" MouseLeftButtonDown="Window_MouseLeftButtonDown" WindowState="Normal" 
+        Topmost="True" AllowsTransparency="True" BorderThickness="7" Closing="Window_Closing" ResizeMode="CanResizeWithGrip" MinWidth="150" MinHeight="150">
     <!--Topmost="True"-->
 
-    <Grid Background="#33FFFFFF" x:Name="MainGrid">
+    <Grid Background="#33FFFFFF" x:Name="MainGrid" SizeChanged="MainGrid_SizeChanged">
         <TabControl Background="Transparent" x:Name="TabControl" BorderThickness="0" BorderBrush="#00000000">
             <TabItem Header="Radar" VerticalAlignment="Bottom" x:Name="TabItem1" Margin="0" MouseDoubleClick="Window_MouseDoubleClick">
                 <Grid Background="Transparent" x:Name="RGrid">
@@ -38,7 +38,7 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Cfg" x:Name="TabItem2" Margin="0">
-                <ScrollViewer>
+                <ScrollViewer ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto">
                     <Grid Background="#FFE5E5E5" MouseLeftButtonDown="Window_MouseLeftButtonDown">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="18"/>
@@ -46,146 +46,149 @@
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
-                            <ColumnDefinition/>
+                            <ColumnDefinition MinWidth="84"/>
                         </Grid.ColumnDefinitions>
                         <!-- <Button Content="Reset points" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="Button_Click"/>-->
-                        <Button Content="Radar + click transparency mode" VerticalAlignment="Top" Click="Button_Click_1" Grid.ColumnSpan="2" Grid.RowSpan="2"/>
-                        <Grid x:Name="HarvestableGrid" Height="157" Margin="0,0.3,0,0" VerticalAlignment="Top" Background="#FF959595" MinWidth="144" MinHeight="157" Grid.Row="1" Grid.Column="1">
+                        <Button Content="Radar + click transparency mode" VerticalAlignment="Top" Click="Button_Click_1" Grid.ColumnSpan="2" Grid.RowSpan="2" Margin="0,0,20,0" Height="18"/>
+                        <Grid x:Name="PlayerGrid" Margin="0,149,0,0" VerticalAlignment="Top" Background="#FF959595" Grid.Row="2" Height="111">
                             <Border BorderBrush="Black" BorderThickness="1">
-                                <Grid>
-
-                                    <CheckBox x:Name="CheckBoxHarvestableT10" Content="1" HorizontalAlignment="Left" Margin="0,35,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
-                                    <CheckBox x:Name="CheckBoxHarvestableT20" Content="2" HorizontalAlignment="Left" Margin="0,50,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
-                                    <CheckBox x:Name="CheckBoxHarvestableT30" Content="3" HorizontalAlignment="Left" Margin="0,65,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
-                                    <CheckBox x:Name="CheckBoxHarvestableT40" Content="4" HorizontalAlignment="Left" Margin="0,80,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
-                                    <CheckBox x:Name="CheckBoxHarvestableT50" Content="5" HorizontalAlignment="Left" Margin="0,95,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
-                                    <CheckBox x:Name="CheckBoxHarvestableT60" Content="6" HorizontalAlignment="Left" Margin="0,110,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
-                                    <CheckBox x:Name="CheckBoxHarvestableT70" Content="7" HorizontalAlignment="Left" Margin="0,125,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
-                                    <CheckBox x:Name="CheckBoxHarvestableT80" Content="8" HorizontalAlignment="Left" Margin="0,140,0,-6" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
-
-                                    <CheckBox x:Name="CheckBoxHarvestableT41" HorizontalAlignment="Left" Margin="30,80,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
-                                    <CheckBox x:Name="CheckBoxHarvestableT51" HorizontalAlignment="Left" Margin="30,95,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
-                                    <CheckBox x:Name="CheckBoxHarvestableT61" HorizontalAlignment="Left" Margin="30,110,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
-                                    <CheckBox x:Name="CheckBoxHarvestableT71" HorizontalAlignment="Left" Margin="30,125,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
-                                    <CheckBox x:Name="CheckBoxHarvestableT81" HorizontalAlignment="Left" Margin="30,140,0,-6" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
-
-                                    <CheckBox x:Name="CheckBoxHarvestableT42" HorizontalAlignment="Left" Margin="45,80,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
-                                    <CheckBox x:Name="CheckBoxHarvestableT52" HorizontalAlignment="Left" Margin="45,95,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
-                                    <CheckBox x:Name="CheckBoxHarvestableT62" HorizontalAlignment="Left" Margin="45,110,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
-                                    <CheckBox x:Name="CheckBoxHarvestableT72" HorizontalAlignment="Left" Margin="45,125,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
-                                    <CheckBox x:Name="CheckBoxHarvestableT82" HorizontalAlignment="Left" Margin="45,140,0,-6" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
-
-                                    <CheckBox x:Name="CheckBoxHarvestableT43" HorizontalAlignment="Left" Margin="60,80,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
-                                    <CheckBox x:Name="CheckBoxHarvestableT53" HorizontalAlignment="Left" Margin="60,95,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
-                                    <CheckBox x:Name="CheckBoxHarvestableT63" HorizontalAlignment="Left" Margin="60,110,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
-                                    <CheckBox x:Name="CheckBoxHarvestableT73" HorizontalAlignment="Left" Margin="60,125,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
-                                    <CheckBox x:Name="CheckBoxHarvestableT83" HorizontalAlignment="Left" Margin="60,140,0,-6" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
-
-                                    <CheckBox x:Name="CheckBoxFiber" Content="Fiber" HorizontalAlignment="Left" Margin="80,65,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMob_Click"/>
-                                    <CheckBox x:Name="CheckBoxHide" Content="Hide" HorizontalAlignment="Left" Margin="80,80,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMob_Click"/>
-                                    <CheckBox x:Name="CheckBoxOre" Content="Ore" HorizontalAlignment="Left" Margin="80,95,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMob_Click"/>
-                                    <CheckBox x:Name="CheckBoxRock" Content="Rock" HorizontalAlignment="Left" Margin="80,110,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMob_Click"/>
-                                    <CheckBox x:Name="CheckBoxWood" Content="Wood" HorizontalAlignment="Left" Margin="80,125,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMob_Click"/>
-
-                                    <TextBlock HorizontalAlignment="Left" Margin="30,65,0,0" TextWrapping="Wrap" Text="L1" VerticalAlignment="Top" Width="15" TextAlignment="Center"/>
-                                    <TextBlock HorizontalAlignment="Left" Margin="45,65,0,0" TextWrapping="Wrap" Text="L2" VerticalAlignment="Top" Width="15" TextAlignment="Center"/>
-                                    <TextBlock HorizontalAlignment="Left" Margin="60,65,0,0" TextWrapping="Wrap" Text="L3" VerticalAlignment="Top" Width="15" TextAlignment="Center"/>
-                                    <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Tiers" VerticalAlignment="Top" Width="30" Margin="0,20,0,0" FontWeight="Bold"/>
-                                    <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Levels" VerticalAlignment="Top" Width="45" Margin="30,50,0,0" FontWeight="Bold"/>
-                                    <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Show" VerticalAlignment="Top" Width="46" Margin="80,50,0,0" FontWeight="Bold"/>
-                                    <CheckBox Content="Hide empty" HorizontalAlignment="Left" VerticalAlignment="Top" IsChecked="True" Click="CheckBoxneedHideZeroResouse_Click" Width="83" Margin="30,20,0,0"/>
-                                    <CheckBox x:Name="ShowHarvestableCaption" Content="Сaption" HorizontalAlignment="Left" Margin="30,35,0,0" VerticalAlignment="Top" IsChecked="True" Click="CheckBoxNeedResourseCaption_Click"/>
-                                    <TextBlock Margin="0" TextWrapping="Wrap" Text="Harvestable settings" VerticalAlignment="Top" FontWeight="Bold" FontSize="14" TextAlignment="Center" Background="#FF32B600"/>
-                                    <CheckBox x:Name="CheckBoxFish" Content="Fish" HorizontalAlignment="Left" Margin="80,140,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMob_Click"/>
-                                </Grid>
-                            </Border>
-                        </Grid>
-                        <Grid x:Name="MobGrid" Margin="0,157,0,0" Background="#FF959595" MinWidth="144" MinHeight="250" Grid.Row="1" Grid.Column="1">
-                            <Border BorderBrush="Black" BorderThickness="1">
-                                <Grid>
-
-                                    <CheckBox x:Name="CheckBoxMobT10" Content="1" HorizontalAlignment="Left" Margin="0,35,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
-                                    <CheckBox x:Name="CheckBoxMobT20" Content="2" HorizontalAlignment="Left" Margin="0,50,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
-                                    <CheckBox x:Name="CheckBoxMobT30" Content="3" HorizontalAlignment="Left" Margin="0,65,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
-                                    <CheckBox x:Name="CheckBoxMobT40" Content="4" HorizontalAlignment="Left" Margin="0,80,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
-                                    <CheckBox x:Name="CheckBoxMobT50" Content="5" HorizontalAlignment="Left" Margin="0,95,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
-                                    <CheckBox x:Name="CheckBoxMobT60" Content="6" HorizontalAlignment="Left" Margin="0,110,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
-                                    <CheckBox x:Name="CheckBoxMobT70" Content="7" HorizontalAlignment="Left" Margin="0,125,0,-5" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
-                                    <CheckBox x:Name="CheckBoxMobT80" Content="8" HorizontalAlignment="Left" Margin="0,140,0,-20" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
-
-                                    <CheckBox x:Name="CheckBoxMobT41" HorizontalAlignment="Left" Margin="30,80,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
-                                    <CheckBox x:Name="CheckBoxMobT51" HorizontalAlignment="Left" Margin="30,95,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
-                                    <CheckBox x:Name="CheckBoxMobT61" HorizontalAlignment="Left" Margin="30,110,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
-                                    <CheckBox x:Name="CheckBoxMobT71" HorizontalAlignment="Left" Margin="30,125,0,-5" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
-                                    <CheckBox x:Name="CheckBoxMobT81" HorizontalAlignment="Left" Margin="30,140,0,-20" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
-
-                                    <CheckBox x:Name="CheckBoxMobT42" HorizontalAlignment="Left" Margin="45,80,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
-                                    <CheckBox x:Name="CheckBoxMobT52" HorizontalAlignment="Left" Margin="45,95,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
-                                    <CheckBox x:Name="CheckBoxMobT62" HorizontalAlignment="Left" Margin="45,110,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
-                                    <CheckBox x:Name="CheckBoxMobT72" HorizontalAlignment="Left" Margin="45,125,0,-5" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
-                                    <CheckBox x:Name="CheckBoxMobT82" HorizontalAlignment="Left" Margin="45,140,0,-20" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
-
-                                    <CheckBox x:Name="CheckBoxMobT43" HorizontalAlignment="Left" Margin="60,80,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
-                                    <CheckBox x:Name="CheckBoxMobT53" HorizontalAlignment="Left" Margin="60,95,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
-                                    <CheckBox x:Name="CheckBoxMobT63" HorizontalAlignment="Left" Margin="60,110,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
-                                    <CheckBox x:Name="CheckBoxMobT73" HorizontalAlignment="Left" Margin="60,125,0,-5" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
-                                    <CheckBox x:Name="CheckBoxMobT83" HorizontalAlignment="Left" Margin="60,140,0,-20" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
-
-                                    <TextBlock HorizontalAlignment="Left" Margin="30,65,0,0" TextWrapping="Wrap" Text="L1" VerticalAlignment="Top" Width="15" TextAlignment="Center"/>
-                                    <TextBlock HorizontalAlignment="Left" Margin="45,65,0,0" TextWrapping="Wrap" Text="L2" VerticalAlignment="Top" Width="15" TextAlignment="Center"/>
-                                    <TextBlock HorizontalAlignment="Left" Margin="60,65,0,0" TextWrapping="Wrap" Text="L3" VerticalAlignment="Top" Width="15" TextAlignment="Center"/>
-                                    <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Tiers" VerticalAlignment="Top" Width="30" FontWeight="Bold" Margin="0,20,0,0"/>
-                                    <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Levels" VerticalAlignment="Top" Width="45" Margin="30,50,0,0" FontWeight="Bold"/>
-                                    <CheckBox x:Name="ShowMobCaption" Content="Сaption" HorizontalAlignment="Left" Margin="79,80,0,0" VerticalAlignment="Top" IsChecked="True" Click="CheckBoxNeedResourseCaption_Click"/>
-                                    <TextBlock Margin="0" TextWrapping="Wrap" Text="Mob settings" VerticalAlignment="Top" FontWeight="Bold" FontSize="14" TextAlignment="Center" Background="#FFD8B100"/>
-                                    <ComboBox x:Name="ComboBoxMobNameList" Margin="0,155,45,0" VerticalAlignment="Top" IsEditable="True"/>
-                                    <Button Content="+" HorizontalAlignment="Right" Margin="0,155,0,0" VerticalAlignment="Top" Height="22" Width="15" Click="ButtonAddList_Click"/>
-                                    <Button Content="-" HorizontalAlignment="Right" Margin="0,155,15,0" VerticalAlignment="Top" Width="15" Height="22" Click="ButtonRemove_Click"/>
-                                    <ListBox x:Name="WhiteBlackList" Margin="0,177,0,0" FontFamily="Consolas" FontSize="10" SelectionChanged="WhiteBlackList_SelectionChanged"/>
-                                    <Button Content="E" HorizontalAlignment="Right" Margin="0,155,30,0" VerticalAlignment="Top" Width="15" Height="22" Click="Button_EditList"/>
-                                </Grid>
-                            </Border>
-                            <CheckBox Content="HP (XX/XX)" HorizontalAlignment="Left" Margin="80,111,0,0" VerticalAlignment="Top" IsChecked="True" Click="CheckBox_MobHPValuve"/>
-                            <CheckBox Content="HP [XX%]" HorizontalAlignment="Left" Margin="80,126,0,0" VerticalAlignment="Top" IsChecked="True" Click="CheckBox_MobHPProcent"/>
-                            <CheckBox Content="Name" HorizontalAlignment="Left" Margin="80,141,0,0" VerticalAlignment="Top" IsChecked="True" Click="CheckBox_MobName"/>
-                            <RadioButton GroupName="NameFilter" Content="Off filterList" HorizontalAlignment="Left" Margin="81,35,0,0" VerticalAlignment="Top" IsChecked="True" Checked="RadioButton_Checked"/>
-                            <RadioButton GroupName="NameFilter" Content="WhiteList mode" HorizontalAlignment="Left" Margin="81,50,0,0" VerticalAlignment="Top" Checked="RadioButton_Checked"/>
-                            <RadioButton GroupName="NameFilter" Content="BlackList mode" HorizontalAlignment="Left" Margin="81,65,0,0" VerticalAlignment="Top" Checked="RadioButton_Checked"/>
-
-                        </Grid>
-                        <Grid x:Name="PlayerGrid" Margin="0,186,0,0" VerticalAlignment="Top" Background="#FF959595" MinWidth="144" MinHeight="112" Grid.Row="2">
-                            <Border BorderBrush="Black" BorderThickness="1">
-                                <Grid>
+                                <Grid x:Name="ContentPlayerGrid">
                                     <TextBlock Margin="0" TextWrapping="Wrap" Text="Player settings" VerticalAlignment="Top" FontWeight="Bold" FontSize="14" TextAlignment="Center" Background="#FF0093D8"/>
-                                    <CheckBox Content="Show players" HorizontalAlignment="Left" Margin="0,20,0,0" VerticalAlignment="Top" Click="CheckBox_Click_2" IsChecked="True"/>
-                                    <CheckBox Content="Sound for all players" HorizontalAlignment="Left" Margin="0,80,-22,0" VerticalAlignment="Top" IsChecked="False" Click="CheckBox_SoundNotification"/>
-                                    <CheckBox Content="HP (XX/XX)" HorizontalAlignment="Left" Margin="0,35,0,0" VerticalAlignment="Top" IsChecked="True" Click="CheckBox_PlayerHPValuve"/>
-                                    <CheckBox Content="HP [XX%]" HorizontalAlignment="Left" Margin="0,50,0,0" VerticalAlignment="Top" IsChecked="True" Click="CheckBox_PlayerHPProcent"/>
-                                    <CheckBox Content="Nickname" HorizontalAlignment="Left" Margin="0,65,0,0" VerticalAlignment="Top" IsChecked="True" Click="CheckBox_Nickname"/>
-                                    <CheckBox Content="Sound for PVP players" HorizontalAlignment="Left" Margin="0,95,-31,0" VerticalAlignment="Top" IsChecked="True" Click="CheckBox_PVPSoundNotification"/>
+                                    <CheckBox x:Name="ShowPlayers" Content="Show players" HorizontalAlignment="Left" Margin="0,19,0,0" VerticalAlignment="Top" Click="CheckBox_Click_2" IsChecked="True"/>
+                                    <CheckBox x:Name="SoundForAll" Content="Sound for all players" HorizontalAlignment="Left" Margin="0,79,0,0" VerticalAlignment="Top" IsChecked="False" Click="CheckBox_SoundNotification"/>
+                                    <CheckBox x:Name="HpValue" Content="HP (XX/XX)" HorizontalAlignment="Left" Margin="0,34,0,0" VerticalAlignment="Top" IsChecked="True" Click="CheckBox_PlayerHPValuve"/>
+                                    <CheckBox x:Name="HpProcent" Content="HP [XX%]" HorizontalAlignment="Left" Margin="0,49,0,0" VerticalAlignment="Top" IsChecked="True" Click="CheckBox_PlayerHPProcent"/>
+                                    <CheckBox x:Name="PlayerNickname" Content="Nickname" HorizontalAlignment="Left" Margin="0,64,0,0" VerticalAlignment="Top" IsChecked="True" Click="CheckBox_Nickname"/>
+                                    <CheckBox x:Name="PvpPlayerSound" Content="Sound for PVP players" HorizontalAlignment="Left" Margin="0,94,0,0" VerticalAlignment="Top" IsChecked="True" Click="CheckBox_PVPSoundNotification"/>
                                 </Grid>
                             </Border>
 
                         </Grid>
-                        <Grid x:Name="RadarCfgGrid" Height="186" Margin="0" VerticalAlignment="Top" Background="#FF959595" MinHeight="186" MinWidth="144" Grid.Row="1">
+                        <Grid x:Name="RadarCfgGrid" Height="149" Margin="0" VerticalAlignment="Top" Background="#FF959595" Grid.Row="1">
                             <Border BorderBrush="Black" BorderThickness="1">
-                                <Grid>
-                                    <CheckBox Content="Radar on/off" HorizontalAlignment="Left" Margin="0,20,0,0" VerticalAlignment="Top" IsChecked="True" Click="CheckBox_Radar"/>
-                                    <TextBox HorizontalAlignment="Left" Height="19" Margin="1,120,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Width="30" PreviewTextInput="TextBox_PreviewTextInput" TextChanged="TextBox_TextChanged"/>
-                                    <TextBlock HorizontalAlignment="Left" Margin="35,121,-5,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Text="Points lifetime (sec)"/>
-                                    <TextBox x:Name="Scale" HorizontalAlignment="Left" Height="19" Margin="1,142,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Width="30" PreviewTextInput="TextBox_PreviewTextInput" TextChanged="TextBox_TextChanged2"/>
-                                    <TextBlock x:Name="RadarScaleLable" HorizontalAlignment="Left" Margin="35,143,-80,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="195" Text="Radar scale (5px=1m)"/>
-                                    <TextBox x:Name="RadiusTextBox" HorizontalAlignment="Left" Height="19" Margin="1,164,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="30" PreviewTextInput="TextBox_PreviewTextInput" TextChanged="TextBox_TextChanged3"/>
-                                    <TextBlock HorizontalAlignment="Left" Margin="35,165,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="96" Text="Display radius (m)"/>
-                                    <Slider x:Name="SliderOpacity" HorizontalAlignment="Left" Margin="0,55,0,0" VerticalAlignment="Top" Width="125" ValueChanged="Slider_ValueChanged" Maximum="1" TickFrequency="0" Value="0.75"/>
-                                    <TextBlock x:Name="OpacityCaption" HorizontalAlignment="Left" Margin="1,35,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="125" Text="Opacity (75%)"/>
-                                    <TextBlock x:Name="WindowsSizeCaption" HorizontalAlignment="Left" Margin="1,75,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="125" Text="Windows size (500px)"/>
-                                    <Slider HorizontalAlignment="Left" Margin="0,95,0,0" VerticalAlignment="Top" Width="125" ValueChanged="Slider_ValueChanged1" Maximum="2000" Value="500" Minimum="150"/>
+                                <Grid x:Name="ContentRadarCfgGrid">
+                                    <CheckBox Content="Radar on/off" HorizontalAlignment="Left" Margin="0,132,0,0" VerticalAlignment="Top" IsChecked="True" Click="CheckBox_Radar"/>
+                                    <TextBox x:Name="PointsLifetime" HorizontalAlignment="Left" Height="19" Margin="1,71,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Width="30" PreviewTextInput="TextBox_PreviewTextInput" TextChanged="TextBox_TextChanged"/>
+                                    <TextBlock HorizontalAlignment="Left" Margin="36,72,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="110" Text="Points lifetime (sec)"/>
+                                    <TextBox x:Name="Scale" HorizontalAlignment="Left" Height="19" Margin="1,92,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Width="30" PreviewTextInput="TextBox_PreviewTextInput" TextChanged="TextBox_TextChanged2"/>
+                                    <TextBlock x:Name="RadarScaleLable" Margin="36,93,1,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Radar scale (5px=1m)"/>
+                                    <TextBox x:Name="RadiusTextBox" HorizontalAlignment="Left" Height="19" Margin="1,113,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="30" PreviewTextInput="TextBox_PreviewTextInput" TextChanged="TextBox_TextChanged3"/>
+                                    <TextBlock HorizontalAlignment="Left" Margin="36,114,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="96" Text="Display radius (m)"/>
+                                    <Slider x:Name="SliderOpacity" Margin="0,53,0,0" VerticalAlignment="Top" ValueChanged="Slider_ValueChanged" Maximum="1" TickFrequency="0" Value="0.75" Height="18"/>
+                                    <TextBlock x:Name="OpacityCaption" HorizontalAlignment="Left" Margin="1,37,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="125" Text="Opacity (75%)"/>
                                     <TextBlock Margin="0" TextWrapping="Wrap" Text="Radar settings" VerticalAlignment="Top" FontWeight="Bold" FontSize="14" TextAlignment="Center" Background="White"/>
+                                    <TextBox x:Name="WindowSizeX" HorizontalAlignment="Left" Height="19" Margin="1,20,0,0" TextWrapping="Wrap" Text="500" VerticalAlignment="Top" Width="30" PreviewTextInput="TextBox_PreviewTextInput" TextChanged="WindowSizeX_TextChanged"/>
+                                    <TextBlock HorizontalAlignment="Left" Margin="36,21,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="36" Text="Size X"/>
+                                    <TextBox x:Name="WindowSizeY" HorizontalAlignment="Left" Height="19" Margin="72,20,0,0" TextWrapping="Wrap" Text="500" VerticalAlignment="Top" Width="30" PreviewTextInput="TextBox_PreviewTextInput" TextChanged="WindowSizeY_TextChanged"/>
+                                    <TextBlock HorizontalAlignment="Left" Margin="107,21,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="32" Text="Size Y"/>
                                 </Grid>
                             </Border>
                         </Grid>
-                        <Label Content="Hotkeys:&#xD;&#xA;Alt + M&#x9;– Full size mode&#xD;&#xA;Alt +&quot;+&quot;&#x9;– Zoom in&#xD;&#xA;Alt +&quot;-&quot;&#x9;– Zoom out" HorizontalAlignment="Left" Margin="0,298,0,0" VerticalAlignment="Top" Height="77" Width="145" Grid.Row="1"/>
+
+                        <Grid x:Name="HarvestableGrid" Height="156" Margin="0,0.3,0,0" VerticalAlignment="Top" Background="#FF959595" Grid.Row="1" Grid.Column="1">
+                            <Border BorderBrush="Black" BorderThickness="1">
+                                <Grid x:Name="ContentHarvestableGrid">
+                                    <CheckBox x:Name="CheckBoxHarvestableT10" Content="1" HorizontalAlignment="Left" Margin="0,34,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
+                                    <CheckBox x:Name="CheckBoxHarvestableT20" Content="2" HorizontalAlignment="Left" Margin="0,49,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
+                                    <CheckBox x:Name="CheckBoxHarvestableT30" Content="3" HorizontalAlignment="Left" Margin="0,64,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
+                                    <CheckBox x:Name="CheckBoxHarvestableT40" Content="4" HorizontalAlignment="Left" Margin="0,79,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
+                                    <CheckBox x:Name="CheckBoxHarvestableT50" Content="5" HorizontalAlignment="Left" Margin="0,94,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
+                                    <CheckBox x:Name="CheckBoxHarvestableT60" Content="6" HorizontalAlignment="Left" Margin="0,109,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
+                                    <CheckBox x:Name="CheckBoxHarvestableT70" Content="7" HorizontalAlignment="Left" Margin="0,124,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
+                                    <CheckBox x:Name="CheckBoxHarvestableT80" Content="8" HorizontalAlignment="Left" Margin="0,139,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
+
+                                    <CheckBox x:Name="CheckBoxHarvestableT41" HorizontalAlignment="Left" Margin="30,79,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
+                                    <CheckBox x:Name="CheckBoxHarvestableT51" HorizontalAlignment="Left" Margin="30,94,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
+                                    <CheckBox x:Name="CheckBoxHarvestableT61" HorizontalAlignment="Left" Margin="30,109,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
+                                    <CheckBox x:Name="CheckBoxHarvestableT71" HorizontalAlignment="Left" Margin="30,124,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
+                                    <CheckBox x:Name="CheckBoxHarvestableT81" HorizontalAlignment="Left" Margin="30,139,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
+
+                                    <CheckBox x:Name="CheckBoxHarvestableT42" HorizontalAlignment="Left" Margin="45,79,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
+                                    <CheckBox x:Name="CheckBoxHarvestableT52" HorizontalAlignment="Left" Margin="45,94,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
+                                    <CheckBox x:Name="CheckBoxHarvestableT62" HorizontalAlignment="Left" Margin="45,109,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
+                                    <CheckBox x:Name="CheckBoxHarvestableT72" HorizontalAlignment="Left" Margin="45,124,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
+                                    <CheckBox x:Name="CheckBoxHarvestableT82" HorizontalAlignment="Left" Margin="45,139,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
+
+                                    <CheckBox x:Name="CheckBoxHarvestableT43" HorizontalAlignment="Left" Margin="60,79,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
+                                    <CheckBox x:Name="CheckBoxHarvestableT53" HorizontalAlignment="Left" Margin="60,94,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
+                                    <CheckBox x:Name="CheckBoxHarvestableT63" HorizontalAlignment="Left" Margin="60,109,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
+                                    <CheckBox x:Name="CheckBoxHarvestableT73" HorizontalAlignment="Left" Margin="60,124,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
+                                    <CheckBox x:Name="CheckBoxHarvestableT83" HorizontalAlignment="Left" Margin="60,139,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
+
+                                    <CheckBox x:Name="CheckBoxFiber" Content="Fiber" HorizontalAlignment="Left" Margin="80,64,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMob_Click"/>
+                                    <CheckBox x:Name="CheckBoxHide" Content="Hide" HorizontalAlignment="Left" Margin="80,79,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMob_Click"/>
+                                    <CheckBox x:Name="CheckBoxOre" Content="Ore" HorizontalAlignment="Left" Margin="80,94,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMob_Click"/>
+                                    <CheckBox x:Name="CheckBoxRock" Content="Rock" HorizontalAlignment="Left" Margin="80,109,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMob_Click"/>
+                                    <CheckBox x:Name="CheckBoxWood" Content="Wood" HorizontalAlignment="Left" Margin="80,124,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMob_Click"/>
+
+                                    <TextBlock HorizontalAlignment="Left" Margin="30,64,0,0" TextWrapping="Wrap" Text="L1" VerticalAlignment="Top" Width="15" TextAlignment="Center"/>
+                                    <TextBlock HorizontalAlignment="Left" Margin="45,64,0,0" TextWrapping="Wrap" Text="L2" VerticalAlignment="Top" Width="15" TextAlignment="Center"/>
+                                    <TextBlock HorizontalAlignment="Left" Margin="60,64,0,0" TextWrapping="Wrap" Text="L3" VerticalAlignment="Top" Width="15" TextAlignment="Center"/>
+                                    <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Tiers" VerticalAlignment="Top" Width="30" Margin="0,19,0,0" FontWeight="Bold"/>
+                                    <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Levels" VerticalAlignment="Top" Width="45" Margin="30,49,0,0" FontWeight="Bold"/>
+                                    <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Show" VerticalAlignment="Top" Width="46" Margin="80,49,0,0" FontWeight="Bold"/>
+                                    <CheckBox x:Name="HideEmpty" Content="Hide empty" HorizontalAlignment="Left" VerticalAlignment="Top" IsChecked="True" Click="CheckBoxneedHideZeroResouse_Click" Width="83" Margin="30,19,0,0"/>
+                                    <CheckBox x:Name="ShowHarvestableCaption" Content="Сaption" HorizontalAlignment="Left" Margin="30,34,0,0" VerticalAlignment="Top" IsChecked="True" Click="CheckBoxNeedResourseCaption_Click"/>
+                                    <TextBlock Margin="0" TextWrapping="Wrap" Text="Harvestable settings" VerticalAlignment="Top" FontWeight="Bold" FontSize="14" TextAlignment="Center" Background="#FF32B600"/>
+                                    <CheckBox x:Name="CheckBoxFish" Content="Fish" HorizontalAlignment="Left" Margin="80,139,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMob_Click"/>
+                                </Grid>
+                            </Border>
+                        </Grid>
+                        <Grid x:Name="MobGrid" Margin="0,156,0,0" Background="#FF959595" MinHeight="250" Grid.Row="1" Grid.Column="1">
+                            <Border BorderBrush="Black" BorderThickness="1">
+                                <Grid x:Name="ContentMobGrid">
+
+                                    <CheckBox x:Name="CheckBoxMobT10" Content="1" HorizontalAlignment="Left" Margin="0,34,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
+                                    <CheckBox x:Name="CheckBoxMobT20" Content="2" HorizontalAlignment="Left" Margin="0,49,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
+                                    <CheckBox x:Name="CheckBoxMobT30" Content="3" HorizontalAlignment="Left" Margin="0,64,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
+                                    <CheckBox x:Name="CheckBoxMobT40" Content="4" HorizontalAlignment="Left" Margin="0,79,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
+                                    <CheckBox x:Name="CheckBoxMobT50" Content="5" HorizontalAlignment="Left" Margin="0,94,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
+                                    <CheckBox x:Name="CheckBoxMobT60" Content="6" HorizontalAlignment="Left" Margin="0,109,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
+                                    <CheckBox x:Name="CheckBoxMobT70" Content="7" HorizontalAlignment="Left" Margin="0,124,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
+                                    <CheckBox x:Name="CheckBoxMobT80" Content="8" HorizontalAlignment="Left" Margin="0,139,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
+
+                                    <CheckBox x:Name="CheckBoxMobT41" HorizontalAlignment="Left" Margin="30,79,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
+                                    <CheckBox x:Name="CheckBoxMobT51" HorizontalAlignment="Left" Margin="30,94,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
+                                    <CheckBox x:Name="CheckBoxMobT61" HorizontalAlignment="Left" Margin="30,109,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
+                                    <CheckBox x:Name="CheckBoxMobT71" HorizontalAlignment="Left" Margin="30,124,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
+                                    <CheckBox x:Name="CheckBoxMobT81" HorizontalAlignment="Left" Margin="30,139,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
+
+                                    <CheckBox x:Name="CheckBoxMobT42" HorizontalAlignment="Left" Margin="45,79,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
+                                    <CheckBox x:Name="CheckBoxMobT52" HorizontalAlignment="Left" Margin="45,94,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
+                                    <CheckBox x:Name="CheckBoxMobT62" HorizontalAlignment="Left" Margin="45,109,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
+                                    <CheckBox x:Name="CheckBoxMobT72" HorizontalAlignment="Left" Margin="45,124,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
+                                    <CheckBox x:Name="CheckBoxMobT82" HorizontalAlignment="Left" Margin="45,139,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
+
+                                    <CheckBox x:Name="CheckBoxMobT43" HorizontalAlignment="Left" Margin="60,79,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
+                                    <CheckBox x:Name="CheckBoxMobT53" HorizontalAlignment="Left" Margin="60,94,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
+                                    <CheckBox x:Name="CheckBoxMobT63" HorizontalAlignment="Left" Margin="60,109,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
+                                    <CheckBox x:Name="CheckBoxMobT73" HorizontalAlignment="Left" Margin="60,124,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
+                                    <CheckBox x:Name="CheckBoxMobT83" HorizontalAlignment="Left" Margin="60,139,0,0" VerticalAlignment="Top" Click="CheckBoxHarvestableAndMobTierLvl_Click"/>
+
+                                    <TextBlock HorizontalAlignment="Left" Margin="30,64,0,0" TextWrapping="Wrap" Text="L1" VerticalAlignment="Top" Width="15" TextAlignment="Center"/>
+                                    <TextBlock HorizontalAlignment="Left" Margin="45,64,0,0" TextWrapping="Wrap" Text="L2" VerticalAlignment="Top" Width="15" TextAlignment="Center"/>
+                                    <TextBlock HorizontalAlignment="Left" Margin="60,64,0,0" TextWrapping="Wrap" Text="L3" VerticalAlignment="Top" Width="15" TextAlignment="Center"/>
+                                    <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Tiers" VerticalAlignment="Top" Width="30" FontWeight="Bold" Margin="0,19,0,0"/>
+                                    <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Levels" VerticalAlignment="Top" Width="45" Margin="30,49,0,0" FontWeight="Bold"/>
+                                    <CheckBox x:Name="ShowMobCaption" Content="Сaption" HorizontalAlignment="Left" Margin="79,79,0,0" VerticalAlignment="Top" IsChecked="True" Click="CheckBoxNeedResourseCaption_Click"/>
+                                    <TextBlock TextTrimming="None" Margin="0" TextWrapping="Wrap" Text="Mob settings" VerticalAlignment="Top" FontWeight="Bold" FontSize="14" TextAlignment="Center" Background="#FFD8B100"/>
+                                    <ComboBox x:Name="ComboBoxMobNameList" Margin="0,154,45,0" VerticalAlignment="Top" IsEditable="True"/>
+                                    <Button Content="+" HorizontalAlignment="Right" Margin="0,154,0,0" VerticalAlignment="Top" Height="22" Width="15" Click="ButtonAddList_Click"/>
+                                    <Button Content="-" HorizontalAlignment="Right" Margin="0,154,15,0" VerticalAlignment="Top" Width="15" Height="22" Click="ButtonRemove_Click"/>
+                                    <ListBox x:Name="WhiteBlackList" Margin="0,176,0,0" FontFamily="Consolas" FontSize="10" SelectionChanged="WhiteBlackList_SelectionChanged"/>
+                                    <Button Content="E" HorizontalAlignment="Right" Margin="0,154,30,0" VerticalAlignment="Top" Width="15" Height="22" Click="Button_EditList"/>
+                                </Grid>
+                            </Border>
+                            <CheckBox Content="HP (XX/XX)" HorizontalAlignment="Left" Margin="80,110,0,0" VerticalAlignment="Top" IsChecked="True" Click="CheckBox_MobHPValuve"/>
+                            <CheckBox Content="HP [XX%]" HorizontalAlignment="Left" Margin="80,125,0,0" VerticalAlignment="Top" IsChecked="True" Click="CheckBox_MobHPProcent"/>
+                            <CheckBox Content="Name" HorizontalAlignment="Left" Margin="80,140,0,0" VerticalAlignment="Top" IsChecked="True" Click="CheckBox_MobName"/>
+                            <RadioButton GroupName="NameFilter" Content="Off filterList" HorizontalAlignment="Left" Margin="81,34,0,0" VerticalAlignment="Top" IsChecked="True" Checked="RadioButton_Checked"/>
+                            <RadioButton GroupName="NameFilter" Content="WhiteList mode" HorizontalAlignment="Left" Margin="81,49,1,0" VerticalAlignment="Top" Checked="RadioButton_Checked"/>
+                            <RadioButton GroupName="NameFilter" Content="BlackList mode" HorizontalAlignment="Left" Margin="81,64,0,0" VerticalAlignment="Top" Checked="RadioButton_Checked"/>
+
+                        </Grid>
+                        <Label Content="Hotkeys:&#xD;&#xA;Alt + M&#x9;– Full size mode&#xD;&#xA;Alt +&quot;+&quot;&#x9;– Zoom in&#xD;&#xA;Alt +&quot;-&quot;&#x9;– Zoom out" HorizontalAlignment="Left" Margin="0,255,0,0" VerticalAlignment="Top" Height="77" Width="145" Grid.Row="1"/>
+                        <Button Content="X" Grid.Column="1" HorizontalAlignment="Right" Margin="0" VerticalAlignment="Top" Width="20" Background="#FFC30000" FontFamily="Lucida Console" Height="18" FontSize="16" Click="Button_Click"/>
 
                     </Grid>
                 </ScrollViewer>
