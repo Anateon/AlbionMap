@@ -5,10 +5,25 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:interface="clr-namespace:Albion.Network.Interface"
         mc:Ignorable="d"
-        Title="Albion Radar" Height="476" Width="354" Closed="Window_Closed" WindowStyle="None" Background="#00FFFFFF" MouseLeftButtonDown="Window_MouseLeftButtonDown" WindowState="Normal" 
-        Topmost="True" AllowsTransparency="True" BorderThickness="7" Closing="Window_Closing" ResizeMode="CanResizeWithGrip" MinWidth="150" MinHeight="150">
+        Title="Albion Radar" Height="500" Width="500" Closed="Window_Closed" WindowStyle="None" Background="#00FFFFFF" MouseLeftButtonDown="Window_MouseLeftButtonDown" WindowState="Normal" 
+        Topmost="True" AllowsTransparency="True" BorderThickness="7" Closing="Window_Closing" ResizeMode="CanResizeWithGrip" MinWidth="120" MinHeight="120">
     <!--Topmost="True"-->
-
+    <Window.Resources>
+        <Style TargetType="{x:Type ResizeGrip}">
+            <Setter Property="MinWidth" Value="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}"/>
+            <Setter Property="MinHeight" Value="{DynamicResource {x:Static SystemParameters.HorizontalScrollBarHeightKey}}"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ResizeGrip}">
+                        <Grid SnapsToDevicePixels="True" Background="{TemplateBinding Background}">
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Visibility" Value="Hidden"/>
+        </Style>
+    </Window.Resources>
     <Grid Background="#33FFFFFF" x:Name="MainGrid" SizeChanged="MainGrid_SizeChanged">
         <TabControl Background="Transparent" x:Name="TabControl" BorderThickness="0" BorderBrush="#00000000">
             <TabItem Header="Radar" VerticalAlignment="Bottom" x:Name="TabItem1" Margin="0" MouseDoubleClick="Window_MouseDoubleClick">

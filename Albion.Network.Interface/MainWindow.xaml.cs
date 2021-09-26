@@ -50,6 +50,7 @@ namespace Albion.Network.Interface
         public static bool needShowPlayerHPProcent = true;
         public static bool needShowPlayerHPValuve = true;
         public static bool needShowNickname = true;
+        public static double opacitySaveFullSizeMode;
 
         public static bool needShowMobHPProcent = true;
         public static bool needShowMobHPValuve = true;
@@ -126,18 +127,19 @@ namespace Albion.Network.Interface
             {
                 if (fullSizeStatus)
                 {
+                    SliderOpacity.Value = opacitySaveFullSizeMode+0.5;
+                    SliderOpacity.Value = opacitySaveFullSizeMode;
                     fullSizeStatus = false;
                     WindowState = WindowState.Normal;
                     IntPtr hwnd = new WindowInteropHelper(this).Handle;
                     Win32.makeNormal(hwnd);
                     //TabControl.Background = Brushes.White;
-                    SliderOpacity.Value = 0.74;
-                    SliderOpacity.Value = 0.75;
                     TabItem1.Visibility = Visibility.Visible;
                     TabItem2.Visibility = Visibility.Visible;
                 }
                 else
                 {
+                    opacitySaveFullSizeMode = SliderOpacity.Value;
                     TabControl.SelectedIndex = 0;
                     fullSizeStatus = true;
                     WindowState = WindowState.Maximized;
@@ -189,7 +191,6 @@ namespace Albion.Network.Interface
             {
                 thread.Start();
             }
-
         }
         private static void PacketHandler(object sender, CaptureEventArgs e)
         {
