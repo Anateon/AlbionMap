@@ -138,10 +138,11 @@
                                     <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Levels" VerticalAlignment="Top" Width="45" Margin="30,50,0,0" FontWeight="Bold"/>
                                     <CheckBox x:Name="ShowMobCaption" Content="Сaption" HorizontalAlignment="Left" Margin="79,80,0,0" VerticalAlignment="Top" IsChecked="True" Click="CheckBoxNeedResourseCaption_Click"/>
                                     <TextBlock Margin="0" TextWrapping="Wrap" Text="Mob settings" VerticalAlignment="Top" FontWeight="Bold" FontSize="14" TextAlignment="Center" Background="#FFD8B100"/>
-                                    <ComboBox x:Name="ComboBoxMobNameList" Margin="0,155,30,0" VerticalAlignment="Top" IsEditable="True"/>
+                                    <ComboBox x:Name="ComboBoxMobNameList" Margin="0,155,45,0" VerticalAlignment="Top" IsEditable="True"/>
                                     <Button Content="+" HorizontalAlignment="Right" Margin="0,155,0,0" VerticalAlignment="Top" Height="22" Width="15" Click="ButtonAddList_Click"/>
                                     <Button Content="-" HorizontalAlignment="Right" Margin="0,155,15,0" VerticalAlignment="Top" Width="15" Height="22" Click="ButtonRemove_Click"/>
                                     <ListBox x:Name="WhiteBlackList" Margin="0,177,0,0" FontFamily="Consolas" FontSize="10" SelectionChanged="WhiteBlackList_SelectionChanged"/>
+                                    <Button Content="E" HorizontalAlignment="Right" Margin="0,155,30,0" VerticalAlignment="Top" Width="15" Height="22" Click="Button_EditList"/>
                                 </Grid>
                             </Border>
                             <CheckBox Content="HP (XX/XX)" HorizontalAlignment="Left" Margin="80,111,0,0" VerticalAlignment="Top" IsChecked="True" Click="CheckBox_MobHPValuve"/>

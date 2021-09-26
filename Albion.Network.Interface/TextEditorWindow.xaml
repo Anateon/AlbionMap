@@ -1,0 +1,14 @@
+﻿<Window x:Class="Albion.Network.Interface.TextEditorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Albion.Network.Interface"
+        mc:Ignorable="d"
+        Title="TextEditorWindow" Height="432" Width="452">
+    <Grid>
+        <TextBox Name="list" Margin="0,0,0,20" TextWrapping="Wrap" AcceptsReturn="True"/>
+        <Button Content="Enter" HorizontalAlignment="Right" Margin="0" VerticalAlignment="Bottom" Width="75" Click="Button_Click"/>
+        <Button Content="loot preset" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Bottom" Width="75" Click="Button_Click_1"/>
+    </Grid>
+</Window>

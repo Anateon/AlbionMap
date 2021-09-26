@@ -569,5 +569,45 @@ namespace Albion.Network.Interface
             }
             MyInfo.NeedUpdate = true;
         }
+
+        private void Button_EditList(object sender, RoutedEventArgs e)
+        {
+            TextEditorWindow winDialog = new TextEditorWindow();
+            foreach (var varItem in WhiteBlackList.Items)
+            {
+                winDialog.list.Text += (string)varItem +"\n";
+            }
+            Topmost = false;
+            if (winDialog.ShowDialog() == true)
+            {
+                listNames.Clear();
+                WhiteBlackList.Items.Clear();
+                foreach (var mob in winDialog.MobList.Split('\n'))
+                {
+                    if (mob == "")
+                        break;
+                    bool exist = false;
+                    foreach (var dumpMobs in MobsDump.Mob)
+                    {
+                        if (dumpMobs.uniquename == mob)
+                        {
+                            exist = true;
+                            break;
+                        }
+                    }
+                    if (!exist)
+                    {
+                        MessageBox.Show($"Error adding a mob '{mob}' (does not exist)");
+                        return;
+                    }
+                    if (!WhiteBlackList.Items.Contains(mob))
+                    {
+                        listNames.Add(mob);
+                        WhiteBlackList.Items.Add(mob);
+                    }
+                }
+            }
+            Topmost = true;
+        }
     }
 }

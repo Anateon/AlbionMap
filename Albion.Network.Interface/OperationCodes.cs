@@ -2,6 +2,6 @@
 {
     public class OperationCodes
     {
-        public const short Move = 21;
+        public const short Move = 22;
     }
 }
