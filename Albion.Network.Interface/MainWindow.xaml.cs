@@ -31,7 +31,7 @@ namespace Albion.Network.Interface
         public static List<int> keysForDell = new List<int>();
         public static PlayerInfo MyInfo = new PlayerInfo();
         public static Mutex mutexObj = new Mutex();
-        private DispatcherTimer dispatcherTimer;
+        private static DispatcherTimer dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
         private static List<Thread> threads = new List<Thread>();
         public static Mobs MobsDump;
         public static AOResources ResourcesDump;
@@ -78,8 +78,6 @@ namespace Albion.Network.Interface
         public MainWindow()
         {
             InitializeComponent();
-
-            dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
             dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
             dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0,250);
             dispatcherTimer.Start();
@@ -168,7 +166,6 @@ namespace Albion.Network.Interface
                 tmp++;
                 Scale.Text = tmp.ToString();
             });
-            ConfigStoreRestore(false);
             receiver = builder.Build();
             Console.WriteLine("Start");
             CaptureDeviceList devices = CaptureDeviceList.Instance;
@@ -191,6 +188,7 @@ namespace Albion.Network.Interface
             {
                 thread.Start();
             }
+            ConfigStoreRestore(false);
         }
         private static void PacketHandler(object sender, CaptureEventArgs e)
         {
@@ -268,13 +266,16 @@ namespace Albion.Network.Interface
 
         private void CheckBox_Radar(object sender, RoutedEventArgs e)
         {
-            if ((bool)((CheckBox)sender).IsChecked)
+            if (sender != null)
             {
-                dispatcherTimer.Start();
-            }
-            else
-            {
-                dispatcherTimer.Stop();
+                if ((bool)((CheckBox)sender).IsChecked)
+                {
+                    dispatcherTimer.Start();
+                }
+                else
+                {
+                    dispatcherTimer.Stop();
+                }
             }
         }
 
@@ -692,7 +693,6 @@ namespace Albion.Network.Interface
                                         {
                                             case "CheckBox":
                                                 ((CheckBox)varChild).IsChecked = Boolean.Parse(onePropertySeparated[1]);
-                                                saveString += $"{varChild.Name}={((CheckBox)varChild).IsChecked}\n";
                                                 break;
                                             case "Slider":
                                                 ((Slider)varChild).Value = double.Parse(onePropertySeparated[1]);
