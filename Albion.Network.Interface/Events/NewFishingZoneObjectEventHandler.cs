@@ -23,8 +23,14 @@ namespace Albion.Network.Interface
                     Lvl = value.Lvl,
                     Time = DateTime.Now,
                     NeedUpdate = true,
+                    fishName = value.fishName
                 };
-                Console.WriteLine("OBJECT FISH");
+                if (value.fishName == "FishingNodeOceanShark")
+                {
+                    System.Media.SystemSounds.Beep.Play();
+                    System.Console.WriteLine($"{tmp.Nuber} FishingNodeOceanShark");
+                }
+                Console.WriteLine($"{DateTime.Now} '{value.fishName}' {value.Number}");
                 MainWindow.mutexObj.WaitOne();
                 MainWindow.chelDictionary[value.Id] = tmp;
                 MainWindow.mutexObj.ReleaseMutex();

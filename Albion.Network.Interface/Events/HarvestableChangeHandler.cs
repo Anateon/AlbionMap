@@ -24,7 +24,7 @@ namespace Albion.Network.Interface
             }
             catch (Exception exception)
             {
-                throw;
+                //throw;
             }
             return Task.CompletedTask;
         }

@@ -24,7 +24,6 @@ namespace Albion.Network.Interface
                     Lvl = -2,
                     NeedUpdate = true,
                 };
-                Console.WriteLine("MINI GAME FISH!!!!!!");
                 MainWindow.mutexObj.WaitOne();
                 MainWindow.chelDictionary[value.Id] = tmp;
                 MainWindow.mutexObj.ReleaseMutex();

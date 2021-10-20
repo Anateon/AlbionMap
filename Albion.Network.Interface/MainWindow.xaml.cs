@@ -125,7 +125,7 @@ namespace Albion.Network.Interface
             {
                 if (fullSizeStatus)
                 {
-                    SliderOpacity.Value = opacitySaveFullSizeMode+0.5;
+                    SliderOpacity.Value = 0.1;
                     SliderOpacity.Value = opacitySaveFullSizeMode;
                     fullSizeStatus = false;
                     WindowState = WindowState.Normal;
@@ -138,6 +138,7 @@ namespace Albion.Network.Interface
                 else
                 {
                     opacitySaveFullSizeMode = SliderOpacity.Value;
+                    SliderOpacity.Value = 0;
                     TabControl.SelectedIndex = 0;
                     fullSizeStatus = true;
                     WindowState = WindowState.Maximized;
@@ -570,14 +571,14 @@ namespace Albion.Network.Interface
             TextEditorWindow winDialog = new TextEditorWindow();
             foreach (var varItem in WhiteBlackList.Items)
             {
-                winDialog.list.Text += (string)varItem +"\n";
+                winDialog.list.Text += (string)varItem +"\r";
             }
             Topmost = false;
             if (winDialog.ShowDialog() == true)
             {
                 listNames.Clear();
                 WhiteBlackList.Items.Clear();
-                foreach (var mob in winDialog.MobList.Split('\n'))
+                foreach (var mob in winDialog.MobList.Split(';'))
                 {
                     if (mob == "")
                         break;

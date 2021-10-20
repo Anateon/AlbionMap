@@ -51,5 +51,6 @@ namespace Albion.Network.Interface
         public HarvestableTypeResource Type { get; set; }
         public int Nuber { get; set; }
         public byte RowType { get; set; }
+        public string fishName { get; set; }
     }
 }

@@ -30,7 +30,7 @@ namespace Albion.Network.Interface
         }
         public string MobList
         {
-            get { return list.Text; }
+            get { return list.Text.Replace("\n",";").Replace("\r",""); }
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)

@@ -438,7 +438,7 @@ namespace Albion.Network.Interface
                             switch (((ResurseInfo)info.Value).Lvl)
                             {
                                 case 0:
-                                    tmpString = $"{((ResurseInfo)info.Value).Nuber} FISH";
+                                    tmpString = $"{((ResurseInfo)info.Value).Nuber} FISH";//((ResurseInfo)info.Value).fishName
                                     break;
                                 case -1:
                                     tmpString = $"{((ResurseInfo)info.Value).Nuber} FISH AREA";

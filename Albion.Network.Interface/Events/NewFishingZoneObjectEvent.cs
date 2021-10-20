@@ -10,7 +10,8 @@ namespace Albion.Network.Interface
             Id = int.Parse(parameters[0].ToString());
             Position = (float[])parameters[1];
             Number = parameters.TryGetValue(2, out object var) ? int.Parse(var.ToString()) : 0;
-            if ((parameters.TryGetValue(4, out object var1) ? (var1.ToString()) : "") == "")
+            fishName = (parameters.TryGetValue(4, out object var1) ? (var1.ToString()) : "");
+            if (fishName == "")
             {
                 Lvl = -1;
             }
@@ -23,6 +24,7 @@ namespace Albion.Network.Interface
         public float[] Position { get; }
         public int Number { get; }
         public int Lvl { get; }
+        public string fishName { get; }
 
     }
 }
